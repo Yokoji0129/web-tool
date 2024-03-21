@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'App\Http\Controllers\MainController@startpage');
-
+Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');
+Route::get('/account/new', 'App\Http\Controllers\MainController@make_account');
 // Route::get('/{any}', function () {
 //     return view('app');
 // })->where('any', '.*');
