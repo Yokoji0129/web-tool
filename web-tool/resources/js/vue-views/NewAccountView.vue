@@ -1,3 +1,6 @@
+<script setup>
+
+</script>
 <template>
   <div class="login-box">
     <h2>アカウント新規作成</h2>

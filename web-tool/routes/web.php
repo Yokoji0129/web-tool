@@ -13,7 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'App\Http\Controllers\MainController@startpage');
+Route::get('/', 'App\Http\Controllers\MainController@startpage');//ログイン
+Route::get('/newAccount', 'App\Http\Controllers\MainController@startpage');//アカウント新規作成
+Route::get('/accountName', 'App\Http\Controllers\MainController@startpage');//アカウント名作成
+Route::get('/diaryBooksList', 'App\Http\Controllers\MainController@startpage');//日記本一覧
+Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記ページ
 Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');
 Route::get('/account/new', 'App\Http\Controllers\MainController@make_account');
 Route::post('/post', 'App\Http\Controllers\MainController@add_account');
