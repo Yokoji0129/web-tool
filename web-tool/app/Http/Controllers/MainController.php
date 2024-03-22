@@ -69,9 +69,9 @@ class MainController extends Controller
 
     }
 
-    public function add_account()
+    public function add_account(Request $request)
     {
-        $data = '製作途中';
-        return $data;
+        $account_object = new Account;
+        $account_object->add_account($request->id,$request->password,$request->confirmPassword,'匿名希望');
     }
 }
