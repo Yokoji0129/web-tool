@@ -21,6 +21,7 @@ class Account extends Model
         $data = DB::table($this->table)->get();
         return $data;
     }
+
     public function add_account($id,$password,$random_key,$name)
     {
         Account::create([
@@ -29,5 +30,19 @@ class Account extends Model
             'account_random_key' => $random_key,
             'account_name' => $name
         ]);
+    }
+
+    public function serach_id($data)
+    {
+        $ids = Account::where('account_id', 'like', "%$data%")->get();
+        if (count($ids) === 0)
+        {
+            return true;
+        }
+        else
+        {
+            $data .= 'は既に存在するidです';
+            dd($data);
+        }
     }
 }

@@ -18,8 +18,8 @@ Route::get('/newAccount', 'App\Http\Controllers\MainController@startpage');//ア
 Route::get('/accountName', 'App\Http\Controllers\MainController@startpage');//アカウント名作成
 Route::get('/diaryBooksList', 'App\Http\Controllers\MainController@startpage');//日記本一覧
 Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記ページ
-Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');
-Route::get('/account/new', 'App\Http\Controllers\MainController@make_account');
+Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
+Route::get('/account/{id}/{password}', 'App\Http\Controllers\MainController@make_account');//テストアカウント作成
 Route::post('/post', 'App\Http\Controllers\MainController@add_account');
 // Route::get('/{any}', function () {
 //     return view('app');
