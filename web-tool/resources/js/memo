@@ -5,3 +5,20 @@
 <RouterLink to="/diaryBooksList">日記本一覧</RouterLink> |
 <RouterLink to="/diary">日記</RouterLink> |
 <router-view />
+
+<script setup>
+
+</script>
+<template>
+  <div class="login-box">
+    <h2>アカウント新規作成</h2>
+    <form action="process_login.php" method="post">
+      <input type="text" placeholder="ID" />
+      <input type="password" name="password" placeholder="パスワード" />
+      <input type="password" name="password" placeholder="パスワード確認" />
+      <RouterLink to="/accountName">
+        <p class="signup-link">作成</p>
+      </RouterLink>
+    </form>
+  </div>
+</template>
