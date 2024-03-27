@@ -21,6 +21,7 @@ Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記�
 Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
 Route::get('/account/{id}/{password}', 'App\Http\Controllers\MainController@make_account');//テストアカウント作成
 Route::post('/post', 'App\Http\Controllers\MainController@add_account');
+Route::post('/account/login', 'App\Http\Controllers\MainController@login');//製作途中
 // Route::get('/{any}', function () {
 //     return view('app');
 // })->where('any', '.*');

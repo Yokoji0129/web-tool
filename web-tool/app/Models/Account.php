@@ -34,15 +34,18 @@ class Account extends Model
 
     public function serach_id($data)
     {
-        $ids = Account::where('account_id', 'like', "%$data%")->get();
+        $ids = Account::where('account_id', 'like', "$data")->get();
         if (count($ids) === 0)
         {
-            return true;
+            $torf = true;
+            return $torf;
         }
         else
         {
-            $data .= 'は既に存在するidです';
-            dd($data);
+            $data = '既に存在するidです';
+            echo $data;
+            $torf = false;
+            return $torf;
         }
     }
 }
