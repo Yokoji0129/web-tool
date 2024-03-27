@@ -56,8 +56,5 @@
     margin: 100px auto;
     margin-top: 200px;
   }
-  .signup-link {
-    width: 93%;
-  }
 }
 </style>
