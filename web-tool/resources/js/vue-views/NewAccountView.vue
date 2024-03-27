@@ -9,11 +9,13 @@ const data = reactive({
   password: "",
   confirmPassword: "",
 });
-const error = ref("");//フォーム入力エラー文字入れ
+const error = ref(""); //フォーム入力エラー文字入れ
 const router = useRouter(); //特定の処理後にページ遷移させるための変数
 
 //フォーム入力条件メソッド
 const validateForm = () => {
+  //ID,パスワードの長さが8文字未満、または33文字以上の場合(英数字含む)の正規表現
+  const Alphanumeric = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,32}$/;
   //全部の値が埋められていなかった場合
   if (
     !data.id.trim() ||
@@ -23,26 +25,31 @@ const validateForm = () => {
     error.value = "※すべての項目を入力してください。";
     return false;
   }
+  //idがAlphanumericにマッチしなかった場合
+  if (!Alphanumeric.test(data.id)) {
+    error.value =
+      "※IDは英数字を含み、8文字以上32文字以下で入力してください。";
+    return false;
+  }
   //確認用とパスワードが違った場合
   if (data.password !== data.confirmPassword) {
     error.value = "※パスワードが一致しません。";
     return false;
   }
-  //パスワードの長さが8文字未満、または33文字以上の場合(英数字含む)の正規表現
-  const passwordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,32}$/;
-  //passwordがpasswordRegexにマッチしなかった場合
-  if (!passwordRegex.test(data.password)) {
-    error.value = "※パスワードは英数字を含み、8文字以上32文字以下で入力してください。";
+  //passwordがAlphanumericにマッチしなかった場合
+  if (!Alphanumeric.test(data.password)) {
+    error.value =
+      "※パスワードは英数字を含み、8文字以上32文字以下で入力してください。";
     return false;
-  }
-  else{
+  } 
+  else {
     return true;
   }
 };
 
 //フォーム送信メソッド
 const submitForm = () => {
-  if (!validateForm()) return;//フォーム入力に誤りがあった場合falseになって処理を止める
+  if (!validateForm()) return; //フォーム入力に誤りがあった場合falseになって処理を止める
   axios
     .post("/post", {
       id: data.id,
