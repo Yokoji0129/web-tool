@@ -36,6 +36,13 @@ class MainController extends Controller
         }
     }
 
+    public function search_id($id)
+    {
+        $account_object = new Account;
+        $data = $account_object->search_id($id);
+        return $data;
+    }
+
     public function len_check($data)
     {
         if((strlen($data) >= 8) && (strlen($data) <= 32))
@@ -84,7 +91,7 @@ class MainController extends Controller
         $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
         $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
 
-        $id = MainController::hash_id($id);//$idも20回ハッシュ化
+        // $id = MainController::hash_id($id);//$idも20回ハッシュ化
         $id_check = $account_object->serach_id($id);//idが存在するかチェック,存在するなら何の処理も実行されない
 
         $random_key = Str::random(20);//20文字でランダムに生成
@@ -111,7 +118,7 @@ class MainController extends Controller
         $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
         $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
 
-        $id = MainController::hash_id($id);//$idも20回ハッシュ化
+        // $id = MainController::hash_id($id);//$idも20回ハッシュ化
         $id_check = $account_object->serach_id($id);//idが存在するかチェック,存在しないならtrue存在するならfalse
 
         $random_key = Str::random(20);//20文字でランダムに生成
