@@ -48,4 +48,18 @@ class Account extends Model
             return $torf;
         }
     }
+
+    public function get_data($data)
+    {
+        $account_data = Account::where('account_id', 'like', "$data")->get();
+        if (count($account_data) > 0)
+        {
+            return $account_data;
+        }
+        else 
+        {
+            $account_data = '存在しません';
+            return $account_data;
+        }
+    }
 }

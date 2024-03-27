@@ -39,7 +39,7 @@ class MainController extends Controller
     public function search_id($id)
     {
         $account_object = new Account;
-        $data = $account_object->search_id($id);
+        $data = $account_object->get_data($id);
         return $data;
     }
 
