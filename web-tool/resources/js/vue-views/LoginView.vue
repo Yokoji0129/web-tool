@@ -16,7 +16,7 @@
 <style scoped>
 .login-box {
   width: 700px;
-  margin: 120px auto;
+  margin: 200px auto;
   padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ccc;

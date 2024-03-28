@@ -115,7 +115,7 @@ const submitForm = () => {
 .create-account-box {
   width: 700px;
   margin: auto;
-  margin-top: 120px;
+  margin-top: 200px;
   padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ccc;
