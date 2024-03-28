@@ -1,14 +1,10 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
 <template>
   <div class="login-box">
     <h2>ログイン</h2>
     <form>
       <input type="text" name="username" placeholder="ユーザー名" />
       <input type="password" name="password" placeholder="パスワード" />
-      <input type="button" value="ログイン" />
+      <button class="login-button">ログイン</button>
       <!--アカウント新規作成ページに飛ぶ-->
       <RouterLink to="/newAccount">
         <button class="signup-link">アカウント新規作成</button>
@@ -20,16 +16,18 @@ import { RouterLink, RouterView } from "vue-router";
 <style scoped>
 .login-box {
   width: 700px;
-  margin: 300px auto;
+  margin: 120px auto;
   padding: 20px;
-  background-color: #f2e6d9;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .login-box h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #333;
 }
 
 .login-box input[type="text"],
@@ -37,45 +35,37 @@ import { RouterLink, RouterView } from "vue-router";
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 2px solid #594736;
+  border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
-  background-color: #e4d6c8;
+  background-color: #fff;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-box button:hover {
+  background-color: #0056b3;
 }
 
 .signup-link {
-  text-align: center;
-  width: 100%;
-  padding: 10px;
   margin-top: 10px;
-  border: none;
-  background-color: #8b5a2b;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.signup-link:hover {
-  background-color: #54391e;
-}
-.login-box input[type="button"] {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background-color: #8b5a2b;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
-.login-box input[type="button"]:hover {
-  background-color: #54391e;
-}
-/*ウィンドウ幅が700px以下の場合*/
-@media screen and (max-width: 700px) {
+/*ウィンドウ幅が750px以下の場合*/
+@media screen and (max-width: 750px) {
   .login-box {
     width: 300px;
     margin: 100px auto;
-    margin-top: 200px;
+    margin-top: 100px;
   }
 }
 </style>

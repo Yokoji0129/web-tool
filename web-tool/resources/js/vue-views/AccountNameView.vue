@@ -12,49 +12,51 @@
 <style scoped>
 .account-name-box {
   width: 700px;
-  margin: 300px auto;
+  margin: 120px auto;
   padding: 20px;
-  background-color: #f2e6d9;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .account-name-box h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #333;
 }
 
 .account-name-box input[type="text"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 2px solid #594736;
+  border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
-  background-color: #e4d6c8;
+  background-color: #fff;
 }
 
 .decision{
-  text-align: center;
   width: 100%;
   padding: 10px;
   border: none;
-  background-color: #8b5a2b;
+  background-color: #007bff;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .decision:hover{
-  background-color: #54391e;
+  background-color: #0056b3;
 }
 
-/*ウィンドウ幅が700px以下の場合*/
-@media screen and (max-width: 700px) {
+/*ウィンドウ幅が750px以下の場合*/
+@media screen and (max-width: 750px) {
   .account-name-box {
     width: 300px;
     margin: 100px auto;
-    margin-top: 200px;
+    margin-top: 100px;
   }
 }
 </style>
