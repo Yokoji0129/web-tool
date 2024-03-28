@@ -20,6 +20,13 @@ class MainController extends Controller
         return $data;//全てのアカウントのすべてのデータを返す
     }
 
+    public function search_id($id)
+    {
+        $account_object = new Account;
+        $data = $account_object->search_id($id);
+        return $data;
+    }
+
     public function string_check($data)
     {
         if (preg_match("/^[a-zA-Z0-9]+$/", $data))
@@ -34,13 +41,6 @@ class MainController extends Controller
             $torf = false;
             return $torf;
         }
-    }
-
-    public function search_id($id)
-    {
-        $account_object = new Account;
-        $data = $account_object->get_data($id);
-        return $data;
     }
 
     public function len_check($data)
@@ -59,6 +59,12 @@ class MainController extends Controller
             }
     }
 
+    public function full_to_half($data)
+    {
+        $data = mb_convert_kana($data, 'a');
+        return $data;
+    }
+
     public function hash_password($solt,$password)
     {
         $str = $solt . $password;
@@ -69,39 +75,27 @@ class MainController extends Controller
         return $str;
     }
 
-    public function hash_id($id)
-    {
-        for ($i = 0; $i < 20; $i += 1)
-        {
-            $id = hash('sha256', $id);
-        }
-        return $id;
-    }
-
     public function make_account($id,$password)
     {
         $account_object = new Account;
-
-        $id = mb_convert_kana($id,"a");
-        $password = mb_convert_kana($password,"a");
+        $id = MainController::full_to_half($id);
+        $password = MainController::full_to_half($password);
         //$id,passwordの全角英大文字,英子文字,数字を半角にする
 
-        $str_id = MainController::string_check($id);//問題なければtrueが問題があればfalseが返ってくる
-        $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
-        $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
-        $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $str_id = MainController::string_check($id);
+        $str_password = MainController::string_check($password);
+        $len_id = MainController::len_check($id);
+        $len_password = MainController::len_check($password);
 
-        // $id = MainController::hash_id($id);//$idも20回ハッシュ化
-        $id_check = $account_object->serach_id($id);//idが存在するかチェック,存在するなら何の処理も実行されない
-
-        $random_key = Str::random(20);//20文字でランダムに生成
+        $id_check = $account_object->search_id($id);
+        $random_key = Str::random(20);
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
         $name = '匿名希望';
 
-        if($str_id && $str_password && $len_id && $len_password && $id_check)
+        if($str_id && $str_password && $len_id && $len_password && (count($id_check) === 0))
+        //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
-            return redirect("/account/data");
         }
     }
 
@@ -109,23 +103,23 @@ class MainController extends Controller
     {
         $account_object = new Account;
 
-        $id = mb_convert_kana($request->id,"a");
-        $password = mb_convert_kana($request->password,"a");
+        $id = MainController::full_to_half($request->id);
+        $password = MainController::full_to_half($request->password);
         //$id,passwordの全角英大文字,英子文字,数字を半角にする
 
-        $str_id = MainController::string_check($id);//問題なければtrueが問題があればfalseが返ってくる
-        $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
-        $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
-        $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $str_id = MainController::string_check($id);
+        $str_password = MainController::string_check($password);
+        $len_id = MainController::len_check($id);
+        $len_password = MainController::len_check($password);
 
-        // $id = MainController::hash_id($id);//$idも20回ハッシュ化
-        $id_check = $account_object->serach_id($id);//idが存在するかチェック,存在しないならtrue存在するならfalse
+        $id_check = $account_object->serach_id($id);
 
-        $random_key = Str::random(20);//20文字でランダムに生成
+        $random_key = Str::random(20);
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
         $name = '匿名希望';
 
-        if($str_id && $str_password && $len_id && $len_password && $id_check)
+        if($str_id && $str_password && $len_id && $len_password && (count($id_check) === 0))
+        //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
         }

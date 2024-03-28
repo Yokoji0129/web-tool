@@ -20,7 +20,7 @@ Route::get('/diaryBooksList', 'App\Http\Controllers\MainController@startpage');/
 Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記ページ
 Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
 Route::get('/account/{id}/{password}', 'App\Http\Controllers\MainController@make_account');//テストアカウント作成
-Route::get('/account/{id}', 'App\Http\Controllers\MainController@search_id');//対象idの情報を返します
+Route::get('/search/{id}', 'App\Http\Controllers\MainController@search_id');//対象idの情報を返します
 Route::post('/post', 'App\Http\Controllers\MainController@add_account');
 Route::post('/account/login', 'App\Http\Controllers\MainController@login');//製作途中
 // Route::get('/{any}', function () {

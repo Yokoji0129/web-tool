@@ -32,34 +32,9 @@ class Account extends Model
         ]);
     }
 
-    public function serach_id($data)
+    public function search_id($id)
     {
-        $ids = Account::where('account_id', 'like', "$data")->get();
-        if (count($ids) === 0)
-        {
-            $torf = true;
-            return $torf;
-        }
-        else
-        {
-            $data = '既に存在するidです';
-            echo $data;
-            $torf = false;
-            return $torf;
-        }
-    }
-
-    public function get_data($data)
-    {
-        $account_data = Account::where('account_id', 'like', "$data")->get();
-        if (count($account_data) > 0)
-        {
-            return $account_data;
-        }
-        else 
-        {
-            $account_data = '存在しません';
-            return $account_data;
-        }
+        $data = Account::where('account_id', 'like', "$id")->get();
+        return $data;
     }
 }
