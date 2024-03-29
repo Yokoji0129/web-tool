@@ -27,6 +27,12 @@ class MainController extends Controller
         return $data;
     }
 
+    public function full_to_half($data)
+    {
+        $after_data = mb_convert_kana($data, 'a');
+        return $after_data;
+    }
+
     public function string_check($data)
     {
         if (preg_match("/^[a-zA-Z0-9]+$/", $data))
@@ -36,8 +42,8 @@ class MainController extends Controller
         }
         else
         {
-            $data .= 'に使用できない文字が含まれています';
-            echo $data;
+            // $data .= 'に使用できない文字が含まれています';
+            // echo $data;
             $torf = false;
             return $torf;
         }
@@ -52,17 +58,11 @@ class MainController extends Controller
             }
         else
             {
-                $data .= 'は8文字以上32文字以下の条件に一致していません';
-                echo $data;
+                // $data .= 'は8文字以上32文字以下の条件に一致していません';
+                // echo $data;
                 $torf = false;
                 return $torf;
             }
-    }
-
-    public function full_to_half($data)
-    {
-        $data = mb_convert_kana($data, 'a');
-        return $data;
     }
 
     public function hash_password($solt,$password)
@@ -112,7 +112,7 @@ class MainController extends Controller
         $len_id = MainController::len_check($id);
         $len_password = MainController::len_check($password);
 
-        $id_check = $account_object->serach_id($id);
+        $id_check = $account_object->search_id($id);
 
         $random_key = Str::random(20);
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
