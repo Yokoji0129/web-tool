@@ -24,7 +24,16 @@ class MainController extends Controller
     {
         $account_object = new Account;
         $data = $account_object->search_id($id);
-        return $data;
+        if (count($data) === 0)
+        {
+            $torf = true;
+            return $torf;
+        }
+        else
+        {
+            $torf = false;
+            return $torf;
+        }
     }
 
     public function full_to_half($data)
@@ -87,12 +96,12 @@ class MainController extends Controller
         $len_id = MainController::len_check($id);
         $len_password = MainController::len_check($password);
 
-        $id_check = $account_object->search_id($id);
+        $id_check = MainController::search_id($id);
         $random_key = Str::random(20);
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
         $name = '匿名希望';
 
-        if($str_id && $str_password && $len_id && $len_password && (count($id_check) === 0))
+        if($str_id && $str_password && $len_id && $len_password && $id_check)
         //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
@@ -112,13 +121,13 @@ class MainController extends Controller
         $len_id = MainController::len_check($id);
         $len_password = MainController::len_check($password);
 
-        $id_check = $account_object->search_id($id);
+        $id_check = MainController::search_id($id);
 
         $random_key = Str::random(20);
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
         $name = '匿名希望';
 
-        if($str_id && $str_password && $len_id && $len_password && (count($id_check) === 0))
+        if($str_id && $str_password && $len_id && $len_password && $id_check)
         //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
