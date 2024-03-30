@@ -26,12 +26,12 @@ class MainController extends Controller
         $data = $account_object->search_id($id);
         if (count($data) === 0)
         {
-            $torf = true;
+            $torf = 'true';
             return $torf;
         }
         else
         {
-            $torf = false;
+            $torf = 'false';
             return $torf;
         }
     }
