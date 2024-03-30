@@ -10,14 +10,33 @@ const data = reactive({
   confirmPassword: "",
 });
 const error = ref(""); //フォーム入力エラー文字入れ
-const router = useRouter(); //特定の処理後にページ遷移させるための変数
+
+const id = ref("");//ユーザーidが存在するかの情報が入る
+
+//IDが存在するか検索するためのメソッド
+const idSearch = async () => {
+  //tryは非同期処理が成功するか失敗するかに関係なく実行される。
+  try {
+    const response = await axios.get(`/search/${data.id}`);
+    id.value = response.data;
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 
 //ID,パスワードの長さが8文字未満、または33文字以上の場合(英数字含む)の正規表現
 const Alphanumeric = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,32}$/;
 
 //フォーム入力条件メソッド
-const validateForm = () => {
-  //全部の値が埋められていなかった場合
+const validateForm = async () => {
+
+  //idResultにIDが存在するかしないかのtrue or falseが格納される
+  //awaitでidSearchの非同期処理が終わるまでそれ以降の処理を待つ
+  const idResult = await idSearch();
+
+  //ID,passwordのどれかが一つでも空欄だった場合
   if (
     !data.id.trim() ||
     !data.password.trim() ||
@@ -26,9 +45,16 @@ const validateForm = () => {
     error.value = "※すべての項目を入力してください。";
     return false;
   }
-  //idがAlphanumericにマッチしなかった場合
+  //IDが英数字8文字以上32文字以下で入力されなかった場合
   if (!Alphanumeric.test(data.id)) {
-    error.value = "※IDは英数字を含み、8文字以上32文字以下で入力してください。";
+    error.value =
+      "※IDは英数字を含み、8文字以上32文字以下で入力してください。";
+    return false;
+  }
+  //passwordが英数字8文字以上32文字以下で入力されなかった場合
+  if (!Alphanumeric.test(data.password)) {
+    error.value =
+      "※パスワードは英数字を含み、8文字以上32文字以下で入力してください。";
     return false;
   }
   //確認用とパスワードが違った場合
@@ -36,26 +62,24 @@ const validateForm = () => {
     error.value = "※パスワードが一致しません。";
     return false;
   }
-  //passwordがAlphanumericにマッチしなかった場合
-  if (!Alphanumeric.test(data.password)) {
-    error.value =
-      "※パスワードは英数字を含み、8文字以上32文字以下で入力してください。";
+  //IDが存在した場合(falseの時)
+  if (!idResult) {
+    error.value = "※このIDは既に存在しています。";
     return false;
-  } else {
-  /**ここにでき次第IDがかぶっているかの条件式書く*/
-    return true;
   }
+
+  return true;
 };
 
-/**
- * 次回やること
- * 記号や特殊文字がパスワードやIDに入っていた場合
- * 「使用できない文字が含まれています」と表示させる
- **/
+const router = useRouter(); //特定の処理後にページ遷移させるための変数
 
 //フォーム送信メソッド
-const submitForm = () => {
-  if (!validateForm()) return; //フォーム入力に誤りがあった場合falseになって処理を止める
+const submitForm = async () => {
+  //awaitでvalidateの処理が終わるまで待つ
+  const isValid = await validateForm();
+  //falseだったら非同期処理がされないで処理が止まる
+  if (!isValid) return;
+
   axios
     .post("/post", {
       id: data.id,
@@ -63,15 +87,16 @@ const submitForm = () => {
       confirmPassword: data.confirmPassword,
     })
     .then((response) => {
-      console.log("成功");
+      console.log(response);
       //フォーム送信成功時アカウント名作成ページ遷移する
       router.push("/accountName");
     })
     .catch((error) => {
-      console.log("エラー");
+      console.log(error);
     });
 };
 </script>
+
 
 <template>
   <div class="create-account-box">
