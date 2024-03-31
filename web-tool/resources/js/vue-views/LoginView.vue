@@ -61,7 +61,7 @@
 }
 
 /*ウィンドウ幅が750px以下の場合*/
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 700px) {
   .login-box {
     width: 300px;
     margin: 100px auto;
