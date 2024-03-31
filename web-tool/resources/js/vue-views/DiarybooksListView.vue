@@ -1,3 +1,47 @@
+<script setup>
+import { ref } from "vue";
+
+const showPopup = ref(false);
+const bookTitle = ref("");
+const selectedColor = ref("#ffffff"); // カラー選択の初期値を設定する
+const books = ref([]); //本のリスト
+
+//ポップアップの表示非表示
+const togglePopup = () => {
+  showPopup.value = !showPopup.value;
+};
+
+//引数で本の作成情報を取得(bookの中にnewBookが入る)
+const addBook = (book) => {
+  books.value.push(book);
+};
+
+//本を作成するメソッド
+const createBook = () => {
+  //タイトルが記入されていなかったら
+  if (!bookTitle.value) {
+    //returnで本が未設定のまま作成されないようにする
+    alert("タイトルを入力してください。");
+    return;
+  }
+
+  //本の設定で選択したもの
+  const newBook = {
+    title: bookTitle.value,
+    color: selectedColor.value,
+  };
+
+  addBook(newBook);
+  togglePopup();
+
+  //タイトルとカラーをリセットする
+  bookTitle.value = "";
+  selectedColor.value = "#ffffff";
+};
+</script>
+
+
+
 <template>
   <div class="container">
     <nav class="fixed-nav">
@@ -9,69 +53,54 @@
     </nav>
     <main>
       <div class="diaries">
-        <div class="diary">
-          <h2>北海道</h2>
+        <!--作成した本のリスト-->
+        <div
+          v-for="(book, index) in books"
+          :key="index"
+          class="diary"
+          :style="{ backgroundColor: book.color }"
+        >
+          <h2>{{ book.title }}</h2>
         </div>
-        <div class="diary">
-          <h2>青森</h2>
-        </div>
-        <div class="diary">
-          <h2>秋田</h2>
-        </div>
-        <div class="diary">
-          <h2>北海道</h2>
-        </div>
-        <div class="diary">
-          <h2>青森</h2>
-        </div>
-        <div class="diary">
-          <h2>秋田</h2>
-        </div>
-        <div class="diary">
-          <h2>北海道</h2>
-        </div>
-        <div class="diary">
-          <h2>青森</h2>
-        </div>
-        <div class="diary">
-          <h2>秋田</h2>
-        </div>
-        <div class="diary">
-          <h2>北海道</h2>
-        </div>
-        <div class="diary">
-          <h2>青森</h2>
-        </div>
-        <div class="diary">
-          <h2>秋田</h2>
-        </div>
-        <div class="diary">
-          <h2>北海道</h2>
-        </div>
-        <div class="diary">
-          <h2>青森</h2>
-        </div>
-        <div class="diary">
-          <h2>秋田</h2>
-        </div>
-        <div class="diary">
-          <h2>北海道</h2>
-        </div>
-        <div class="diary">
-          <h2>青森</h2>
-        </div>
-        <div class="diary">
-          <h2>秋田</h2>
-        </div>
-        <div class="diary">
+        <div class="diary" @click="togglePopup">
           <h2>+</h2>
+        </div>
+      </div>
+      <!--ポップアップ-->
+      <div v-if="showPopup" class="popup">
+        <div class="popup-content">
+          <button class="close-btn" @click="togglePopup">閉じる</button>
+          <div>
+            <h3>日記本新規作成</h3>
+            <!--本のタイトル-->
+            <input
+              v-model="bookTitle"
+              type="text"
+              class="book-title"
+              placeholder="本のタイトル"
+            />
+            <h3>日記本新規作成</h3>
+            <!--カラー選択プルダウン-->
+            <select v-model="selectedColor" class="color-select">
+              <option value="#ffffff">カラーなし</option>
+              <option value="red">赤</option>
+              <option value="blue">青</option>
+              <option value="green">緑</option>
+              <option value="yellow">黄</option>
+            </select>
+            <!--本を作成するボタン-->
+            <div class="create-btn">
+              <button @click="createBook">作成</button>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
 </template>
-            
+
 <style scoped>
+/* 既存のスタイル */
 .container {
   margin-top: 92px;
   display: flex;
@@ -81,11 +110,11 @@
 .fixed-nav {
   text-align: center;
   margin-top: 92px;
-  position: fixed; /* ナビゲーションメニューを固定 */
-  top: 0; /* 上端に配置 */
-  width: 100%; /* 幅を100%に設定 */
-  background-color: #ffffff; /* 背景色を設定 */
-  z-index: 999; /* 他の要素の上に重なるようにする */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 999;
 }
 
 .nav-list {
@@ -94,7 +123,7 @@
   padding: 0;
   margin: 0;
   display: flex;
-  justify-content: space-between; /* アイテムを均等に配置 */
+  justify-content: space-between;
 }
 
 .nav-list p {
@@ -105,7 +134,7 @@
 .nav-item-left,
 .nav-item-center,
 .nav-item-right {
-  flex: 1; /* 各アイテムを均等に広げる */
+  flex: 1;
   font-weight: bold;
 }
 
@@ -120,16 +149,16 @@ main {
 
 .diaries {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
 .diary {
   text-align: center;
   border: 2px solid #ccc;
-  padding: 50px 0 300px 0;
+  padding: 70px 0 280px 0;
   margin-top: 30px;
-  background-color: #f9f9f9;
+  background-color: #d4d4d4;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
@@ -138,17 +167,95 @@ main {
   margin: 0;
 }
 
-/* ウィンドウ幅が700px以下の場合のnavのスタイル */
+/* ポップアップ */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  position: relative;
+  width: 35%;
+  background-color: white;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.popup-content h3 {
+  margin: 20 0 10px 0;
+  text-align: center;
+  color: #333;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.book-title {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.selected-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.color-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.create-btn {
+  text-align: center;
+}
+
+.create-btn button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-btn button:hover {
+  background-color: #0056b3;
+}
+/*ウィンドウ幅が700px以下の場合のnavのスタイル*/
 @media screen and (max-width: 700px) {
   .container {
     margin-top: 132px;
   }
+
   .fixed-nav {
     margin-top: 72px;
   }
+
   .nav-list {
     flex-direction: column;
-    align-items: center; /* アイテムを中央寄せに設定 */
+    align-items: center;
   }
 
   .nav-list p {
@@ -158,9 +265,24 @@ main {
   .nav-item-left,
   .nav-item-center,
   .nav-item-right {
-    flex: none; /* アイテムの伸縮を解除 */
-    width: auto; /* オート幅に設定して、テキストの幅に合わせる */
+    flex: none;
+    width: auto;
+  }
+}
+/*ウィンドウ幅が580px以下の場合のnavのスタイル*/
+@media screen and (max-width: 580px) {
+  .diaries {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+@media screen and (max-width: 500px) {
+  .popup-content h3 {
+    margin: 20px 0 10px 0;
+  }
+}
+@media screen and (max-width: 1400px) {
+  .popup-content {
+    width: 50%;
   }
 }
 </style>
-  
