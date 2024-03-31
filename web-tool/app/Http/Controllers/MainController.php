@@ -127,10 +127,18 @@ class MainController extends Controller
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
         $name = '匿名希望';
 
+        $return_data = 'ok';
+
         if($str_id && $str_password && $len_id && $len_password && $id_check)
         //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
+            return view('app', compact('return_data'));
+        }
+        else
+        {
+            $return_data = 'no';
+            return view('app', compact('return_data'));
         }
     }
 
