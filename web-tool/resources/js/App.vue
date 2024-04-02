@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="header">
-        <h1 class="header-title">旅行日記</h1>
+      <h1 class="header-title">旅行日記</h1>
     </header>
     <RouterView />
     <footer class="footer">
@@ -11,14 +11,14 @@
 </template>
 
 <style scoped>
-p{
+p {
   margin: 0;
 }
 /* ヘッダーのスタイル */
 .header {
   background-color: #f8f9fa;
   border-bottom: 1px solid #ced4da;
-  padding: 20px;
+  padding: 20px 0;
   text-align: center;
   position: fixed; /* ヘッダーを固定 */
   top: 0; /* 上端に配置 */
@@ -49,10 +49,19 @@ p{
 /* ウィンドウ幅が750px以下の場合のヘッダーのスタイル */
 @media screen and (max-width: 700px) {
   .header {
-    padding: 10px;
+    padding: 10px 0;
   }
   .footer {
     padding: 5px;
+  }
+}
+
+/**firefox用のデザイン**/
+@-moz-document url-prefix() {
+  @media screen and (max-width: 700px) {
+    .header {
+      padding: 20px 0;
+    }
   }
 }
 </style>

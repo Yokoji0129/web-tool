@@ -40,8 +40,6 @@ const createBook = () => {
 };
 </script>
 
-
-
 <template>
   <div class="container">
     <nav class="fixed-nav">
@@ -102,19 +100,20 @@ const createBook = () => {
 <style scoped>
 /* 既存のスタイル */
 .container {
-  margin-top: 92px;
+  margin-top: 90px;
   display: flex;
   flex-direction: column;
 }
 
 .fixed-nav {
   text-align: center;
-  margin-top: 92px;
+  margin-top: 90px;
   position: fixed;
   top: 0;
   width: 100%;
   background-color: #ffffff;
   z-index: 999;
+  border-bottom: 1px solid #ced4da;
 }
 
 .nav-list {
@@ -275,14 +274,15 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
-@media screen and (max-width: 500px) {
-  .popup-content h3 {
-    margin: 20px 0 10px 0;
-  }
-}
 @media screen and (max-width: 1400px) {
   .popup-content {
     width: 50%;
+  }
+}
+/**firefox用のデザイン**/
+@-moz-document url-prefix() {
+  .fixed-nav {
+    margin-top: 81px;
   }
 }
 </style>
