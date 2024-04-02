@@ -36,6 +36,11 @@ class MainController extends Controller
         }
     }
 
+    public function session(Request $request)
+    {
+        dd($request);
+    }
+
     public function full_to_half($data)
     {
         $after_data = mb_convert_kana($data, 'a');
@@ -127,29 +132,94 @@ class MainController extends Controller
         $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
         $name = '匿名希望';
 
+        $return_data = 'ok';
+
         if($str_id && $str_password && $len_id && $len_password && $id_check)
         //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
+            return view('app', compact('return_data'));
+        }
+        else
+        {
+            $return_data = 'no';
+            return view('app', compact('return_data'));
         }
     }
 
-    public function login($id, $password)
+    public function testlogin($id, $password)
     {
         $account_object = new Account;
 
-        $id = mb_convert_kana($id,"a");
-        $password = mb_convert_kana($password,"a");
+        $id = MainController::full_to_half($id);
+        $password = MainController::full_to_half($password);
         //$id,passwordの全角英大文字,英子文字,数字を半角にする
 
         $str_id = MainController::string_check($id);//問題なければtrueが問題があればfalseが返ってくる
         $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
         $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
         $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $id_check = $account_object->search_id($id);
 
-        //上記の4つがtrueであれば処理を行う
-        //id検索をして対象となるアカウントがあれば認証に、なければ何もしない
-        //対象となるアカウントの情報だけをデーターベースから取ってきて、そのソルトと入力されたpasswordをハッシュ化し一致するか確認
-        //一致すればセッションidとidを紐づけ保存
+        $return_data = 'ok';
+
+        if ($str_id && $str_password && $len_id && $len_password && (count($id_check) > 0))
+        {
+            $account_data = $account_object->search_id($id);
+            $account_data = $account_data->toArray();
+            $password = MainController::hash_password($account_data["0"]["account_random_key"],$password);
+            if ($password === $account_data["0"]["account_password"])
+            {
+                // return view('app', compact('return_data'));
+                echo $return_data;
+            }
+            else
+            {
+                $return_data = 'no';
+                // return view('app', compact('return_data'));
+                echo $return_data;
+            }
+        }
+        else
+        {
+            abort(500, 'サーバーエラーです');
+        }
+    }
+
+    public function login(Request $request)
+    {
+        $account_object = new Account;
+
+        $id = MainController::full_to_half($request->id);
+        $password = MainController::full_to_half($request->password);
+        //$id,passwordの全角英大文字,英子文字,数字を半角にする
+
+        $str_id = MainController::string_check($id);//問題なければtrueが問題があればfalseが返ってくる
+        $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
+        $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $id_check = $account_object->search_id($id);
+
+        $return_data = 'ok';
+
+        if ($str_id && $str_password && $len_id && $len_password && (count($id_check) > 0))
+        {
+            $account_data = $account_object->search_id($id);
+            $account_data = $account_data->toArray();
+            $password = MainController::hash_password($account_data["0"]["account_random_key"],$password);
+            if ($password === $account_data["0"]["account_password"])
+            {
+                return view('app', compact('return_data'));
+            }
+            else
+            {
+                $return_data = 'no';
+                return view('app', compact('return_data'));
+            }
+        }
+        else
+        {
+            abort(500, 'サーバーエラーです');
+        }
     }
 }
