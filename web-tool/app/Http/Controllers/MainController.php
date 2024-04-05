@@ -164,7 +164,7 @@ class MainController extends Controller
         $password = MainController::hash($befor_pass);//ハッシュ化したものをpasswordとして保存
         $id = MainController::hash($id);
 
-        $name = '匿名希望';
+        $name = $request->accountName;
         $return_data = 'ok';
 
         if($str_id && $str_password && $len_id && $len_password && $id_check)
