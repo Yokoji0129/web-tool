@@ -8,6 +8,7 @@ const data = reactive({
   id: "",
   password: "",
   confirmPassword: "",
+  accountName: ""
 });
 const error = ref(""); //フォーム入力エラー文字入れ
 
@@ -85,11 +86,12 @@ const submitForm = async () => {
       id: data.id,
       password: data.password,
       confirmPassword: data.confirmPassword,
+      accountName: data.accountName
     })
     .then((response) => {
       console.log(response);
-      //フォーム送信成功時アカウント名作成ページ遷移する
-      router.push("/accountName");
+      //フォーム送信成功時ログインページ遷移する
+      router.push("/");
     })
     .catch((error) => {
       console.log(error);
@@ -113,6 +115,7 @@ const submitForm = async () => {
           check: Alphanumeric.test(data.id),
         }"
       ></p>
+      
       <input type="password" v-model="data.password" placeholder="パスワード" />
       <!--パスワードの条件満たしてる時と満たしてないときのデザイン-->
       <p class="no-password">□</p>
@@ -129,6 +132,7 @@ const submitForm = async () => {
         v-model="data.confirmPassword"
         placeholder="パスワード確認"
       />
+      <input type="text" v-model="data.accountName" placeholder="アカウント名" />
       <!--エラーの際テキスト表示-->
       <p class="error-text">{{ error }}</p>
       <button class="account-name-link" type="submit">作成</button>
