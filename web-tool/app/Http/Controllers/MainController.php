@@ -254,7 +254,7 @@ class MainController extends Controller
         $id = MainController::hash($id);
         $id_check = $account_object->search_id($id);
 
-        $return_data = 'ok';
+        // $return_data = 'ok';
 
         if ($str_id && $str_password && $len_id && $len_password && (count($id_check) > 0))
         {
@@ -264,12 +264,11 @@ class MainController extends Controller
             $password = MainController::hash($befor_pass);
             if ($password === $account_data["0"]["account_password"])
             {
-                return view('app', compact('return_data'));
+                MainController::auth($request->cookies->get("laravel_session"), $id);
             }
             else
             {
-                $return_data = 'no';
-                return view('app', compact('return_data'));
+                //
             }
         }
         else
