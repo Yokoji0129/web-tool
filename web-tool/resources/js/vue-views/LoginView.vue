@@ -1,10 +1,35 @@
+<script setup>
+import { RouterLink, useRouter } from "vue-router";
+import axios from "axios";
+import { ref } from "vue";
+
+const id = ref('');
+const password = ref('');
+const router = useRouter();
+
+const login = async () => {
+  axios
+    .post("/login", {
+      id: id.value,
+      password: password.value,
+    })
+    .then((response) => {
+      console.log(response);
+      router.push("/diaryBooksList");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+</script>
+
 <template>
   <div class="login-box">
     <h2>ログイン</h2>
-    <form>
-      <input type="text" name="username" placeholder="ユーザー名" />
-      <input type="password" name="password" placeholder="パスワード" />
-      <button class="login-button">ログイン</button>
+    <form @submit.prevent="login">
+      <input v-model="id" type="text" name="id" placeholder="ユーザーID" />
+      <input v-model="password" type="password" name="password" placeholder="パスワード" />
+      <button type="submit" class="login-button">ログイン</button>
       <!--アカウント新規作成ページに飛ぶ-->
       <RouterLink to="/newAccount">
         <button class="signup-link">アカウント新規作成</button>
@@ -12,6 +37,7 @@
     </form>
   </div>
 </template>
+
   
 <style scoped>
 .login-box {
