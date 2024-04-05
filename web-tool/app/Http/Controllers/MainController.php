@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Account;
+use App\Models\SessionAccount;
 use Illuminate\Support\Str;
 
 class MainController extends Controller
@@ -23,6 +24,7 @@ class MainController extends Controller
     public function search_id($id)
     {
         $account_object = new Account;
+        $id = MainController::hash($id);
         $data = $account_object->search_id($id);
         if (count($data) === 0)
         {
@@ -38,7 +40,23 @@ class MainController extends Controller
 
     public function session(Request $request)
     {
-        dd($request);
+        dump($request->cookies->get("laravel_session"));
+    }
+
+    public function search_session($session)
+    {
+        $session_account_object = new SessionAccount;
+        $data = $session_account_object->search_session($session);
+        if (count($data) === 0)
+        {
+            $torf = true;
+            return $torf;
+        }
+        else
+        {
+            $torf = false;
+            return $torf;
+        }
     }
 
     public function full_to_half($data)
@@ -89,6 +107,15 @@ class MainController extends Controller
         return $str;
     }
 
+    public function hash($data)
+    {
+        for ($i = 0; $i < 20; $i += 1)
+        {
+            $data = hash('sha256', $data);
+        }
+        return $data;
+    }
+
     public function make_account($id,$password)
     {
         $account_object = new Account;
@@ -101,9 +128,14 @@ class MainController extends Controller
         $len_id = MainController::len_check($id);
         $len_password = MainController::len_check($password);
 
+        $id = MainController::hash($id);
         $id_check = MainController::search_id($id);
         $random_key = Str::random(20);
-        $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
+
+        $befor_pass = $random_key . $password;
+
+        $password = MainController::hash($befor_pass);//ハッシュ化したものをpasswordとして保存
+        $id = MainController::hash($id);
         $name = '匿名希望';
 
         if($str_id && $str_password && $len_id && $len_password && $id_check)
@@ -127,11 +159,12 @@ class MainController extends Controller
         $len_password = MainController::len_check($password);
 
         $id_check = MainController::search_id($id);
-
         $random_key = Str::random(20);
-        $password = MainController::hash_password($random_key,$password);//ハッシュ化したものをpasswordとして保存
-        $name = '匿名希望';
+        $befor_pass = $random_key . $password;
+        $password = MainController::hash($befor_pass);//ハッシュ化したものをpasswordとして保存
+        $id = MainController::hash($id);
 
+        $name = '匿名希望';
         $return_data = 'ok';
 
         if($str_id && $str_password && $len_id && $len_password && $id_check)
@@ -147,7 +180,26 @@ class MainController extends Controller
         }
     }
 
-    public function testlogin($id, $password)
+    public function auth($session, $id)
+    {
+        $session_account_object = new SessionAccount;
+        $session = MainController::full_to_half($session);
+        $str_session = MainController::string_check($session);
+        if ($str_session && (strlen($session) === 40))
+        {
+            if (MainController::search_session($session))
+            {
+                $session_account_object->add_session($session, $id);
+                echo 'ログインしました';
+            }
+            else
+            {
+                echo 'ログイン済みです';
+            }
+        }
+    }
+
+    public function testlogin(Request $request, $id, $password)
     {
         $account_object = new Account;
 
@@ -159,6 +211,7 @@ class MainController extends Controller
         $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
         $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
         $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $id = MainController::hash($id);
         $id_check = $account_object->search_id($id);
 
         $return_data = 'ok';
@@ -167,11 +220,11 @@ class MainController extends Controller
         {
             $account_data = $account_object->search_id($id);
             $account_data = $account_data->toArray();
-            $password = MainController::hash_password($account_data["0"]["account_random_key"],$password);
+            $befor_pass = $account_data["0"]["account_random_key"] . $password;
+            $password = MainController::hash($befor_pass);
             if ($password === $account_data["0"]["account_password"])
             {
-                // return view('app', compact('return_data'));
-                echo $return_data;
+                MainController::auth($request->cookies->get("laravel_session"), $id);
             }
             else
             {
@@ -198,6 +251,7 @@ class MainController extends Controller
         $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
         $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
         $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        $id = MainController::hash($id);
         $id_check = $account_object->search_id($id);
 
         $return_data = 'ok';
@@ -206,7 +260,8 @@ class MainController extends Controller
         {
             $account_data = $account_object->search_id($id);
             $account_data = $account_data->toArray();
-            $password = MainController::hash_password($account_data["0"]["account_random_key"],$password);
+            $befor_pass = $account_data["0"]["account_random_key"] . $password;
+            $password = MainController::hash($befor_pass);
             if ($password === $account_data["0"]["account_password"])
             {
                 return view('app', compact('return_data'));
