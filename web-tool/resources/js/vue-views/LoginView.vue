@@ -1,17 +1,51 @@
 <script setup>
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
-const id = ref('');
-const password = ref('');
+const data = reactive({
+  id: "",
+  password: "",
+});
+
+const error = ref("");
+
+const idSearch = async () => {
+  try {
+    const response = await axios.get(`/search/${data.id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+//フォーム入力条件メソッド
+const validateForm = async () => {
+  const idResult = await idSearch();
+  //ID, passwordのどれかが一つでも空欄だった場合
+  if (!data.id.trim() || !data.password.trim()) {
+    error.value = "※すべての項目を入力してください。";
+    return false;
+  }
+  //IDが存在しない場合
+  if (idResult) {
+    error.value = "※このIDは存在しません";
+    return false;
+  }
+
+  return true;
+};
+
 const router = useRouter();
 
 const login = async () => {
+  const isValid = await validateForm();
+  if (!isValid) return;
   axios
     .post("/login", {
-      id: id.value,
-      password: password.value,
+      id: data.id,
+      password: data.password,
     })
     .then((response) => {
       console.log(response);
@@ -27,16 +61,18 @@ const login = async () => {
   <div class="login-box">
     <h2>ログイン</h2>
     <form @submit.prevent="login">
-      <input v-model="id" type="text" name="id" placeholder="ユーザーID" />
-      <input v-model="password" type="password" name="password" placeholder="パスワード" />
+      <input v-model="data.id" type="text" name="id" placeholder="ユーザーID" />
+      <input v-model="data.password" type="password" name="password" placeholder="パスワード" />
+      <p class="error-text">{{ error }}</p>
       <button type="submit" class="login-button">ログイン</button>
-      <!--アカウント新規作成ページに飛ぶ-->
       <RouterLink to="/newAccount">
         <button class="signup-link">アカウント新規作成</button>
       </RouterLink>
     </form>
   </div>
 </template>
+
+
 
   
 <style scoped>
