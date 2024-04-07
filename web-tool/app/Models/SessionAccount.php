@@ -25,13 +25,13 @@ class SessionAccount extends Model
 
     public function search_session($id)
     {
-        $data = SessionAccount::where('session_id', 'like', "$id")->get();
+        $data = SessionAccount::where('session_id', 'like', "$id")->get(['session_id', 'account_id']);
         return $data;
     }
 
     public function search_account($id)
     {
-        $data = SessionAccount::where('account_id', 'like', "$id")->get();
+        $data = SessionAccount::where('account_id', 'like', "$id")->get(['session_id', 'account_id']);
         return $data;
     }
 
