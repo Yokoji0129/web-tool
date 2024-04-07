@@ -78,7 +78,7 @@ const login = async () => {
 <style scoped>
 .login-box {
   width: 700px;
-  margin: 200px auto;
+  margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ccc;
@@ -126,8 +126,7 @@ const login = async () => {
 @media screen and (max-width: 700px) {
   .login-box {
     width: 300px;
-    margin: 100px auto;
-    margin-top: 100px;
+    margin: 130px auto;
   }
 }
 </style>

@@ -143,8 +143,7 @@ const submitForm = async () => {
 <style scoped>
 .create-account-box {
   width: 700px;
-  margin: auto;
-  margin-top: 200px;
+  margin: 250 auto;
   padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ccc;
@@ -242,7 +241,7 @@ const submitForm = async () => {
   .create-account-box {
     width: 300px;
     margin: auto;
-    margin-top: 100px; /* 上方向の余白を追加 */
+    margin-top: 130px;
   }
   .create-account-box input[type="text"],
   .create-account-box input[type="password"] {

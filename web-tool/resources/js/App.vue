@@ -14,17 +14,17 @@
 p {
   margin: 0;
 }
-/* ヘッダーのスタイル */
+
 .header {
   background-color: #f8f9fa;
   border-bottom: 1px solid #ced4da;
   padding: 20px 0;
   text-align: center;
-  position: fixed; /* ヘッダーを固定 */
-  top: 0; /* 上端に配置 */
-  left: 0; /* 左端に配置 */
-  width: 100%; /* 幅を100%に設定 */
-  z-index: 999; /* 他の要素の上に重なるようにする */
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%;
+  z-index: 999;
 }
 
 .header-title {
@@ -35,15 +35,16 @@ p {
 }
 
 .footer {
+  text-align: center;
   background-color: #5a646d;
   color: #ffffff;
   padding: 20px;
   text-align: center;
-  position: fixed; /* フッターを固定 */
-  left: 0; /* 左端に配置 */
-  bottom: 0; /* 下端に配置 */
-  width: 100%; /* 幅を100%に設定 */
-  z-index: 999; /* 他の要素の上に重なるようにする */
+  position: fixed;
+  left: 0; 
+  bottom: 0;
+  width: 100%;
+  z-index: 999; 
 }
 
 /* ウィンドウ幅が750px以下の場合のヘッダーのスタイル */
