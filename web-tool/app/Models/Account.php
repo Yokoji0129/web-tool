@@ -34,7 +34,7 @@ class Account extends Model
 
     public function search_id($id)
     {
-        $data = Account::where('account_id', 'like', "$id")->get();
+        $data = Account::where('account_id', 'like', "$id")->get(['account_id', 'account_password', 'account_random_key', 'account_name']);
         return $data;
     }
 }

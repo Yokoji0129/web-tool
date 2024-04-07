@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Account;
+use App\Models\Diary;
 
-class AccountSeeder extends Seeder
+class DiarySeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Account::truncate();
+        Diary::truncate();
     }
 }

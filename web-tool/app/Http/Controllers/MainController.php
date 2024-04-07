@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Account;
 use App\Models\SessionAccount;
+use App\Models\AccountDiary;
+use App\Models\Diary;
 use Illuminate\Support\Str;
 
 class MainController extends Controller
@@ -43,22 +45,6 @@ class MainController extends Controller
         dump($request->cookies->get("laravel_session"));
     }
 
-    public function search_session($session)
-    {
-        $session_account_object = new SessionAccount;
-        $data = $session_account_object->search_session($session);
-        if (count($data) === 0)
-        {
-            $torf = true;
-            return $torf;
-        }
-        else
-        {
-            $torf = false;
-            return $torf;
-        }
-    }
-
     public function full_to_half($data)
     {
         $after_data = mb_convert_kana($data, 'a');
@@ -90,21 +76,9 @@ class MainController extends Controller
             }
         else
             {
-                // $data .= 'は8文字以上32文字以下の条件に一致していません';
-                // echo $data;
                 $torf = false;
                 return $torf;
             }
-    }
-
-    public function hash_password($solt,$password)
-    {
-        $str = $solt . $password;
-        for ($i = 0; $i < 20; $i += 1)
-        {
-            $str = hash('sha256', $str);
-        }
-        return $str;
     }
 
     public function hash($data)
@@ -180,21 +154,25 @@ class MainController extends Controller
         }
     }
 
-    public function auth($session, $id)
+    public function auth($session)
     {
         $session_account_object = new SessionAccount;
         $session = MainController::full_to_half($session);
         $str_session = MainController::string_check($session);
+
+        $login_situ = true;
+
         if ($str_session && (strlen($session) === 40))
         {
-            if (MainController::search_session($session))
+            $data = $session_account_object->search_session($session);
+            if (count($data) === 1)
             {
-                $session_account_object->add_session($session, $id);
-                echo 'ログインしました';
+                return $login_situ;
             }
             else
             {
-                echo 'ログイン済みです';
+                $login_situ = false;
+                return $login_situ;
             }
         }
     }
@@ -202,6 +180,7 @@ class MainController extends Controller
     public function testlogin(Request $request, $id, $password)
     {
         $account_object = new Account;
+        $session_account_object = new SessionAccount;
 
         $id = MainController::full_to_half($id);
         $password = MainController::full_to_half($password);
@@ -224,13 +203,23 @@ class MainController extends Controller
             $password = MainController::hash($befor_pass);
             if ($password === $account_data["0"]["account_password"])
             {
-                MainController::auth($request->cookies->get("laravel_session"), $id);
+                $session = $request->cookies->get("laravel_session");
+                $torf = MainController::auth($session);
+                if ($torf === false)
+                {
+                    $session_account_object->add_session($session, $id);
+                    return $return_data;
+                }
+                else
+                {
+                    $return_data = 'ログイン済み';
+                    return $return_data;
+                }
             }
             else
             {
                 $return_data = 'no';
-                // return view('app', compact('return_data'));
-                echo $return_data;
+                return view('app', compact('return_data'));
             }
         }
         else
@@ -242,6 +231,7 @@ class MainController extends Controller
     public function login(Request $request)
     {
         $account_object = new Account;
+        $session_account_object = new SessionAccount;
 
         $id = MainController::full_to_half($request->id);
         $password = MainController::full_to_half($request->password);
@@ -254,7 +244,7 @@ class MainController extends Controller
         $id = MainController::hash($id);
         $id_check = $account_object->search_id($id);
 
-        // $return_data = 'ok';
+        $return_data = 'true';
 
         if ($str_id && $str_password && $len_id && $len_password && (count($id_check) > 0))
         {
@@ -264,16 +254,136 @@ class MainController extends Controller
             $password = MainController::hash($befor_pass);
             if ($password === $account_data["0"]["account_password"])
             {
-                MainController::auth($request->cookies->get("laravel_session"), $id);
+                $session = $request->cookies->get("laravel_session");
+                $torf = MainController::auth($session);
+                if ($torf === false)
+                {
+                    $session_account_object->add_session($session, $id);
+                    return $return_data;
+                }
+                else
+                {
+                    $return_data = 'logged';
+                    return $return_data;
+                }
             }
             else
             {
-                //
+                $reutrn_data = 'false';
+                return $reutrn_data;
             }
         }
         else
         {
             abort(500, 'サーバーエラーです');
+        }
+    }
+
+    public function return_diary(Request $request)
+    {
+        $session_account_object = new SessionAccount;
+        $account_diary_object = new AccountDiary;
+        $diary_object = new Diary;
+        $session = $request->cookies->get("laravel_session");
+        $session_account_data = $session_account_object->search_session($session);
+
+        $return_data = 'true';
+        if (count($session_account_data) === 1)
+        {
+            $session_account_data = $session_account_data->toArray();
+            $account_id = $session_account_data["0"]["account_id"];
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+
+        if ($return_data === 'true')
+        {
+            $account_diary_data = $account_diary_object->search_account($account_id);
+            if ((count($account_diary_data) > 0))
+            {
+                $account_diary_data = $account_diary_data->toArray();
+                $return_data = [];
+                foreach ($account_diary_data as $diaries => $ids)
+                {
+                    $data = $diary_object->search_data($ids['diary_id']);
+                    $data = $data->toArray();
+                    $return_data[] = $data;
+                }
+                return $return_data;
+            }
+            else
+            {
+                $return_data = 'nodata';
+                return $return_data;
+            }
+        }
+        else
+        {
+            $return_data = '?';
+            return $return_data;
+        }
+    }
+
+    public function test_add_diarydata(Request $request, $name, $color)
+    {
+        $diary_object = new Diary;
+        $session_account_object = new SessionAccount;
+        $account_diary = new AccountDiary;
+
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $return_data = 'true';
+        if ($torf)
+        {
+            $id = $diary_object->all_data();
+            $diary_id = count($id) + 1;
+            $file = 'nodata';
+            $diary_object->add_data($diary_id,$name,$file,$color);
+
+            $session_account_data = $session_account_object->search_session($session);
+            $session_account_data = $session_account_data->toArray();
+            $account_id = $session_account_data["0"]["account_id"];
+            $account_diary->add_data($account_id, $diary_id);
+            return $return_data;
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+    }
+
+    public function add_dairy(Request $request)
+    {
+        $diary_object = new Diary;
+        $session_account_object = new SessionAccount;
+        $account_diary = new AccountDiary;
+
+        $name = $request->name;
+        $color = $request->color;
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $return_data = 'true';
+        if ($torf)
+        {
+            $id = $diary_object->all_data();
+            $diary_id = count($id) + 1;
+            $file = 'nodata';
+            $diary_object->add_data($diary_id,$name,$file,$color);
+
+            $session_account_data = $session_account_object->search_session($session);
+            $session_account_data = $session_account_data->toArray();
+            $account_id = $session_account_data["0"]["account_id"];
+            $account_diary->add_data($account_id, $diary_id);
+            return $return_data;
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
         }
     }
 }
