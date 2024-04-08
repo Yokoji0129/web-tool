@@ -1,26 +1,18 @@
-ルーター設定コード
-<RouterLink to="/">ログイン</RouterLink> |
-<RouterLink to="/newAccount">新規アカウント作成</RouterLink> |
-<RouterLink to="/accountName">アカウント名初期設定</RouterLink> |
-<RouterLink to="/diaryBooksList">日記本一覧</RouterLink> |
-<RouterLink to="/diary">日記</RouterLink> |
-<router-view />
+レスポンシブデザインサイズ基準
 
-<script setup>
+WQHD解像度
+2560x1440
 
-</script>
-<template>
-  <div class="login-box">
-    <h2>アカウント新規作成</h2>
-    <form action="process_login.php" method="post">
-      <input type="text" placeholder="ID" />
-      <input type="password" name="password" placeholder="パスワード" />
-      <input type="password" name="password" placeholder="パスワード確認" />
-      <RouterLink to="/accountName">
-        <p class="signup-link">作成</p>
-      </RouterLink>
-    </form>
-  </div>
-</template>
+フルhd解像度
+1920x1020
 
-#f8f9fa ヘッダーのバックカラー
+中程度の大きさのノートパソコンやデスクトップモニターの解像度
+1440x900
+
+小さいノートパソコンや古いモニターの解像度
+1024x768
+
+ipadの解像度
+768x1024
+
+450px以下は基本スマホのpx数

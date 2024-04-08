@@ -48,9 +48,9 @@ p {
 }
 
 /* ウィンドウ幅が750px以下の場合のヘッダーのスタイル */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 768px) {
   .header {
-    padding: 10px 0;
+    padding: 5px 0;
   }
   .footer {
     padding: 5px;
@@ -59,9 +59,9 @@ p {
 
 /**firefox用のデザイン**/
 @-moz-document url-prefix() {
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 768px) {
     .header {
-      padding: 20px 0;
+      padding: 10px 0;
     }
   }
 }

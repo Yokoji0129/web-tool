@@ -98,7 +98,6 @@ const createBook = () => {
 </template>
 
 <style scoped>
-/* 既存のスタイル */
 .container {
   margin-top: 90px;
   display: flex;
@@ -107,7 +106,7 @@ const createBook = () => {
 
 .fixed-nav {
   text-align: center;
-  margin-top: 90px;
+  margin-top: 92px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -242,14 +241,22 @@ main {
 .create-btn button:hover {
   background-color: #0056b3;
 }
-/*ウィンドウ幅が700px以下の場合のnavのスタイル*/
-@media screen and (max-width: 700px) {
+
+/***ポップアップ横幅調整*/
+@media screen and (max-width: 1440px) {
+  .popup-content {
+    width: 50%;
+  }
+}
+
+/*タブレット*/
+@media screen and (max-width: 768px) {
   .container {
     margin-top: 132px;
   }
 
   .fixed-nav {
-    margin-top: 72px;
+    margin-top: 62px;
   }
 
   .nav-list {
@@ -268,21 +275,23 @@ main {
     width: auto;
   }
 }
-/*ウィンドウ幅が580px以下の場合のnavのスタイル*/
+
+/*ウィンドウ幅が580px以下の場合のnavのスタイル(本の横幅調整。このタイミングでやらないと本が正方形になる)*/
 @media screen and (max-width: 580px) {
   .diaries {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
-@media screen and (max-width: 1400px) {
-  .popup-content {
-    width: 50%;
-  }
-}
+
 /**firefox用のデザイン**/
 @-moz-document url-prefix() {
   .fixed-nav {
-    margin-top: 81px;
+    margin-top: 82px;
+  }
+  @media screen and (max-width: 768px) {
+    .fixed-nav {
+      margin-top: 62px;
+    }
   }
 }
 </style>

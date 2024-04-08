@@ -143,7 +143,7 @@ const submitForm = async () => {
 <style scoped>
 .create-account-box {
   width: 700px;
-  margin: 250 auto;
+  margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
   border: 1px solid #ccc;
@@ -237,7 +237,7 @@ const submitForm = async () => {
 }
 
 /*ウィンドウ幅が750px以下の場合*/
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 768px) {
   .create-account-box {
     width: 300px;
     margin: auto;

@@ -71,9 +71,6 @@ const login = async () => {
     </form>
   </div>
 </template>
-
-
-
   
 <style scoped>
 .login-box {
@@ -123,7 +120,7 @@ const login = async () => {
 }
 
 /*ウィンドウ幅が750px以下の場合*/
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 768px) {
   .login-box {
     width: 300px;
     margin: 130px auto;

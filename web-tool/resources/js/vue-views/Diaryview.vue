@@ -22,10 +22,10 @@ import { ref } from "vue";
         <input class="file" type="file" />
       </div>
       <div class="image-grid">
+        <img src="../../../public/testImage/test2.jpg" />
         <img src="../../../public/testImage/test.png" />
         <img src="../../../public/testImage/test.png" />
-        <img src="../../../public/testImage/test.png" />
-        <img src="../../../public/testImage/test.png" />
+        <img src="../../../public/testImage/test2.jpg" />
         <img src="../../../public/testImage/test.png" />
         <img src="../../../public/testImage/test.png" />
         <!--画像がないときに表示させる<h1>旅行での写真を入れてください</h1>-->
@@ -36,22 +36,23 @@ import { ref } from "vue";
   
 <style scoped>
 .book-layout {
-  margin-top: 130px;
+  margin-top: 90px;
   display: flex;
 }
 
 .left-page {
+  margin-top: 35px;
   flex: 1;
   padding: 30px;
 }
 
 .right-page {
+  margin-top: 20px;
   flex: 1;
   padding: 30px;
 }
 
 .page-title-box {
-  margin-top: 25px;
   text-align: center;
 }
 
@@ -71,7 +72,7 @@ import { ref } from "vue";
   padding-bottom: 70%;
   width: 100%;
   font-size: 24px;
-  resize: none; /**textareaのサイズをユーザーが帰れないように変更**/
+  resize: none; /**textareaのサイズをユーザーが変えれないように変更**/
 }
 
 .image-grid {
@@ -82,44 +83,64 @@ import { ref } from "vue";
 
 .image-grid img {
   max-width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 /**フルHD**/
-@media screen and (max-width: 1980px) {
+@media screen and (max-width: 1920px) {
+  .left-page {
+    padding-top: 20px;
+  }
   .page-text {
     padding-bottom: 60%;
   }
 
   .image-grid img {
     max-width: 90%;
-    height: auto;
   }
 }
 
-/**このサイズからページを縦に並べる**/
-@media screen and (max-width: 1280px) {
-  .book-layout {
-    flex-direction: column;
-    margin-top: 70px;
-    margin-bottom: 60px;
+/**ノートパソコンLサイズ**/
+@media screen and (max-width: 1440px) {
+  .right-page {
+    margin-top: 40px;
   }
 
-  /**縦並びになったときに幅を100%に戻す**/
+  .page-text {
+    padding-bottom: 75%;
+  }
+
   .image-grid img {
     max-width: 100%;
-    height: auto;
   }
 }
 
-@media screen and (max-width: 700px) {
+/**このサイズから左右ページを縦配置**/
+@media screen and (max-width: 1400px) {
   .book-layout {
-    margin-top: 40px;
-    margin-bottom: 30px;
+    flex-direction: column;
+    margin-top: 65px;
+    margin-bottom: 60px;
   }
-  .title {
-    margin-top: 72px;
-    padding: 1px;
+  .left-page {
+    padding-bottom: 0;
+  }
+  .right-page {
+    margin-top: 0;
+  }
+  .page-text {
+    padding-bottom: 35%;
+  }
+  .page-title{
+    height: 60px;
+  }
+}
+
+/**タブレット(ここから画像一列)**/
+@media screen and (max-width: 768px) {
+  .book-layout {
+    margin-top: 35px;
+    margin-bottom: 30px;
   }
   .image-grid {
     grid-template-columns: repeat(1, 1fr);
@@ -129,9 +150,22 @@ import { ref } from "vue";
     font-size: 24px;
   }
   .page-text {
-    padding-bottom: 100%;
+    padding-bottom: 60%;
     width: 100%;
     font-size: 16px;
+  }
+}
+
+/**スマホ**/
+@media screen and (max-width: 450px) {
+  .book-layout {
+    margin-top: 30px;
+  }
+  .page-title {
+    height: 40px;
+  }
+  .page-text {
+    padding-bottom: 80%;
   }
 }
 </style>
