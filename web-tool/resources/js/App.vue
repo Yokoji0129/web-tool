@@ -24,7 +24,7 @@ p {
   top: 0; 
   left: 0; 
   width: 100%;
-  z-index: 999;
+  z-index: 99;
 }
 
 .header-title {
@@ -45,6 +45,7 @@ p {
   bottom: 0;
   width: 100%;
   z-index: 999; 
+  font-family: "Georgia", serif;
 }
 
 /* ウィンドウ幅が750px以下の場合のヘッダーのスタイル */
