@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Account;
 use App\Models\SessionAccount;
+use App\Models\Account;
 use App\Models\AccountDiary;
 use App\Models\Diary;
+use App\Models\DiaryPage;
+use App\Models\Page;
 use Illuminate\Support\Str;
 
 class MainController extends Controller
@@ -60,10 +62,20 @@ class MainController extends Controller
         }
         else
         {
-            // $data .= 'に使用できない文字が含まれています';
-            // echo $data;
             $torf = false;
             return $torf;
+        }
+    }
+
+    public function int_check($num)
+    {
+        if (is_numeric($num))
+        {
+            return intval($num);
+        }
+        else
+        {
+            return 'false';
         }
     }
 
@@ -279,19 +291,26 @@ class MainController extends Controller
         }
     }
 
-    public function return_diary(Request $request)
+    public function s_after_a($session)
     {
         $session_account_object = new SessionAccount;
+        $session_account_data = $session_account_object->search_session($session);
+        $session_account_data = $session_account_data->toArray();
+        $account_id = $session_account_data["0"]["account_id"];
+        return $account_id;
+    }
+
+    public function return_diary(Request $request)
+    {
         $account_diary_object = new AccountDiary;
         $diary_object = new Diary;
         $session = $request->cookies->get("laravel_session");
-        $session_account_data = $session_account_object->search_session($session);
+        $torf = MainController::auth($session);
 
         $return_data = 'true';
-        if (count($session_account_data) === 1)
+        if ($torf)
         {
-            $session_account_data = $session_account_data->toArray();
-            $account_id = $session_account_data["0"]["account_id"];
+            $account_id = MainController::s_after_a($session);
         }
         else
         {
@@ -330,7 +349,6 @@ class MainController extends Controller
     public function test_add_diarydata(Request $request, $name, $color)
     {
         $diary_object = new Diary;
-        $session_account_object = new SessionAccount;
         $account_diary = new AccountDiary;
 
         $session = $request->cookies->get("laravel_session");
@@ -343,9 +361,7 @@ class MainController extends Controller
             $file = 'nodata';
             $diary_object->add_data($diary_id,$name,$file,$color);
 
-            $session_account_data = $session_account_object->search_session($session);
-            $session_account_data = $session_account_data->toArray();
-            $account_id = $session_account_data["0"]["account_id"];
+            $account_id = MainController::s_after_a($session);
             $account_diary->add_data($account_id, $diary_id);
             return $return_data;
         }
@@ -359,7 +375,6 @@ class MainController extends Controller
     public function add_dairy(Request $request)
     {
         $diary_object = new Diary;
-        $session_account_object = new SessionAccount;
         $account_diary = new AccountDiary;
 
         $name = $request->name;
@@ -374,11 +389,175 @@ class MainController extends Controller
             $file = 'nodata';
             $diary_object->add_data($diary_id,$name,$file,$color);
 
-            $session_account_data = $session_account_object->search_session($session);
-            $session_account_data = $session_account_data->toArray();
-            $account_id = $session_account_data["0"]["account_id"];
+            $account_id = MainController::s_after_a($session);
             $account_diary->add_data($account_id, $diary_id);
             return $return_data;
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+    }
+
+    public function test_add_page(Request $request, $id, $title, $txt)
+    {
+        $account_diary_object = new AccountDiary;
+        $diary_page_object = new DiaryPage;
+        $page_object = new Page;
+
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $id = MainController::int_check($id);
+
+        if ($torf && $id)
+        {
+            $account_id = MainController::s_after_a($session);
+            $diary_data = $account_diary_object->search_account($account_id);
+            if (count($diary_data) > 0)
+            {
+                $return_data = 'true';
+            }
+            else
+            {
+                $return_data = 'nodata';
+            }
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+
+        if($return_data === 'true')
+        {
+            foreach ($diary_data as $diaries => $ids)
+            {
+                if($ids['diary_id'] === $id)
+                {
+                    $page_data = $page_object->all_data();
+                    $page_id = count($page_data) + 1;
+                    $diary_page_object->add_data($id, $page_id);
+
+                    $file1 = 'nodata';
+                    $file2 = 'nodata';
+                    $file3 = 'nodata';
+                    $file4 = 'nodata';
+                    $file5 = 'nodata';
+                    $file6 = 'nodata';
+
+                    $page_object->add_data($page_id, $title, $txt, $file1, $file2, $file3, $file4, $file5, $file6);
+                    return $return_data;
+                }
+                else
+                {
+                    $return_data = 'noid';
+                    return $return_data;
+                }
+            }
+        }
+        else
+        {
+            $return_data = '?';
+            return $return_data;
+        }
+    }
+
+    public function add_page(Request $request)
+    {
+        $account_diary_object = new AccountDiary;
+        $diary_page_object = new DiaryPage;
+        $page_object = new Page;
+
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $id = MainController::int_check($request->id);
+
+        if ($torf && $id)
+        {
+            $account_id = MainController::s_after_a($session);
+            $diary_data = $account_diary_object->search_account($account_id);
+            if(count($diary_data) > 0)
+            {
+                $return_data = 'true';
+            }
+            else
+            {
+                $return_data = 'nodata';
+                return $return_data;
+            }
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+
+        if($return_data === 'true')
+        {
+            foreach ($diary_data as $diaries => $ids)
+            {
+                if($ids['diary_id'] === $id)
+                {
+                    $page_data = $page_object->all_data();
+                    $page_id = count($page_data) + 1;
+                    $diary_page_object->add_data($id, $page_id);
+
+                    $file1 = 'nodata';
+                    $file2 = 'nodata';
+                    $file3 = 'nodata';
+                    $file4 = 'nodata';
+                    $file5 = 'nodata';
+                    $file6 = 'nodata';
+
+                    $page_object->add_data($page_id, $request->title, $request->txt, $file1, $file2, $file3, $file4, $file5, $file6);
+                    return $return_data;
+                }
+                else
+                {
+                    $return_data = 'noid';
+                    return $return_data;
+                }
+            }
+        }
+    }
+
+    public function return_page(Request $request, $id)
+    {
+        $account_diary_object = new AccountDiary;
+        $diary_page_object = new DiaryPage;
+        $page_object = new Page;
+
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $return_data = 'true';
+        $id = MainController::int_check($request->id);
+
+        if($torf && $id)
+        {
+            $account_id = MainController::s_after_a($session);
+            $diary_data = $account_diary_object->search_account($account_id);
+            foreach ($diary_data as $diaries => $ids)
+            {
+                if($ids['diary_id'] === $id)
+                {
+                    $page_ids = $diary_page_object->search_diary($id);
+                    $page_ids = $page_ids->toArray();
+                    $return_data = [];
+                    foreach($page_ids as $value => $id)
+                    {
+                        $data = $page_object->search_id($id['page_id']);
+                        $data = $data->toArray();
+                        $return_data[] = $data;
+                    }
+                    return $return_data;
+                }
+                else
+                {
+                    $return_data = 'noid';
+                    return $return_data;
+                }
+            }
         }
         else
         {
