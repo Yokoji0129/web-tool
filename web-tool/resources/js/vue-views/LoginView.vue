@@ -40,6 +40,7 @@ const validateForm = async () => {
 const router = useRouter();
 
 const login = async () => {
+  console.log(data.id, data.password)
   const isValid = await validateForm();
   if (!isValid) return;
   axios

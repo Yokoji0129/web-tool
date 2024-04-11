@@ -27,16 +27,30 @@ const createBook = () => {
 
   //本の設定で選択したもの
   const newBook = {
-    title: bookTitle.value,
+    name: bookTitle.value,
     color: selectedColor.value,
   };
 
-  addBook(newBook);
-  togglePopup();
-
+  console.log(newBook.name, newBook.color)
   //タイトルとカラーをリセットする
   bookTitle.value = "";
   selectedColor.value = "#ffffff";
+
+  axios
+    .post("/diaryadd", {
+      name: newBook.title,
+      color: newBook.color
+    })
+    .then((response) => {
+      //本リストに追加
+      addBook(newBook);
+      //作成したときにポップアップを閉じる
+      togglePopup();
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 

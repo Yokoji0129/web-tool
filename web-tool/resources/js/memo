@@ -16,3 +16,14 @@ ipadの解像度
 768x1024
 
 450px以下は基本スマホのpx数
+
+axios
+    .post("/diaryadd", {
+      newBook: newBook,
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
