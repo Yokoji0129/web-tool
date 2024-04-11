@@ -3,7 +3,8 @@ import { onMounted, ref } from "vue";
 
 const showPopup = ref(false);
 const bookTitle = ref("");
-const selectedColor = ref("#ffffff"); //カラー選択の初期値を設定する
+const selectedColor = ref("#ffffff"); //背景カラー初期値白色
+const textColor = ref("#000000")//テキストカラー初期値黒色
 const books = ref([]); //本のリスト
 
 //ポップアップの表示非表示
@@ -11,10 +12,27 @@ const togglePopup = () => {
   showPopup.value = !showPopup.value;
 };
 
-//引数で本の作成情報を取得(bookの中にnewBookが入る)
-//const addBook = (book) => {
-//  books.value.push(book);
-//};
+//本の情報をとってくるメソッド
+const displayBooks = () => {
+  axios
+    .get("/returndiary")
+    .then((response) => {
+      books.value = response.data;
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+/**
+ * やること
+ * 1.テキストカラーの選択できるようにする
+ * 2.本のタイトルの文字数制限つける(文字が多いとデザインがおかしくなるため)
+ * 3.背景カラーの増加とカラーコードの試行錯誤(プルダウンをv-forで短くできるかやってみる)
+ * 4.本の情報をreactiveにして統一させる
+ * navの項目のコードを追加する
+ * **/
 
 //本をpostするメソッド
 const createBook = () => {
@@ -25,41 +43,25 @@ const createBook = () => {
     return;
   }
 
-  console.log(bookTitle.value, selectedColor.value);
-
-  //タイトルとカラーをリセットする
-  bookTitle.value = "";
-  selectedColor.value = "#ffffff";
-
   axios
     .post("/diaryadd", {
       name: bookTitle.value,
       color: selectedColor.value,
+      textColor: textColor.value
     })
     .then((response) => {
-      //本リストに追加
-      //addBook(newBook);
       //作成したときにポップアップを閉じる
       togglePopup();
+      //本の表示
+      displayBooks();
       console.log(response);
     })
     .catch((error) => {
       console.log(error);
     });
-};
-
-//本の情報をとってくるメソッド
-const displayBooks = () => {
-  axios
-    .get("/returnpage/{id}")
-    .then((response) => {
-      books.value = response.data;
-      //謎のnoidがコンソールに出る
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  //タイトルとカラーをリセットする
+  bookTitle.value = "";
+  selectedColor.value = "#ffffff";
 };
 
 //ページ表示時に情報を表示させる
@@ -84,9 +86,9 @@ onMounted(() => {
           v-for="(book, index) in books"
           :key="index"
           class="diary"
-          :style="{ backgroundColor: book.color }"
+          :style="{ backgroundColor: book[0].diary_color }"
         >
-          <h2>{{ book.title }}</h2>
+          <h2>{{ book[0].diary_name }}</h2>
         </div>
         <div class="diary" @click="togglePopup">
           <h2>+</h2>
