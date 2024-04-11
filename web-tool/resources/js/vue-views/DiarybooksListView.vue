@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 
 const showPopup = ref(false);
 const bookTitle = ref("");
-const selectedColor = ref("#ffffff"); // カラー選択の初期値を設定する
+const selectedColor = ref("#ffffff"); //カラー選択の初期値を設定する
 const books = ref([]); //本のリスト
 
 //ポップアップの表示非表示
@@ -25,13 +25,7 @@ const createBook = () => {
     return;
   }
 
-  //本の設定で選択したもの
-  const newBook = {
-    name: bookTitle.value,
-    color: selectedColor.value,
-  };
-
-  console.log(newBook.name, newBook.color);
+  console.log(bookTitle.value, selectedColor.value);
 
   //タイトルとカラーをリセットする
   bookTitle.value = "";
@@ -39,8 +33,8 @@ const createBook = () => {
 
   axios
     .post("/diaryadd", {
-      name: newBook.title,
-      color: newBook.color,
+      name: bookTitle.value,
+      color: selectedColor.value,
     })
     .then((response) => {
       //本リストに追加
@@ -60,6 +54,8 @@ const displayBooks = () => {
     .get("/returnpage/{id}")
     .then((response) => {
       books.value = response.data;
+      //謎のnoidがコンソールに出る
+      console.log(response.data);
     })
     .catch((error) => {
       console.log(error);
@@ -68,8 +64,8 @@ const displayBooks = () => {
 
 //ページ表示時に情報を表示させる
 onMounted(() => {
-  displayBooks()
-})
+  displayBooks();
+});
 </script>
 
 <template>
