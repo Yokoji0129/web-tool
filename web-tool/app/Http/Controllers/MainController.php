@@ -281,8 +281,8 @@ class MainController extends Controller
             }
             else
             {
-                $reutrn_data = 'false';
-                return $reutrn_data;
+                $return_data = 'false';
+                return $return_data;
             }
         }
         else
@@ -372,7 +372,7 @@ class MainController extends Controller
         }
     }
 
-    public function add_dairy(Request $request)
+    public function add_diary(Request $request)
     {
         $diary_object = new Diary;
         $account_diary = new AccountDiary;
