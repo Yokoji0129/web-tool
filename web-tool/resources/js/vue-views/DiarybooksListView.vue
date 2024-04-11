@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const showPopup = ref(false);
 const bookTitle = ref("");
@@ -12,11 +12,11 @@ const togglePopup = () => {
 };
 
 //引数で本の作成情報を取得(bookの中にnewBookが入る)
-const addBook = (book) => {
-  books.value.push(book);
-};
+//const addBook = (book) => {
+//  books.value.push(book);
+//};
 
-//本を作成するメソッド
+//本をpostするメソッド
 const createBook = () => {
   //タイトルが記入されていなかったら
   if (!bookTitle.value) {
@@ -31,7 +31,8 @@ const createBook = () => {
     color: selectedColor.value,
   };
 
-  console.log(newBook.name, newBook.color)
+  console.log(newBook.name, newBook.color);
+
   //タイトルとカラーをリセットする
   bookTitle.value = "";
   selectedColor.value = "#ffffff";
@@ -39,11 +40,11 @@ const createBook = () => {
   axios
     .post("/diaryadd", {
       name: newBook.title,
-      color: newBook.color
+      color: newBook.color,
     })
     .then((response) => {
       //本リストに追加
-      addBook(newBook);
+      //addBook(newBook);
       //作成したときにポップアップを閉じる
       togglePopup();
       console.log(response);
@@ -52,6 +53,23 @@ const createBook = () => {
       console.log(error);
     });
 };
+
+//本の情報をとってくるメソッド
+const displayBooks = () => {
+  axios
+    .get("/returnpage/{id}")
+    .then((response) => {
+      books.value = response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+//ページ表示時に情報を表示させる
+onMounted(() => {
+  displayBooks()
+})
 </script>
 
 <template>
