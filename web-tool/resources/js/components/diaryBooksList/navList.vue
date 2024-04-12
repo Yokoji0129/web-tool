@@ -81,32 +81,35 @@ onMounted(() => {
 .nav-item-right {
   flex: 1;
   font-weight: bold;
+  cursor: pointer;
 }
 
-.nav-item-left {
-  cursor: pointer;
+.nav-item-left:hover,
+.nav-item-center:hover,
+.nav-item-right:hover {
+  background-color: #ced4da;
 }
 
 .tooltip {
   position: absolute;
-  width: 30%;
-  bottom: -92%;
-  left: 33%;
+  width: 32.5%;
+  bottom: -90%;
+  left: 33.3%;
   transform: translateX(-100%);
   background-color: #8795a1;
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 /**注意書き文字改行調整**/
-@media screen and (max-width: 1492px) {
+@media screen and (max-width: 1378px) {
   .tooltip {
-    bottom: -129%;
+    bottom: -128%;
   }
 }
 /**注意書き文字改行調整**/
-@media screen and (max-width: 1012px) {
+@media screen and (max-width: 935px) {
   .tooltip {
-    bottom: -165%;
+    bottom: -166%;
   }
 }
 
@@ -169,7 +172,7 @@ onMounted(() => {
 /**firefox用のデザイン**/
 @-moz-document url-prefix() {
   .tooltip {
-    bottom: -84%;
+    bottom: -85%;
   }
   .fixed-nav {
     margin-top: 82px;
@@ -177,13 +180,25 @@ onMounted(() => {
   /**注意書き文字改行調整**/
   @media screen and (max-width: 1493px) {
     .tooltip {
-      bottom: -117%;
+      bottom: -86%;
+    }
+  }
+  /**注意書き文字改行調整**/
+  @media screen and (max-width: 1378px) {
+    .tooltip {
+      bottom: -120%;
     }
   }
   /**注意書き文字改行調整**/
   @media screen and (max-width: 1013px) {
     .tooltip {
-      bottom: -150%;
+      bottom: -120%;
+    }
+  }
+  /**注意書き文字改行調整**/
+  @media screen and (max-width: 935px) {
+    .tooltip {
+      bottom: -154%;
     }
   }
   @media screen and (max-width: 768px) {
