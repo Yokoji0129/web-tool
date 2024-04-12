@@ -1,9 +1,11 @@
 <script setup>
+import { RouterLink, useRouter } from "vue-router";
 import { onMounted, ref, reactive } from "vue";
 
 const showPopup = ref(false); //ポップアップの表示制御
 const showTooltip = ref(false); //注意書きの表示制御
 const books = ref([]); //本のリスト
+const router = useRouter();
 
 //日記作成データ
 const bookData = reactive({
@@ -21,6 +23,17 @@ const toggleTooltip = () => {
   showTooltip.value = !showTooltip.value;
 };
 
+const logout = () => {
+  axios
+    .post("/logout", {})
+    .then((response) => {
+      router.push("/");
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 //本の情報をとってくるメソッド
 const displayBooks = () => {
@@ -85,7 +98,7 @@ onMounted(() => {
 
 <template>
   <div class="logout-box">
-    <button class="logout">ログアウト</button>
+    <button class="logout" @click="logout">ログアウト</button>
   </div>
   <div class="container">
     <nav class="fixed-nav">
@@ -114,7 +127,9 @@ onMounted(() => {
           class="diary"
           :style="{ backgroundColor: book[0].diary_color }"
         >
-          <h2>{{ book[0].diary_name }}</h2>
+          <h2 :style="{ color: book[0].diary_text_color }">
+            {{ book[0].diary_name }}
+          </h2>
         </div>
         <div class="diary" @click="togglePopup">
           <h2>+</h2>
