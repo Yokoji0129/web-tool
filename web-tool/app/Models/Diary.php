@@ -14,7 +14,8 @@ class Diary extends Model
         'diary_id',  
         'diary_name',
         'diary_top_file',
-        'diary_color'
+        'diary_color',
+        'diary_text_color'
     ];
 
     public function all_data()
@@ -25,17 +26,18 @@ class Diary extends Model
 
     public function search_data($id)
     {
-        $data = Diary::where('diary_id', 'like', "$id")->get(['diary_id', 'diary_name', 'diary_top_file', 'diary_color']);
+        $data = Diary::where('diary_id', 'like', "$id")->get(['diary_id', 'diary_name', 'diary_top_file', 'diary_color', 'diary_text_color']);
         return $data;
     }
 
-    public function add_data($id, $name, $file, $color)
+    public function add_data($id, $name, $file, $color, $text_color)
     {
         Diary::create([
             'diary_id' => $id,
             'diary_name' => $name,
             'diary_top_file' => $file,
-            'diary_color' => $color
+            'diary_color' => $color,
+            'diary_text_color' => $text_color
         ]);
     }
 }
