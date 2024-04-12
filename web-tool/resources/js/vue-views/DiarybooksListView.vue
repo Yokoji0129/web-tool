@@ -1,16 +1,26 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 
-const showPopup = ref(false);
-const bookTitle = ref("");
-const selectedColor = ref("#ffffff"); //背景カラー初期値白色
-const textColor = ref("#000000")//テキストカラー初期値黒色
+const showPopup = ref(false); //ポップアップの表示制御
+const showTooltip = ref(false); //注意書きの表示制御
 const books = ref([]); //本のリスト
+
+//日記作成データ
+const bookData = reactive({
+  bookName: "",
+  bookBackColor: "#ffffff",
+  bookTextColor: "#000000",
+});
 
 //ポップアップの表示非表示
 const togglePopup = () => {
   showPopup.value = !showPopup.value;
 };
+
+const toggleTooltip = () => {
+  showTooltip.value = !showTooltip.value;
+};
+
 
 //本の情報をとってくるメソッド
 const displayBooks = () => {
@@ -18,7 +28,7 @@ const displayBooks = () => {
     .get("/returndiary")
     .then((response) => {
       books.value = response.data;
-      console.log(response.data)
+      console.log(response.data);
     })
     .catch((error) => {
       console.log(error);
@@ -30,14 +40,15 @@ const displayBooks = () => {
  * 1.テキストカラーの選択できるようにする
  * 2.本のタイトルの文字数制限つける(文字が多いとデザインがおかしくなるため)
  * 3.背景カラーの増加とカラーコードの試行錯誤(プルダウンをv-forで短くできるかやってみる)
- * 4.本の情報をreactiveにして統一させる
- * navの項目のコードを追加する
+ * 5.navの項目のコードを追加する
+ * 6.本を追加した後からも本の情報を変えれるようにする
+ * 7.本作成時フォントも変えれるようにする
  * **/
 
 //本をpostするメソッド
 const createBook = () => {
   //タイトルが記入されていなかったら
-  if (!bookTitle.value) {
+  if (!bookData.bookName) {
     //returnで本が未設定のまま作成されないようにする
     alert("タイトルを入力してください。");
     return;
@@ -45,9 +56,9 @@ const createBook = () => {
 
   axios
     .post("/diaryadd", {
-      name: bookTitle.value,
-      color: selectedColor.value,
-      textColor: textColor.value
+      name: bookData.bookName,
+      color: bookData.bookBackColor,
+      textColor: bookData.bookTextColor,
     })
     .then((response) => {
       //作成したときにポップアップを閉じる
@@ -59,9 +70,11 @@ const createBook = () => {
     .catch((error) => {
       console.log(error);
     });
-  //タイトルとカラーをリセットする
-  bookTitle.value = "";
-  selectedColor.value = "#ffffff";
+
+  //ポップアップ内の入力情報をリセットする
+  bookData.bookName = "";
+  bookData.bookBackColor = "#ffffff";
+  bookData.bookTextColor = "#000000";
 };
 
 //ページ表示時に情報を表示させる
@@ -71,12 +84,25 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="logout-box">
+    <button class="logout">ログアウト</button>
+  </div>
   <div class="container">
     <nav class="fixed-nav">
       <ul class="nav-list">
-        <li class="nav-item-left"><p>利用注意</p></li>
-        <li class="nav-item-center"><p>日記本一覧(0冊)</p></li>
-        <li class="nav-item-right"><p>アカウント名: 名無し</p></li>
+        <li class="nav-item-left">
+          <p @click="toggleTooltip">利用注意</p>
+          <div class="tooltip" v-show="showTooltip">
+            このサービスは勉強用に作成されたものです、​
+            このサービスに保存できる情報量には限界があります、予めご了承ください
+          </div>
+        </li>
+        <li class="nav-item-center">
+          <p>日記本一覧({{ books.length }}冊)</p>
+        </li>
+        <li class="nav-item-right">
+          <p>アカウント名: 名無し</p>
+        </li>
       </ul>
     </nav>
     <main>
@@ -102,20 +128,29 @@ onMounted(() => {
             <h3>日記本新規作成</h3>
             <!--本のタイトル-->
             <input
-              v-model="bookTitle"
+              v-model="bookData.bookName"
               type="text"
               class="book-title"
               placeholder="本のタイトル"
             />
-            <h3>日記本新規作成</h3>
-            <!--カラー選択プルダウン-->
-            <select v-model="selectedColor" class="color-select">
-              <option value="#ffffff">カラーなし</option>
-              <option value="red">赤</option>
-              <option value="blue">青</option>
-              <option value="green">緑</option>
-              <option value="yellow">黄</option>
-            </select>
+            <h3>日記カラー選択</h3>
+            <!--背景カラー選択プルダウン-->
+            <div class="color-select-box">
+              <select v-model="bookData.bookBackColor" class="color-select">
+                <option value="#ffffff">日記カラー(白)</option>
+                <option value="red">赤</option>
+                <option value="blue">青</option>
+                <option value="green">緑</option>
+                <option value="yellow">黄</option>
+              </select>
+              <select v-model="bookData.bookTextColor" class="color-select">
+                <option value="#000000">日記テキストカラー(黒)</option>
+                <option value="red">赤</option>
+                <option value="blue">青</option>
+                <option value="green">緑</option>
+                <option value="yellow">黄</option>
+              </select>
+            </div>
             <!--本を作成するボタン-->
             <div class="create-btn">
               <button @click="createBook">作成</button>
@@ -128,6 +163,23 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.logout-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+}
+
+.logout {
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  padding: 35px;
+}
+
+.logout:hover {
+  background-color: #c9c9c9;
+}
+
 .container {
   margin-top: 90px;
   display: flex;
@@ -168,6 +220,17 @@ onMounted(() => {
 
 .nav-item-left {
   cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  width: 31%;
+  bottom: -59px;
+  left: 33%;
+  transform: translateX(-100%);
+  background-color: #8795a1;
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 main {
@@ -244,6 +307,9 @@ main {
   max-height: 200px;
   object-fit: contain;
 }
+.color-select-box {
+  display: flex;
+}
 
 .color-select {
   width: 100%;
@@ -272,6 +338,13 @@ main {
   background-color: #0056b3;
 }
 
+/**フルHD**/
+@media screen and (max-width: 1920px) {
+  .tooltip {
+    bottom: -83px;
+  }
+}
+
 /***ポップアップ横幅調整*/
 @media screen and (max-width: 1440px) {
   .popup-content {
@@ -281,6 +354,10 @@ main {
 
 /*タブレット*/
 @media screen and (max-width: 768px) {
+  .logout {
+    padding: 20px;
+  }
+
   .container {
     margin-top: 132px;
   }
@@ -304,12 +381,35 @@ main {
     flex: none;
     width: auto;
   }
+
+  .popup-content {
+    width: 100%;
+  }
+
+  .tooltip {
+    left: 50%;
+    bottom: 0px;
+    width: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 /*ウィンドウ幅が580px以下の場合のnavのスタイル(本の横幅調整。このタイミングでやらないと本が正方形になる)*/
 @media screen and (max-width: 580px) {
   .diaries {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+/**スマホ**/
+@media screen and (max-width: 450px) {
+  .logout {
+    padding: 20px 10px;
+  }
+  .tooltip {
+    bottom: 0px;
+    width: 100%;
+    transform: translateX(-50%);
   }
 }
 
