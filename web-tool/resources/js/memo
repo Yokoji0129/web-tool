@@ -19,10 +19,3 @@ ipadの解像度
 
 このサービスは勉強用に作成されたものです、​
 このサービスに保存できる情報量には限界があります、予めご了承ください
-
-.tooltip {
-    left: 50%;
-    bottom: -60px;
-    width: 70%;
-    transform: translateX(-50%);
-  }
