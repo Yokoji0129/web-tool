@@ -25,6 +25,20 @@ class MainController extends Controller
         return $data;//全てのアカウントのすべてのデータを返す
     }
 
+    public function all_diary_data()
+    {
+        $diary_object = new Diary;
+        $data = $diary_object->all_data();
+        return $data;
+    }
+
+    public function all_page_data()
+    {
+        $page_object = new Page;
+        $data = $page_object->all_data();
+        return $data;
+    }
+
     public function search_id($id)
     {
         $account_object = new Account;
@@ -354,12 +368,13 @@ class MainController extends Controller
         $session = $request->cookies->get("laravel_session");
         $torf = MainController::auth($session);
         $return_data = 'true';
+        $text_color = 'nodata';
         if ($torf)
         {
             $id = $diary_object->all_data();
             $diary_id = count($id) + 1;
             $file = 'nodata';
-            $diary_object->add_data($diary_id,$name,$file,$color);
+            $diary_object->add_data($diary_id,$name,$file,$color,$text_color);
 
             $account_id = MainController::s_after_a($session);
             $account_diary->add_data($account_id, $diary_id);
@@ -379,6 +394,7 @@ class MainController extends Controller
 
         $name = $request->name;
         $color = $request->color;
+        $text_color = $request->textColor;
         $session = $request->cookies->get("laravel_session");
         $torf = MainController::auth($session);
         $return_data = 'true';
@@ -387,7 +403,7 @@ class MainController extends Controller
             $id = $diary_object->all_data();
             $diary_id = count($id) + 1;
             $file = 'nodata';
-            $diary_object->add_data($diary_id,$name,$file,$color);
+            $diary_object->add_data($diary_id,$name,$file,$color,$text_color);
 
             $account_id = MainController::s_after_a($session);
             $account_diary->add_data($account_id, $diary_id);
@@ -564,5 +580,10 @@ class MainController extends Controller
             $return_data = 'false';
             return $return_data;
         }
+    }
+
+    public function add_file(Request $request)
+    {
+        return $request;
     }
 }

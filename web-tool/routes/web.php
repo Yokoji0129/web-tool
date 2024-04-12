@@ -18,7 +18,6 @@ Route::get('/newAccount', 'App\Http\Controllers\MainController@startpage');//ア
 Route::get('/accountName', 'App\Http\Controllers\MainController@startpage');//アカウント名作成
 Route::get('/diaryBooksList', 'App\Http\Controllers\MainController@startpage');//日記本一覧
 Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記ページ
-Route::get('/account/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
 Route::get('/search/{id}', 'App\Http\Controllers\MainController@search_id');//対象idが存在しなければtrueを存在すればfalseを返します
 Route::post('/post', 'App\Http\Controllers\MainController@add_account');
 Route::post('/login', 'App\Http\Controllers\MainController@login');//ログイン機能passwordが一致すればokを一致しなければnoを返す
@@ -26,8 +25,12 @@ Route::get('/returndiary', 'App\Http\Controllers\MainController@return_diary');/
 Route::post('/diaryadd', 'App\Http\Controllers\MainController@add_diary');//日記情報追加用
 Route::post('/pageadd', 'App\Http\Controllers\MainController@add_page');//ページ追加用日記idはid,タイトルはtitle,テキストはtxt
 Route::get('/returnpage/{id}', 'App\Http\Controllers\MainController@return_page');//日記idをもとにページ情報を返します
+Route::post('/file', 'App\Http\Controllers\MainController@add_file');//とりあえずファイル情報渡す場所
 
 //以下のルートはテスト用
+Route::get('/test/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
+Route::get('/test/diary', 'App\Http\Controllers\MainController@all_diary_data');//全ての日記情報取得
+Route::get('/test/page', 'App\Http\Controllers\MainController@all_page_data');//全てのページデータ取得
 Route::get('/test/diary/{name}/{color}', 'App\Http\Controllers\MainController@test_add_diarydata');//日記情報追加のテスト、ファイル情報は受け付けない
 Route::get('/account/login/{id}/{password}', 'App\Http\Controllers\MainController@testlogin');//getでログインできるかのお試し
 Route::get('/account/{id}/{password}', 'App\Http\Controllers\MainController@make_account');//テストアカウント作成

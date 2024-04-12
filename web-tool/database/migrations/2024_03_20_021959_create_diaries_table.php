@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('diary_name',255)->nullable(false);
             $table->string('diary_top_file',255)->nullable(false);
             $table->string('diary_color',255)->nullable(false);
+            $table->string('diary_text_color', 255)->nullable(false);
             $table->timestamps();
         });
     }
