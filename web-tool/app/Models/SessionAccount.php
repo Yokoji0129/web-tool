@@ -37,7 +37,12 @@ class SessionAccount extends Model
 
     public function delete_session($session)
     {
-        $data = SessionAccount::find($session);
-        $data->delete();
+        $data = SessionAccount::where('session_id', 'like' ,"$session")->get();
+        foreach($data as $value => $key)
+        {
+            $id = $key['id'];
+        }
+        $delete_data = SessionAccount::find($id);
+        $delete_data->delete();
     }
 }

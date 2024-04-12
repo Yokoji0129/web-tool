@@ -19,13 +19,15 @@ Route::get('/accountName', 'App\Http\Controllers\MainController@startpage');//�
 Route::get('/diaryBooksList', 'App\Http\Controllers\MainController@startpage');//日記本一覧
 Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記ページ
 Route::get('/search/{id}', 'App\Http\Controllers\MainController@search_id');//対象idが存在しなければtrueを存在すればfalseを返します
-Route::post('/post', 'App\Http\Controllers\MainController@add_account');
+Route::get('/searchname', 'App\Http\Controllers\MainController@return_name');//ログイン状態にあるアカウントの名前を返します
+Route::post('/post', 'App\Http\Controllers\MainController@add_account');//アカウント追加用
 Route::post('/login', 'App\Http\Controllers\MainController@login');//ログイン機能passwordが一致すればokを一致しなければnoを返す
 Route::get('/returndiary', 'App\Http\Controllers\MainController@return_diary');//ログイン状態にあるセッションの日記情報を返す
 Route::post('/diaryadd', 'App\Http\Controllers\MainController@add_diary');//日記情報追加用
 Route::post('/pageadd', 'App\Http\Controllers\MainController@add_page');//ページ追加用日記idはid,タイトルはtitle,テキストはtxt
 Route::get('/returnpage/{id}', 'App\Http\Controllers\MainController@return_page');//日記idをもとにページ情報を返します
 Route::post('/file', 'App\Http\Controllers\MainController@add_file');//とりあえずファイル情報渡す場所
+Route::post('/logout', 'App\Http\Controllers\MainController@logout');//これを実行するとログイン状態が解除される
 
 //以下のルートはテスト用
 Route::get('/test/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得

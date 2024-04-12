@@ -305,6 +305,42 @@ class MainController extends Controller
         }
     }
 
+    public function logout(Request $request)
+    {
+        $session_account_object = new SessionAccount;
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $return_data = 'true';
+        if ($torf)
+        {
+            $session_account_object->delete_session($session);
+            return $return_data;
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+    }
+
+    public function return_name(Request $request)
+    {
+        $account_object = new Account;
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        if ($torf)
+        {
+            $account_id = MainController::s_after_a($session);
+            $data = $account_object->search_id($account_id);
+            $account_data = $data->toArray();
+            foreach($account_data as $data => $key)
+            {
+                $return_data = $key['account_name'];
+            }
+            dd($return_data);
+        }
+    }
+
     public function s_after_a($session)
     {
         $session_account_object = new SessionAccount;
@@ -350,7 +386,6 @@ class MainController extends Controller
             else
             {
                 $return_data = 'nodata';
-                return $return_data;
             }
         }
         else
