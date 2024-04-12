@@ -337,7 +337,7 @@ class MainController extends Controller
             {
                 $return_data = $key['account_name'];
             }
-            dd($return_data);
+            return $return_data;
         }
     }
 
