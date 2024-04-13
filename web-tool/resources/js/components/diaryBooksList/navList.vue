@@ -4,10 +4,22 @@ const props = defineProps({
   books: Array,
 });
 
-const showTooltip = ref(false); //注意書きの表示制御
+const showTooltip = ref(false);
 
 const toggleTooltip = () => {
   showTooltip.value = !showTooltip.value;
+};
+
+const showTooltip2 = ref(false);
+
+const toggleTooltip2 = () => {
+  showTooltip2.value = !showTooltip2.value;
+};
+
+const showTooltip3 = ref(false);
+
+const toggleTooltip3 = () => {
+  showTooltip3.value = !showTooltip3.value;
 };
 
 const accountName = ref("");
@@ -34,17 +46,27 @@ onMounted(() => {
   <nav class="fixed-nav">
     <ul class="nav-list">
       <li class="nav-item-left">
-        <p @click="toggleTooltip">利用注意</p>
+        <p class="p" @click="toggleTooltip">利用注意</p>
         <div class="tooltip" v-show="showTooltip">
           このサービスは勉強用に作成されたものです、​
           このサービスに保存できる情報量には限界があります、予めご了承ください
         </div>
       </li>
       <li class="nav-item-center">
-        <p>日記本一覧({{ books.length }}冊)</p>
+        <p class="p" @click="toggleTooltip2">
+          日記本一覧({{ books.length }}冊)
+        </p>
+        <div class="tooltip2" v-show="showTooltip2">
+          <p class="book-list" v-for="(book, index) in books" :key="index">
+            {{ book[0].diary_name }}
+          </p>
+        </div>
       </li>
       <li class="nav-item-right">
-        <p>ユーザー名: {{ accountName }}</p>
+        <p class="p" @click="toggleTooltip3">ユーザー名: {{ accountName }}</p>
+        <div class="tooltip3" v-show="showTooltip3">
+          <button class="logout">ログアウト</button>
+        </div>
       </li>
     </ul>
   </nav>
@@ -71,7 +93,7 @@ onMounted(() => {
   justify-content: space-between;
 }
 
-.nav-list p {
+.nav-list .p {
   margin: 0;
   padding: 20px;
 }
@@ -93,24 +115,49 @@ onMounted(() => {
 .tooltip {
   position: absolute;
   width: 32.5%;
-  bottom: -90%;
-  left: 33.3%;
+  top: 100%;
+  left: 33.4%;
   transform: translateX(-100%);
   background-color: #ced4da;
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 3;
 }
-/**注意書き文字改行調整**/
-@media screen and (max-width: 1378px) {
-  .tooltip {
-    bottom: -128%;
-  }
+
+.tooltip2 {
+  position: absolute;
+  width: 15%;
+  top: 100%;
+  transform: translateX(-0%);
+  background-color: #ced4da;
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
-/**注意書き文字改行調整**/
-@media screen and (max-width: 935px) {
-  .tooltip {
-    bottom: -166%;
-  }
+
+.tooltip3 {
+  position: absolute;
+  width: 15%;
+  top: 100%;
+  transform: translateX(-0%);
+  background-color: #ced4da;
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.book-list {
+  margin: 10px 0;
+}
+
+.logout {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border: none;
+}
+
+.logout:hover {
+  background-color: #f8f9fa;
 }
 
 /*タブレット*/
@@ -124,7 +171,7 @@ onMounted(() => {
     align-items: center;
   }
 
-  .nav-list p {
+  .nav-list .p {
     padding: 10px;
   }
 
@@ -137,35 +184,26 @@ onMounted(() => {
 
   .tooltip {
     left: 50%;
-    bottom: 0%;
-    width: 50%;
+    top: 33%;
+    width: 100%;
     transform: translateX(-50%);
   }
-}
 
-/**注意書き文字改行調整**/
-@media screen and (max-width: 607px) {
-  .tooltip {
-    width: 60%;
+  .tooltip2 {
+    width: 154px;
+    top: 67%;
+    padding: 0px;
   }
-}
-/**注意書き文字改行調整**/
-@media screen and (max-width: 506px) {
-  .tooltip {
-    width: 70%;
-  }
-}
 
-/**スマホ**/
-@media screen and (max-width: 450px) {
-  .tooltip {
-    width: 90%;
+  .book-list {
+    margin: 0;
   }
-}
-/**注意書き文字改行調整**/
-@media screen and (max-width: 338px) {
-  .tooltip {
+
+  .tooltip3 {
     width: 100%;
+    top: 100%;
+    left: 0;
+    padding: 5px 10px;
   }
 }
 
@@ -177,30 +215,6 @@ onMounted(() => {
   .fixed-nav {
     margin-top: 82px;
   }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 1493px) {
-    .tooltip {
-      bottom: -86%;
-    }
-  }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 1378px) {
-    .tooltip {
-      bottom: -120%;
-    }
-  }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 1013px) {
-    .tooltip {
-      bottom: -120%;
-    }
-  }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 935px) {
-    .tooltip {
-      bottom: -154%;
-    }
-  }
   @media screen and (max-width: 768px) {
     .fixed-nav {
       margin-top: 62px;
@@ -211,23 +225,10 @@ onMounted(() => {
       width: 50%;
       transform: translateX(-50%);
     }
-  }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 607px) {
-    .tooltip {
-      width: 60%;
-    }
-  }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 506px) {
-    .tooltip {
-      width: 70%;
-    }
-  }
-  /**注意書き文字改行調整**/
-  @media screen and (max-width: 450px) {
-    .tooltip {
-      width: 90%;
+    .tooltip2 {
+      width: 163px;
+      top: 66%;
+      padding: 0px;
     }
   }
 }
