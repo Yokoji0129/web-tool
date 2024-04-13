@@ -11,7 +11,7 @@ const books = ref([]); //本のリスト
 //日記作成データ
 const bookData = reactive({
   bookName: "",
-  bookBackColor: "#ffffff",
+  bookBackColor: "",
   bookTextColor: "#000000",
 });
 
@@ -41,6 +41,7 @@ const displayBooks = () => {
  * 6.本を追加した後からも本の情報を変えれるようにする
  * 7.本作成時フォントも変えれるようにする
  * 8.navListで三つのうちクリックしてる状態のところの色を変える
+ * 9.日記本一覧のnavのところにsort機能作る
  * **/
 
 //本をpostするメソッド
@@ -49,6 +50,10 @@ const createBook = () => {
   if (!bookData.bookName) {
     //returnで本が未設定のまま作成されないようにする
     alert("タイトルを入力してください。");
+    return;
+  }
+  if (!bookData.bookBackColor) {
+    alert("日記のデザインを選択してください");
     return;
   }
 
@@ -70,7 +75,7 @@ const createBook = () => {
 
   //ポップアップ内の入力情報をリセットする
   bookData.bookName = "";
-  bookData.bookBackColor = "#ffffff";
+  bookData.bookBackColor = "";
   bookData.bookTextColor = "#000000";
 };
 
@@ -106,11 +111,17 @@ onMounted(() => {
             <!--背景カラー選択プルダウン-->
             <div class="color-select-box">
               <select v-model="bookData.bookBackColor" class="color-select">
-                <option value="#ffffff">日記カラー(白)</option>
-                <option value="red">赤</option>
-                <option value="blue">青</option>
-                <option value="green">緑</option>
-                <option value="yellow">黄</option>
+                <option value="">日記デザイン選択</option>
+                <option value="book-backnumber-1">日記デザイン(1)</option>
+                <option value="book-backnumber-2">日記デザイン(2)</option>
+                <option value="book-backnumber-3">日記デザイン(3)</option>
+                <option value="book-backnumber-4">日記デザイン(4)</option>
+                <option value="book-backnumber-5">日記デザイン(5)</option>
+                <option value="book-backnumber-6">日記デザイン(6)</option>
+                <option value="book-backnumber-7">日記デザイン(7)</option>
+                <option value="book-backnumber-8">日記デザイン(8)</option>
+                <option value="book-backnumber-9">日記デザイン(9)</option>
+                <option value="book-backnumber-10">日記デザイン(10)</option>
               </select>
               <select v-model="bookData.bookTextColor" class="color-select">
                 <option value="#000000">日記テキストカラー(黒)</option>
@@ -132,7 +143,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 .container {
   margin-top: 90px;
   display: flex;
@@ -140,7 +150,7 @@ onMounted(() => {
 }
 
 main {
-  margin: 70px 40px 40px 40px;
+  margin: 70px 5% 200px 10%;
   padding: 20px;
 }
 
@@ -224,10 +234,27 @@ main {
   background-color: #0056b3;
 }
 
-/***ポップアップ横幅調整*/
+@media screen and (max-width: 1597px) {
+  main {
+    margin: 70px 5% 330px 10%;
+  }
+}
+
 @media screen and (max-width: 1440px) {
   .popup-content {
     width: 50%;
+  }
+}
+
+@media screen and (max-width: 1145px) {
+  main {
+    margin: 70px 5% 730px 10%;
+  }
+}
+
+@media screen and (max-width: 1053px) {
+  main {
+    margin: 70px 5% 470px 10%;
   }
 }
 
@@ -241,4 +268,5 @@ main {
     width: 100%;
   }
 }
+
 </style>

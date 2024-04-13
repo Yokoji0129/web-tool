@@ -44,7 +44,7 @@ onMounted(() => {
         <p>日記本一覧({{ books.length }}冊)</p>
       </li>
       <li class="nav-item-right">
-        <p>アカウント名: {{ accountName }}</p>
+        <p>ユーザー名: {{ accountName }}</p>
       </li>
     </ul>
   </nav>
@@ -96,7 +96,7 @@ onMounted(() => {
   bottom: -90%;
   left: 33.3%;
   transform: translateX(-100%);
-  background-color: #8795a1;
+  background-color: #ced4da;
   padding: 5px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
