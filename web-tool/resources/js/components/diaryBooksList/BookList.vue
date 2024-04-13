@@ -24,7 +24,7 @@ const props = defineProps({
 <style scoped>
 .book-backnumber-1 {
   background-image: url(../../../../public/note/note1.jpg);
-  border-left: 20px solid rgb(107,191,93);
+  border-left: 20px solid rgb(107, 191, 93);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -35,7 +35,7 @@ const props = defineProps({
 
 .book-backnumber-2 {
   background-image: url(../../../../public/note/note2.jpg);
-  border-left: 20px solid rgb(255,222,155);
+  border-left: 20px solid rgb(255, 222, 155);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -46,7 +46,7 @@ const props = defineProps({
 
 .book-backnumber-3 {
   background-image: url(../../../../public/note/note3.jpg);
-  border-left: 20px solid rgb(161,142,130);
+  border-left: 20px solid rgb(161, 142, 130);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -57,7 +57,7 @@ const props = defineProps({
 
 .book-backnumber-4 {
   background-image: url(../../../../public/note/note4.jpg);
-  border-left: 20px solid rgb(110,204,230);
+  border-left: 20px solid rgb(110, 204, 230);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -68,7 +68,7 @@ const props = defineProps({
 
 .book-backnumber-5 {
   background-image: url(../../../../public/note/note5.jpg);
-  border-left: 20px solid rgb(207,150,163);
+  border-left: 20px solid rgb(207, 150, 163);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -79,7 +79,7 @@ const props = defineProps({
 
 .book-backnumber-6 {
   background-image: url(../../../../public/note/note6.jpg);
-  border-left: 20px solid rgb(242,195,201);
+  border-left: 20px solid rgb(242, 195, 201);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -90,7 +90,7 @@ const props = defineProps({
 
 .book-backnumber-7 {
   background-image: url(../../../../public/note/note7.jpg);
-  border-left: 20px solid rgb(182,176,162);
+  border-left: 20px solid rgb(182, 176, 162);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -101,7 +101,7 @@ const props = defineProps({
 
 .book-backnumber-8 {
   background-image: url(../../../../public/note/note8.jpg);
-  border-left: 20px solid rgb(233,239,235);
+  border-left: 20px solid rgb(233, 239, 235);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -112,7 +112,7 @@ const props = defineProps({
 
 .book-backnumber-9 {
   background-image: url(../../../../public/note/note9.jpg);
-  border-left: 20px solid rgb(245,202,225);
+  border-left: 20px solid rgb(245, 202, 225);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -123,7 +123,7 @@ const props = defineProps({
 
 .book-backnumber-10 {
   background-image: url(../../../../public/note/note10.jpg);
-  border-left: 20px solid rgb(196,235,171);
+  border-left: 20px solid rgb(196, 235, 171);
   background-size: cover;
   text-align: center;
   padding: 70px 0 280px 0;
@@ -136,7 +136,7 @@ const props = defineProps({
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 5%;
+  gap: 3% 1%;
 }
 
 .book-paper-box {
@@ -150,6 +150,7 @@ const props = defineProps({
   border-radius: 0 10px 10px 0;
   box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
   width: 275px;
+  height: 435px;
 }
 
 .book-paper h2 {
@@ -171,14 +172,9 @@ const props = defineProps({
   margin: 0;
 }
 
-@media screen and (max-width: 1053px) {
+@media screen and (max-width: 768px){
   .diaries {
-    gap: 3% 5%
-  }
-}
-@media screen and (max-width: 740px) {
-  .diaries {
-    gap: 1% 5%
+    gap: 1% 1%;
   }
 }
 </style>

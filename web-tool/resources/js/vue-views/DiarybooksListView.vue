@@ -150,7 +150,7 @@ onMounted(() => {
 }
 
 main {
-  margin: 70px 5% 200px 10%;
+  margin: 70px 5% 500px 10%;
   padding: 20px;
 }
 
@@ -234,33 +234,9 @@ main {
   background-color: #0056b3;
 }
 
-@media screen and (max-width: 1920px) {
-  main {
-    margin: 70px 5% 350px 10%;
-  }
-}
-
-@media screen and (max-width: 1597px) {
-  main {
-    margin: 70px 5% 500px 10%;
-  }
-}
-
 @media screen and (max-width: 1440px) {
   .popup-content {
     width: 50%;
-  }
-}
-
-@media screen and (max-width: 1145px) {
-  main {
-    margin: 70px 5% 980px 10%;
-  }
-}
-
-@media screen and (max-width: 1053px) {
-  main {
-    margin: 70px 5% 650px 10%;
   }
 }
 
@@ -273,10 +249,5 @@ main {
   .popup-content {
     width: 100%;
   }
-
-  main {
-    margin: 70px 5% 700px 10%;
-  }
 }
-
 </style>
