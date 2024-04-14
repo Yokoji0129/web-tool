@@ -15,7 +15,7 @@ const bookData = reactive({
   bookTextColor: "",
   bookFont: "test",
 });
-
+0
 //ポップアップの表示非表示
 const togglePopup = () => {
   showPopup.value = !showPopup.value;
@@ -55,6 +55,10 @@ const createBook = () => {
   }
   if (!bookData.bookBackColor) {
     alert("日記のデザインを選択してください");
+    return;
+  }
+  if (!bookData.bookTextColor) {
+    alert("日記のテキストカラーを選択してください");
     return;
   }
 
@@ -201,8 +205,9 @@ main {
 
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0;
+  right: 0;
+  padding: 10px 15px;
 }
 
 .book-title {
