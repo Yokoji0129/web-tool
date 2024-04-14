@@ -9,14 +9,18 @@ const data = reactive({
 });
 
 const error = ref("");
+const loadingLogin = ref(false)
 
 const idSearch = async () => {
+  loadingLogin.value = true
   try {
     const response = await axios.get(`/search/${data.id}`);
     return response.data;
   } catch (error) {
     console.log(error);
     return false;
+  } finally{
+    loadingLogin.value = false;
   }
 };
 
@@ -40,7 +44,6 @@ const validateForm = async () => {
 const router = useRouter();
 
 const login = async () => {
-  console.log(data.id, data.password)
   const isValid = await validateForm();
   if (!isValid) return;
   axios
@@ -54,7 +57,7 @@ const login = async () => {
     })
     .catch((error) => {
       console.log(error);
-    });
+    })
 };
 </script>
 
@@ -63,13 +66,22 @@ const login = async () => {
     <h2>ログイン</h2>
     <form @submit.prevent="login">
       <input v-model="data.id" type="text" name="id" placeholder="ユーザーID" />
-      <input v-model="data.password" type="password" name="password" placeholder="パスワード" />
+      <input
+        v-model="data.password"
+        type="password"
+        name="password"
+        placeholder="パスワード"
+      />
       <p class="error-text">{{ error }}</p>
       <button type="submit" class="login-button">ログイン</button>
       <RouterLink to="/newAccount">
         <button class="signup-link">アカウント新規作成</button>
       </RouterLink>
     </form>
+    <!-- ローディングアニメーション -->
+    <div v-if="loadingLogin" class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
   </div>
 </template>
   

@@ -1,18 +1,19 @@
 <script setup>
 import { onMounted, ref, reactive } from "vue";
 
-import LogoutBtn from "../components/diaryBooksList/LogoutBtn.vue";
 import navList from "../components/diaryBooksList/navList.vue";
 import BookList from "../components/diaryBooksList/BookList.vue";
 
 const showPopup = ref(false); //ポップアップの表示制御
 const books = ref([]); //本のリスト
+const loadingBook = ref(false);
 
 //日記作成データ
 const bookData = reactive({
   bookName: "",
   bookBackColor: "",
-  bookTextColor: "#000000",
+  bookTextColor: "",
+  bookFont: "test",
 });
 
 //ポップアップの表示非表示
@@ -29,7 +30,7 @@ const displayBooks = () => {
     })
     .catch((error) => {
       console.log(error);
-    });
+    })
 };
 
 /**
@@ -57,11 +58,13 @@ const createBook = () => {
     return;
   }
 
+  loadingBook.value = true
   axios
     .post("/diaryadd", {
       name: bookData.bookName,
       color: bookData.bookBackColor,
       textColor: bookData.bookTextColor,
+      font: bookData.bookFont,
     })
     .then((response) => {
       //作成したときにポップアップを閉じる
@@ -71,12 +74,16 @@ const createBook = () => {
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {
+      loadingBook.value = false;
     });
 
   //ポップアップ内の入力情報をリセットする
   bookData.bookName = "";
   bookData.bookBackColor = "";
-  bookData.bookTextColor = "#000000";
+  bookData.bookTextColor = "";
+  bookData.bookFont = "test";
 };
 
 //ページ表示時に情報を表示させる
@@ -86,14 +93,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <!--ログアウトボタン-->
-  <LogoutBtn />
   <div class="container">
     <!--ユーザー名などのnav-->
     <navList :books="books" />
     <main>
       <!--本一覧-->
-      <BookList :books="books" :togglePopup="togglePopup" />
+      <BookList
+        :books="books"
+        :togglePopup="togglePopup"
+        :displayBooks="displayBooks"
+      />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
         <div class="popup-content">
@@ -105,13 +114,13 @@ onMounted(() => {
               v-model="bookData.bookName"
               type="text"
               class="book-title"
-              placeholder="本のタイトル"
+              placeholder="日記のタイトル"
             />
-            <h3>日記カラー選択</h3>
+            <h3>日記デザイン選択</h3>
             <!--背景カラー選択プルダウン-->
             <div class="color-select-box">
               <select v-model="bookData.bookBackColor" class="color-select">
-                <option value="">日記デザイン選択</option>
+                <option value="">日記背景デザイン</option>
                 <option value="book-backnumber-1">日記デザイン(1)</option>
                 <option value="book-backnumber-2">日記デザイン(2)</option>
                 <option value="book-backnumber-3">日記デザイン(3)</option>
@@ -124,16 +133,24 @@ onMounted(() => {
                 <option value="book-backnumber-10">日記デザイン(10)</option>
               </select>
               <select v-model="bookData.bookTextColor" class="color-select">
-                <option value="#000000">日記テキストカラー(黒)</option>
+                <option value="">テキスト色</option>
+                <option value="#000000">黒</option>
                 <option value="red">赤</option>
                 <option value="blue">青</option>
                 <option value="green">緑</option>
                 <option value="yellow">黄</option>
               </select>
+              <select v-model="bookData.bookFont" class="color-select">
+                <option value="test">フォント</option>
+              </select>
             </div>
             <!--本を作成するボタン-->
             <div class="create-btn">
               <button @click="createBook">作成</button>
+            </div>
+            <!-- ローディングアニメーション -->
+            <div v-if="loadingBook" class="loading-overlay">
+              <div class="spinner"></div>
             </div>
           </div>
         </div>

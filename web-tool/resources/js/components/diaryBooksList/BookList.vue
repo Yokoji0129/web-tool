@@ -1,20 +1,50 @@
 <script setup>
+import axios from "axios";
+import { ref } from "vue";
+
 const props = defineProps({
   books: Array,
   togglePopup: Function,
+  displayBooks: Function,
 });
+
+const loading = ref(false);
+
+const deleteBook = (diaryId) => {
+  loading.value = true;
+
+  axios
+    .post("/delete/diary", {
+      id: diaryId,
+    })
+    .then((response) => {
+      props.displayBooks();
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 </script>
 
 <template>
   <div class="diaries">
     <!--作成した本のリスト-->
     <div class="book-paper" v-for="(book, index) in books" :key="index">
+      <p class="delete-btn" @click="deleteBook(book[0].diary_id)">✕</p>
       <div :class="book[0].diary_color">
         <h2 :style="{ color: book[0].diary_text_color }">
           {{ book[0].diary_name }}
         </h2>
       </div>
     </div>
+    <!-- ローディングアニメーション -->
+    <div v-if="loading" class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+    <!--日記追加-->
     <div class="diary" @click="togglePopup">
       <h2>+</h2>
     </div>
@@ -22,6 +52,21 @@ const props = defineProps({
 </template>
 
 <style scoped>
+.delete-btn {
+  background-color: #ffffff;
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: 0 0 10px 0;
+}
+
+.delete-btn:hover {
+  background-color: #ced4da;
+}
+
 .book-backnumber-1 {
   background-image: url(../../../../public/note/note1.jpg);
   border-left: 20px solid rgb(107, 191, 93);
@@ -172,7 +217,7 @@ const props = defineProps({
   margin: 0;
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .diaries {
     gap: 1% 1%;
   }

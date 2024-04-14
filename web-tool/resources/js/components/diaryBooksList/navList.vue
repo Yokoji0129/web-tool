@@ -1,23 +1,21 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
 const props = defineProps({
   books: Array,
 });
 
 const showTooltip = ref(false);
-
 const toggleTooltip = () => {
   showTooltip.value = !showTooltip.value;
 };
 
 const showTooltip2 = ref(false);
-
 const toggleTooltip2 = () => {
   showTooltip2.value = !showTooltip2.value;
 };
 
 const showTooltip3 = ref(false);
-
 const toggleTooltip3 = () => {
   showTooltip3.value = !showTooltip3.value;
 };
@@ -30,7 +28,20 @@ const account = () => {
     .get("/searchname")
     .then((response) => {
       accountName.value = response.data;
-      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const router = useRouter();
+
+//ログアウトメソッド
+const logout = () => {
+  axios
+    .post("/logout", {})
+    .then((response) => {
+      router.push("/");
     })
     .catch((error) => {
       console.log(error);
@@ -65,7 +76,7 @@ onMounted(() => {
       <li class="nav-item-right">
         <p class="p" @click="toggleTooltip3">ユーザー名: {{ accountName }}</p>
         <div class="tooltip3" v-show="showTooltip3">
-          <button class="logout">ログアウト</button>
+          <button class="logout" @click="logout">ログアウト</button>
         </div>
       </li>
     </ul>
