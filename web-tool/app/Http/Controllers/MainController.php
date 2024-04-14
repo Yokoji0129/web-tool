@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SessionAccount;
 use App\Models\Account;
-use App\Models\AccountDiary;
 use App\Models\Diary;
-use App\Models\DiaryPage;
 use App\Models\Page;
 use Illuminate\Support\Str;
 
@@ -89,7 +87,7 @@ class MainController extends Controller
         }
         else
         {
-            return 'false';
+            return false;
         }
     }
 
@@ -352,34 +350,24 @@ class MainController extends Controller
 
     public function return_diary(Request $request)
     {
-        $account_diary_object = new AccountDiary;
         $diary_object = new Diary;
         $session = $request->cookies->get("laravel_session");
         $torf = MainController::auth($session);
-
         $return_data = 'true';
         if ($torf)
         {
             $account_id = MainController::s_after_a($session);
-        }
-        else
-        {
-            $return_data = 'false';
-            return $return_data;
-        }
-
-        if ($return_data === 'true')
-        {
-            $account_diary_data = $account_diary_object->search_account($account_id);
-            if ((count($account_diary_data) > 0))
+            $data = $diary_object->search_account($account_id);
+            if ((count($data) > 0))
             {
-                $account_diary_data = $account_diary_data->toArray();
+                $data = $data->toArray();
                 $return_data = [];
-                foreach ($account_diary_data as $diaries => $ids)
+                foreach($data as $value => $key)
                 {
-                    $data = $diary_object->search_data($ids['diary_id']);
-                    $data = $data->toArray();
-                    $return_data[] = $data;
+                    $empty = [];
+                    $empty[] = $key;
+                    $return_data[] = $empty;
+                    $empty = [];
                 }
                 return $return_data;
             }
@@ -390,7 +378,7 @@ class MainController extends Controller
         }
         else
         {
-            $return_data = '?';
+            $return_data = 'false';
             return $return_data;
         }
     }
@@ -398,21 +386,17 @@ class MainController extends Controller
     public function test_add_diarydata(Request $request, $name, $color)
     {
         $diary_object = new Diary;
-        $account_diary = new AccountDiary;
 
         $session = $request->cookies->get("laravel_session");
         $torf = MainController::auth($session);
         $return_data = 'true';
-        $text_color = 'nodata';
         if ($torf)
         {
-            $id = $diary_object->all_data();
-            $diary_id = count($id) + 1;
-            $file = 'nodata';
-            $diary_object->add_data($diary_id,$name,$file,$color,$text_color);
-
             $account_id = MainController::s_after_a($session);
-            $account_diary->add_data($account_id, $diary_id);
+            $file = 'nodata';
+            $text_color = 'nodata';
+            $font = 'nodata';
+            $diary_object->add_data($account_id,$name,$file,$color,$text_color,$font);
             return $return_data;
         }
         else
@@ -425,23 +409,54 @@ class MainController extends Controller
     public function add_diary(Request $request)
     {
         $diary_object = new Diary;
-        $account_diary = new AccountDiary;
 
         $name = $request->name;
         $color = $request->color;
         $text_color = $request->textColor;
+        $font = $request->font;
         $session = $request->cookies->get("laravel_session");
         $torf = MainController::auth($session);
         $return_data = 'true';
         if ($torf)
         {
-            $id = $diary_object->all_data();
-            $diary_id = count($id) + 1;
-            $file = 'nodata';
-            $diary_object->add_data($diary_id,$name,$file,$color,$text_color);
-
             $account_id = MainController::s_after_a($session);
-            $account_diary->add_data($account_id, $diary_id);
+            $file = 'nodata';
+            $diary_object->add_data($account_id,$name,$file,$color,$text_color,$font);
+            return $return_data;
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+    }
+
+    public function delete_diary(Request $request)
+    {
+        $diary_object = new Diary;
+
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $id = MainController::int_check($request->id);
+        $return_data = 'true';
+
+        if($torf && $id)
+        {
+            $account_id = MainController::s_after_a($session);
+            $diary_data = $diary_object->search_account($account_id);
+            $diary_data = $diary_data->toArray();
+            foreach($diary_data as $values => $diary)
+            {
+                if ($id === $diary['diary_id'])
+                {
+                    $diary_object->delete_data($id);
+                    $return_data = 'true';
+                    return $return_data;
+                }
+                else{
+                    $return_data = 'noid';
+                }
+            }
             return $return_data;
         }
         else
@@ -453,8 +468,7 @@ class MainController extends Controller
 
     public function test_add_page(Request $request, $id, $title, $txt)
     {
-        $account_diary_object = new AccountDiary;
-        $diary_page_object = new DiaryPage;
+        $diary_object = new Diary;
         $page_object = new Page;
 
         $session = $request->cookies->get("laravel_session");
@@ -464,7 +478,7 @@ class MainController extends Controller
         if ($torf && $id)
         {
             $account_id = MainController::s_after_a($session);
-            $diary_data = $account_diary_object->search_account($account_id);
+            $diary_data = $diary_object->search_account($account_id);
             if (count($diary_data) > 0)
             {
                 $return_data = 'true';
@@ -486,10 +500,6 @@ class MainController extends Controller
             {
                 if($ids['diary_id'] === $id)
                 {
-                    $page_data = $page_object->all_data();
-                    $page_id = count($page_data) + 1;
-                    $diary_page_object->add_data($id, $page_id);
-
                     $file1 = 'nodata';
                     $file2 = 'nodata';
                     $file3 = 'nodata';
@@ -497,15 +507,16 @@ class MainController extends Controller
                     $file5 = 'nodata';
                     $file6 = 'nodata';
 
-                    $page_object->add_data($page_id, $title, $txt, $file1, $file2, $file3, $file4, $file5, $file6);
+                    $page_object->add_data($id, $title, $txt, $file1, $file2, $file3, $file4, $file5, $file6);
+                    $return_data = 'true';
                     return $return_data;
                 }
                 else
                 {
                     $return_data = 'noid';
-                    return $return_data;
                 }
             }
+            return $return_data;
         }
         else
         {
@@ -516,8 +527,7 @@ class MainController extends Controller
 
     public function add_page(Request $request)
     {
-        $account_diary_object = new AccountDiary;
-        $diary_page_object = new DiaryPage;
+        $diary_object = new Diary;
         $page_object = new Page;
 
         $session = $request->cookies->get("laravel_session");
@@ -527,7 +537,7 @@ class MainController extends Controller
         if ($torf && $id)
         {
             $account_id = MainController::s_after_a($session);
-            $diary_data = $account_diary_object->search_account($account_id);
+            $diary_data = $diary_object->search_account($account_id);
             if(count($diary_data) > 0)
             {
                 $return_data = 'true';
@@ -550,10 +560,6 @@ class MainController extends Controller
             {
                 if($ids['diary_id'] === $id)
                 {
-                    $page_data = $page_object->all_data();
-                    $page_id = count($page_data) + 1;
-                    $diary_page_object->add_data($id, $page_id);
-
                     $file1 = 'nodata';
                     $file2 = 'nodata';
                     $file3 = 'nodata';
@@ -561,22 +567,21 @@ class MainController extends Controller
                     $file5 = 'nodata';
                     $file6 = 'nodata';
 
-                    $page_object->add_data($page_id, $request->title, $request->txt, $file1, $file2, $file3, $file4, $file5, $file6);
+                    $page_object->add_data($id, $request->title, $request->txt, $file1, $file2, $file3, $file4, $file5, $file6);
                     return $return_data;
                 }
                 else
                 {
                     $return_data = 'noid';
-                    return $return_data;
                 }
             }
+            return $return_data;
         }
     }
 
     public function return_page(Request $request, $id)
     {
-        $account_diary_object = new AccountDiary;
-        $diary_page_object = new DiaryPage;
+        $diary_object = new Diary;
         $page_object = new Page;
 
         $session = $request->cookies->get("laravel_session");
@@ -587,19 +592,20 @@ class MainController extends Controller
         if($torf && $id)
         {
             $account_id = MainController::s_after_a($session);
-            $diary_data = $account_diary_object->search_account($account_id);
+            $diary_data = $diary_object->search_account($account_id);
             foreach ($diary_data as $diaries => $ids)
             {
                 if($ids['diary_id'] === $id)
                 {
-                    $page_ids = $diary_page_object->search_diary($id);
-                    $page_ids = $page_ids->toArray();
+                    $data = $page_object->search_diary($id);
+                    $data = $data->toArray();
                     $return_data = [];
-                    foreach($page_ids as $value => $id)
+                    foreach($data as $value => $key)
                     {
-                        $data = $page_object->search_id($id['page_id']);
-                        $data = $data->toArray();
-                        $return_data[] = $data;
+                        $empty = [];
+                        $empty[] = $key;
+                        $return_data[] = $empty;
+                        $empty = [];
                     }
                     return $return_data;
                 }
@@ -609,6 +615,49 @@ class MainController extends Controller
                     return $return_data;
                 }
             }
+        }
+        else
+        {
+            $return_data = 'false';
+            return $return_data;
+        }
+    }
+
+    public function delete_page(Request $request)
+    {
+        $diary_object = new Diary;
+        $page_object = new Page;
+
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $id = MainController::int_check($request->id);
+        $return_data = 'true';
+
+        if($torf && $id)
+        {
+            $account_id = MainController::s_after_a($session);
+            $diary_data = $diary_object->search_account($account_id);
+            $diary_data = $diary_data->toArray();
+            $page_data = $page_object->search_id($id);
+            $page_data = $page_data->toArray();
+
+            foreach($diary_data as $index => $diary)
+            {
+                foreach($page_data as $value => $page)
+                {
+                    if($diary['diary_id'] === $page['diary_id'])
+                    {
+                        $page_object->delete_data($id);
+                        $return_data = 'true';
+                        return $return_data;
+                    }
+                    else
+                    {
+                        $return_data = 'noid';
+                    }
+                }
+            }
+            return $return_data;
         }
         else
         {

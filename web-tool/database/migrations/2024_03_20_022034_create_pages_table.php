@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pages', function (Blueprint $table) {
-            $table->id();
-            $table->biginteger('page_id')->nullable(false);
+            $table->bigInteger('diary_id')->nullalbe(false);
+            $table->id('page_id');
             $table->string('page_title',255)->nullable(false);
             $table->string('page_txt',255)->nullable(false);
             $table->string('page_file1',255)->nullable();

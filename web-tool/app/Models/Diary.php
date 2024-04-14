@@ -11,11 +11,12 @@ class Diary extends Model
     use HasFactory;
     protected $table = 'diaries';
     protected $fillable = [  
-        'diary_id',  
+        'account_id',
         'diary_name',
         'diary_top_file',
         'diary_color',
-        'diary_text_color'
+        'diary_text_color',
+        'diary_font'
     ];
 
     public function all_data()
@@ -24,20 +25,31 @@ class Diary extends Model
         return $data;
     }
 
+    public function search_account($id)
+    {
+        $data = Diary::where('account_id', 'like', "$id")->get(['diary_id', 'diary_name', 'diary_top_file', 'diary_color', 'diary_text_color', 'diary_font']);
+        return $data;
+    }
     public function search_data($id)
     {
-        $data = Diary::where('diary_id', 'like', "$id")->get(['diary_id', 'diary_name', 'diary_top_file', 'diary_color', 'diary_text_color']);
+        $data = Diary::where('diary_id', 'like', "$id")->get(['diary_id', 'diary_name', 'diary_top_file', 'diary_color', 'diary_text_color', 'diary_font']);
         return $data;
     }
 
-    public function add_data($id, $name, $file, $color, $text_color)
+    public function add_data($account_id, $name, $file, $color, $text_color, $font)
     {
         Diary::create([
-            'diary_id' => $id,
+            'account_id' => $account_id,
             'diary_name' => $name,
             'diary_top_file' => $file,
             'diary_color' => $color,
-            'diary_text_color' => $text_color
+            'diary_text_color' => $text_color,
+            'diary_font' => $font
         ]);
+    }
+
+    public function delete_data($id)
+    {
+        Diary::where('diary_id', 'like', "$id")->delete();
     }
 }

@@ -28,6 +28,8 @@ Route::post('/pageadd', 'App\Http\Controllers\MainController@add_page');//ペー
 Route::get('/returnpage/{id}', 'App\Http\Controllers\MainController@return_page');//日記idをもとにページ情報を返します
 Route::post('/file', 'App\Http\Controllers\MainController@add_file');//とりあえずファイル情報渡す場所
 Route::post('/logout', 'App\Http\Controllers\MainController@logout');//これを実行するとログイン状態が解除される
+Route::post('/delete/diary', 'App\Http\Controllers\MainController@delete_diary');//日記削除
+Route::post('/delete/page', 'App\Http\Controllers\MainController@delete_page');//ページ削除
 
 //以下のルートはテスト用
 Route::get('/test/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
@@ -38,7 +40,6 @@ Route::get('/account/login/{id}/{password}', 'App\Http\Controllers\MainControlle
 Route::get('/account/{id}/{password}', 'App\Http\Controllers\MainController@make_account');//テストアカウント作成
 Route::get('/re', 'App\Http\Controllers\MainController@session');//requestを覗く
 Route::get('/diary/page/{id}/{title}/{txt}', 'App\Http\Controllers\MainController@test_add_page');//ページ追加のテスト、ファイルは受け付けないidにはログインしているアカウントの日記idを
-
 // Route::get('/{any}', function () {
 //     return view('app');
 // })->where('any', '.*');
