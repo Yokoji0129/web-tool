@@ -173,7 +173,7 @@ const deleteBook = (diaryId) => {
   border-radius: 0 10px 10px 0;
   box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
   width: 275px;
-  height: 435px;
+  height: 436px;
 }
 
 .book-paper h2 {
@@ -304,6 +304,7 @@ const deleteBook = (diaryId) => {
   box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
+
 @media screen and (max-width: 1440px) {
   .popup-content {
     width: 50%;

@@ -7,6 +7,16 @@ import BookList from "../components/diaryBooksList/BookList.vue";
 const showPopup = ref(false); //ポップアップの表示制御
 const books = ref([]); //本のリスト
 const loadingBook = ref(false);
+const selectedBackColor = ref(null); //本の背景classを入れる
+const selectedTextColor = ref(null); //本のテキストカラーを入れる
+
+//本のイメージclass取得(日記作成ポップアップでの見本)
+const bookBackColorSelect = () => {
+  selectedBackColor.value = bookData.bookBackColor;
+};
+const bookTextColorSelect = () => {
+  selectedTextColor.value = bookData.bookTextColor;
+};
 
 //日記作成データ
 const bookData = reactive({
@@ -156,6 +166,7 @@ const createBook = () => {
   bookData.bookBackColor = "";
   bookData.bookTextColor = "";
   bookData.bookFont = "test";
+  selectedBackColor.value = "";
 };
 
 //ページ表示時に情報を表示させる
@@ -192,7 +203,11 @@ onMounted(() => {
             <!--背景カラー選択プルダウン-->
             <div class="color-select-box">
               <!--日記背景デザイン選択-->
-              <select v-model="bookData.bookBackColor" class="color-select">
+              <select
+                v-model="bookData.bookBackColor"
+                class="color-select"
+                @change="bookBackColorSelect"
+              >
                 <option value="">日記背景デザイン</option>
                 <option
                   v-for="(backColor, index) in backgroundColors"
@@ -203,7 +218,11 @@ onMounted(() => {
                 </option>
               </select>
               <!--テキストカラー選択プルダウン-->
-              <select v-model="bookData.bookTextColor" class="color-select">
+              <select
+                v-model="bookData.bookTextColor"
+                class="color-select"
+                @change="bookTextColorSelect"
+              >
                 <option value="">テキスト色</option>
                 <option
                   v-for="(textColor, index) in textColors"
@@ -230,8 +249,16 @@ onMounted(() => {
         <div>
           <!--ここに本のイメージ-->
           <div class="book-paper">
-            <div></div>
+            <div>
+              <!--本のイメージが選択されている場合-->
+              <div :class="selectedBackColor">
+                <h4 class="image-h4" :style="{ color: selectedTextColor }">
+                  {{ bookData.bookName }}
+                </h4>
+              </div>
+            </div>
           </div>
+          <!--ここに本のイメージ-->
         </div>
       </div>
     </main>
@@ -241,13 +268,109 @@ onMounted(() => {
 <style scoped>
 .book-paper {
   background-color: #ffffff;
-  border-right: 12px solid #ffffff;
   border-radius: 0 10px 10px 0;
-  box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
   width: 260px;
-  height: 380px;
+  height: 350px;
   margin-left: 30px;
+  text-align: center;
+  font-size: 24px;
 }
+
+.image-h4 {
+  background-color: #ffffff;
+}
+
+.book-backnumber-1 {
+  background-image: url(../../../public/note/note1.jpg);
+  border-left: 20px solid rgb(107, 191, 93);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-2 {
+  background-image: url(../../../public/note/note2.jpg);
+  border-left: 20px solid rgb(255, 222, 155);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-3 {
+  background-image: url(../../../public/note/note3.jpg);
+  border-left: 20px solid rgb(161, 142, 130);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-4 {
+  background-image: url(../../../public/note/note4.jpg);
+  border-left: 20px solid rgb(110, 204, 230);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-5 {
+  background-image: url(../../../public/note/note5.jpg);
+  border-left: 20px solid rgb(207, 150, 163);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-6 {
+  background-image: url(../../../public/note/note6.jpg);
+  border-left: 20px solid rgb(242, 195, 201);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-7 {
+  background-image: url(../../../public/note/note7.jpg);
+  border-left: 20px solid rgb(182, 176, 162);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-8 {
+  background-image: url(../../../public/note/note8.jpg);
+  border-left: 20px solid rgb(233, 239, 235);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-9 {
+  background-image: url(../../../public/note/note9.jpg);
+  border-left: 20px solid rgb(245, 202, 225);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+.book-backnumber-10 {
+  background-image: url(../../../public/note/note10.jpg);
+  border-left: 20px solid rgb(196, 235, 171);
+  background-size: cover;
+  text-align: center;
+  padding: 70px 0 190px 0;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
+}
+
 .container {
   margin-top: 90px;
   display: flex;
@@ -266,7 +389,7 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(184, 184, 184, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -283,6 +406,7 @@ main {
   border-radius: 5px;
   border: 3px solid #ced4da;
   box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
+  overflow-y: auto; /*スクロール可能*/
 }
 
 .popup-content h3 {
@@ -388,6 +512,14 @@ main {
   .popup-content {
     width: 80%;
   }
+
+  .popup {
+    flex-direction: column;
+  }
+  .book-paper {
+    margin-left: 0px;
+    margin-top: 30px;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -399,6 +531,9 @@ main {
 @media screen and (max-width: 450px) {
   .popup-content {
     width: 70%;
+  }
+  .book-paper {
+    margin-top: 10px;
   }
 }
 </style>
