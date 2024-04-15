@@ -15,7 +15,75 @@ const bookData = reactive({
   bookTextColor: "",
   bookFont: "test",
 });
-0
+
+//背景カラーの選択肢
+const backgroundColors = [
+  {
+    id: "日記デザイン(1)",
+    class: "book-backnumber-1",
+  },
+  {
+    id: "日記デザイン(2)",
+    class: "book-backnumber-2",
+  },
+  {
+    id: "日記デザイン(3)",
+    class: "book-backnumber-3",
+  },
+  {
+    id: "日記デザイン(4)",
+    class: "book-backnumber-4",
+  },
+  {
+    id: "日記デザイン(5)",
+    class: "book-backnumber-5",
+  },
+  {
+    id: "日記デザイン(6)",
+    class: "book-backnumber-6",
+  },
+  {
+    id: "日記デザイン(7)",
+    class: "book-backnumber-7",
+  },
+  {
+    id: "日記デザイン(8)",
+    class: "book-backnumber-8",
+  },
+  {
+    id: "日記デザイン(9)",
+    class: "book-backnumber-9",
+  },
+  {
+    id: "日記デザイン(10)",
+    class: "book-backnumber-10",
+  },
+];
+
+//テキストカラー選択肢
+const textColors = [
+  {
+    id: "黒",
+    color: "#000000",
+  },
+  {
+    id: "赤",
+    color: "red",
+  },
+  {
+    id: "青",
+    color: "blue",
+  },
+  {
+    id: "緑",
+    color: "green",
+  },
+  {
+    id: "黄",
+    color: "yellow",
+  },
+];
+
 //ポップアップの表示非表示
 const togglePopup = () => {
   showPopup.value = !showPopup.value;
@@ -30,7 +98,7 @@ const displayBooks = () => {
     })
     .catch((error) => {
       console.log(error);
-    })
+    });
 };
 
 /**
@@ -54,7 +122,7 @@ const createBook = () => {
     return;
   }
   if (!bookData.bookBackColor) {
-    alert("日記のデザインを選択してください");
+    alert("日記の背景デザインを選択してください");
     return;
   }
   if (!bookData.bookTextColor) {
@@ -62,7 +130,7 @@ const createBook = () => {
     return;
   }
 
-  loadingBook.value = true
+  loadingBook.value = true;
   axios
     .post("/diaryadd", {
       name: bookData.bookName,
@@ -98,10 +166,10 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <!--ユーザー名などのnav-->
+    <!--ユーザー名などのnavコンポーネント-->
     <navList :books="books" />
     <main>
-      <!--本一覧-->
+      <!--本一覧コンポーネント-->
       <BookList
         :books="books"
         :togglePopup="togglePopup"
@@ -110,7 +178,7 @@ onMounted(() => {
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
         <div class="popup-content">
-          <button class="close-btn" @click="togglePopup">閉じる</button>
+          <button class="btn-close" @click="togglePopup">閉じる</button>
           <div>
             <h3>日記本新規作成</h3>
             <!--本のタイトル-->
@@ -123,26 +191,27 @@ onMounted(() => {
             <h3>日記デザイン選択</h3>
             <!--背景カラー選択プルダウン-->
             <div class="color-select-box">
+              <!--日記背景デザイン選択-->
               <select v-model="bookData.bookBackColor" class="color-select">
                 <option value="">日記背景デザイン</option>
-                <option value="book-backnumber-1">日記デザイン(1)</option>
-                <option value="book-backnumber-2">日記デザイン(2)</option>
-                <option value="book-backnumber-3">日記デザイン(3)</option>
-                <option value="book-backnumber-4">日記デザイン(4)</option>
-                <option value="book-backnumber-5">日記デザイン(5)</option>
-                <option value="book-backnumber-6">日記デザイン(6)</option>
-                <option value="book-backnumber-7">日記デザイン(7)</option>
-                <option value="book-backnumber-8">日記デザイン(8)</option>
-                <option value="book-backnumber-9">日記デザイン(9)</option>
-                <option value="book-backnumber-10">日記デザイン(10)</option>
+                <option
+                  v-for="(backColor, index) in backgroundColors"
+                  :key="index"
+                  :value="backColor.class"
+                >
+                  {{ backColor.id }}
+                </option>
               </select>
+              <!--テキストカラー選択プルダウン-->
               <select v-model="bookData.bookTextColor" class="color-select">
                 <option value="">テキスト色</option>
-                <option value="#000000">黒</option>
-                <option value="red">赤</option>
-                <option value="blue">青</option>
-                <option value="green">緑</option>
-                <option value="yellow">黄</option>
+                <option
+                  v-for="(textColor, index) in textColors"
+                  :key="index"
+                  :value="textColor.color"
+                >
+                  {{ textColor.id }}
+                </option>
               </select>
               <select v-model="bookData.bookFont" class="color-select">
                 <option value="test">フォント</option>
@@ -158,12 +227,27 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <div>
+          <!--ここに本のイメージ-->
+          <div class="book-paper">
+            <div></div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
 </template>
 
 <style scoped>
+.book-paper {
+  background-color: #ffffff;
+  border-right: 12px solid #ffffff;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
+  width: 260px;
+  height: 380px;
+  margin-left: 30px;
+}
 .container {
   margin-top: 90px;
   display: flex;
@@ -182,19 +266,23 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(184, 184, 184, 0.5);
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
 }
 
 .popup-content {
   position: relative;
   width: 35%;
-  background-color: white;
+  height: auto;
+  background-color: #ffffff;
   padding: 30px;
   border-radius: 5px;
+  border: 3px solid #ced4da;
+  box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
 }
 
 .popup-content h3 {
@@ -203,21 +291,36 @@ main {
   color: #333;
 }
 
-.close-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px 15px;
+.btn-close {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #555;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-close:hover {
+  background-color: #333;
 }
 
 .book-title {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
   background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.book-title:hover {
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
 .selected-image {
@@ -230,11 +333,19 @@ main {
 }
 
 .color-select {
+  cursor: pointer;
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 5px;
   margin-bottom: 20px;
+  border: 2px solid #ccc;
+  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.color-select:hover {
+  color: #007bff;
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
 .create-btn {
@@ -262,6 +373,12 @@ main {
   }
 }
 
+@media screen and (max-width: 1000px) {
+  .popup-content {
+    width: 70%;
+  }
+}
+
 /*タブレット*/
 @media screen and (max-width: 768px) {
   .container {
@@ -269,7 +386,19 @@ main {
   }
 
   .popup-content {
-    width: 100%;
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .color-select-box {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .popup-content {
+    width: 70%;
   }
 }
 </style>
