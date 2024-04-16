@@ -21,6 +21,7 @@ const toggleTooltip3 = () => {
 };
 
 const accountName = ref("");
+const loadingLogin = ref(false);
 
 //アカウント名取得
 const account = () => {
@@ -38,6 +39,7 @@ const router = useRouter();
 
 //ログアウトメソッド
 const logout = () => {
+  loadingLogin.value = true;
   axios
     .post("/logout", {})
     .then((response) => {
@@ -45,6 +47,9 @@ const logout = () => {
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {
+      loadingBook.value = false;
     });
 };
 
@@ -81,6 +86,10 @@ onMounted(() => {
       </li>
     </ul>
   </nav>
+  <!-- ローディングアニメーション -->
+  <div v-if="loadingLogin" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
 </template>
 
 <style scoped>

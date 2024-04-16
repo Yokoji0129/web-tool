@@ -9,17 +9,17 @@ const data = reactive({
 });
 
 const error = ref("");
-const loadingLogin = ref(false)
+const loadingLogin = ref(false);
 
 const idSearch = async () => {
-  loadingLogin.value = true
+  loadingLogin.value = true;
   try {
     const response = await axios.get(`/search/${data.id}`);
     return response.data;
   } catch (error) {
     console.log(error);
     return false;
-  } finally{
+  } finally {
     loadingLogin.value = false;
   }
 };
@@ -57,7 +57,7 @@ const login = async () => {
     })
     .catch((error) => {
       console.log(error);
-    })
+    });
 };
 </script>
 
@@ -91,9 +91,9 @@ const login = async () => {
   margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .login-box h2 {
@@ -107,10 +107,18 @@ const login = async () => {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
   background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.login-box input[type="text"]:hover,
+.login-box input[type="password"]:hover {
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
 .login-box button {

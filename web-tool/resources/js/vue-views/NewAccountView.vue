@@ -8,15 +8,16 @@ const data = reactive({
   id: "",
   password: "",
   confirmPassword: "",
-  accountName: ""
+  accountName: "",
 });
 const error = ref(""); //フォーム入力エラー文字入れ
-
-const id = ref("");//ユーザーidが存在するかの情報が入る
+const loadingLogin = ref(false);
+const id = ref(""); //ユーザーidが存在するかの情報が入る
 
 //IDが存在するか検索するためのメソッド
 const idSearch = async () => {
   //tryは非同期処理が成功するか失敗するかに関係なく実行される。
+  loadingLogin.value = true;
   try {
     const response = await axios.get(`/search/${data.id}`);
     id.value = response.data;
@@ -24,6 +25,8 @@ const idSearch = async () => {
   } catch (error) {
     console.log(error);
     return false;
+  } finally {
+    loadingLogin.value = false;
   }
 };
 
@@ -32,7 +35,6 @@ const Alphanumeric = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,32}$/;
 
 //フォーム入力条件メソッド
 const validateForm = async () => {
-
   //idResultにIDが存在するかしないかのtrue or falseが格納される
   //awaitでidSearchの非同期処理が終わるまでそれ以降の処理を待つ
   const idResult = await idSearch();
@@ -48,8 +50,7 @@ const validateForm = async () => {
   }
   //IDが英数字8文字以上32文字以下で入力されなかった場合
   if (!Alphanumeric.test(data.id)) {
-    error.value =
-      "※IDは英数字を含み、8文字以上32文字以下で入力してください。";
+    error.value = "※IDは英数字を含み、8文字以上32文字以下で入力してください。";
     return false;
   }
   //passwordが英数字8文字以上32文字以下で入力されなかった場合
@@ -73,6 +74,9 @@ const validateForm = async () => {
 };
 
 const router = useRouter(); //特定の処理後にページ遷移させるための変数
+const loginBack = () => {
+  router.push("/");
+};
 
 //フォーム送信メソッド
 const submitForm = async () => {
@@ -86,7 +90,7 @@ const submitForm = async () => {
       id: data.id,
       password: data.password,
       confirmPassword: data.confirmPassword,
-      accountName: data.accountName
+      accountName: data.accountName,
     })
     .then((response) => {
       console.log(response);
@@ -102,6 +106,7 @@ const submitForm = async () => {
 
 <template>
   <div class="create-account-box">
+    <p class="login-back" @click="loginBack">ログイン画面に戻る</p>
     <h2>アカウント新規作成</h2>
     <form @submit.prevent="submitForm">
       <input type="text" v-model="data.id" placeholder="ID" />
@@ -115,7 +120,7 @@ const submitForm = async () => {
           check: Alphanumeric.test(data.id),
         }"
       ></p>
-      
+
       <input type="password" v-model="data.password" placeholder="パスワード" />
       <!--パスワードの条件満たしてる時と満たしてないときのデザイン-->
       <p class="no-password">□</p>
@@ -132,11 +137,19 @@ const submitForm = async () => {
         v-model="data.confirmPassword"
         placeholder="パスワード確認"
       />
-      <input type="text" v-model="data.accountName" placeholder="アカウント名" />
+      <input
+        type="text"
+        v-model="data.accountName"
+        placeholder="アカウント名"
+      />
       <!--エラーの際テキスト表示-->
       <p class="error-text">{{ error }}</p>
       <button class="account-name-link" type="submit">作成</button>
     </form>
+  </div>
+  <!-- ローディングアニメーション -->
+  <div v-if="loadingLogin" class="loading-overlay">
+    <div class="spinner"></div>
   </div>
 </template>
 
@@ -146,9 +159,9 @@ const submitForm = async () => {
   margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 
@@ -158,15 +171,32 @@ const submitForm = async () => {
   color: #333;
 }
 
+.login-back {
+  cursor: pointer;
+  margin: 0;
+  color: #333;
+}
+.login-back:hover {
+  color: #007bff;
+}
+
 .create-account-box input[type="text"],
 .create-account-box input[type="password"] {
   width: 95%;
   padding: 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
   background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.create-account-box input[type="text"]:hover,
+.create-account-box input[type="password"]:hover {
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
 .account-name-link {
@@ -194,28 +224,28 @@ const submitForm = async () => {
 
 .no-id {
   position: absolute;
-  top: 100px;
+  top: 125px;
   right: 20px;
   margin: 0;
 }
 
 .no-password {
   position: absolute;
-  top: 155px;
+  top: 180px;
   right: 20px;
   margin: 0;
 }
 
 .bad-id {
   position: absolute;
-  top: 100px;
+  top: 125px;
   right: 15px;
   margin: 0;
 }
 
 .bad-password {
   position: absolute;
-  top: 155px;
+  top: 180px;
   right: 15px;
   margin: 0;
 }
