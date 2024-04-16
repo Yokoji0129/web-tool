@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../vue-views/LoginView.vue";
 import NewAccountView from "../vue-views/NewAccountView.vue";
-import AccountNameView from "../vue-views/AccountNameView.vue";
 import DiarybooksListView from "../vue-views/DiarybooksListView.vue";
 import DiaryView from "../vue-views/DiaryView.vue";
 
@@ -17,11 +16,6 @@ const router = createRouter({
             path: "/newAccount",
             name: "newAccount",
             component: NewAccountView,
-        },
-        {
-            path: "/accountName",
-            name: "accountName",
-            component: AccountNameView,
         },
         {
             path: "/diaryBooksList",

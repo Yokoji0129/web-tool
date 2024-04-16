@@ -62,10 +62,10 @@ const deleteBook = (diaryId) => {
           <h3 class="book-title">{{ selectedBook[0].diary_name }}</h3>
         </div>
         <div class="book-select">
-          <h2 class="book-open">日記を開く</h2>
-          <h2 class="book-delete" @click="deleteBook(selectedBook[0].diary_id)">
+          <p class="book-open">日記を開く</p>
+          <p class="book-delete" @click="deleteBook(selectedBook[0].diary_id)">
             日記を削除
-          </h2>
+          </p>
         </div>
       </div>
     </div>
@@ -96,56 +96,61 @@ const deleteBook = (diaryId) => {
   background-color: #ced4da;
 }
 
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup-content {
-  position: relative;
-  width: 35%;
-  background-color: white;
-  padding: 30px 0;
-  border-radius: 5px;
-}
-
 .close-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px 15px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #555;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.close-btn:hover {
+  background-color: #333;
 }
 
 .book-select {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .book-open {
-  background-color: #bcd1ff;
-  padding: 5% 10%;
-  margin-right: 20px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 2px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .book-open:hover {
-  background-color: #91b4ff;
+  background-color: #36783a;
 }
-
 .book-delete {
-  background-color: #ffcabc;
-  padding: 5% 10%;
+  background-color: #af4c4c;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 2px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .book-delete:hover {
-  background-color: #ffb29d;
+  background-color: #783636;
 }
 
 .book-title {
@@ -311,15 +316,15 @@ const deleteBook = (diaryId) => {
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1000px) {
   .popup-content {
-    width: 60%;
+    width: 70%;
   }
 }
 
 @media screen and (max-width: 768px) {
   .popup-content {
-    width: 100%;
+    width: 80%;
   }
   .diaries {
     gap: 1% 1%;
@@ -328,10 +333,10 @@ const deleteBook = (diaryId) => {
 
 @media screen and (max-width: 450px) {
   .book-open {
-    padding: 2% 5%;
+    padding: 5%;
   }
   .book-delete {
-    padding: 2% 5%;
+    padding: 5%;
   }
 }
 </style>

@@ -179,33 +179,6 @@ main {
   padding: 20px;
 }
 
-/* ポップアップ */
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.popup-content {
-  position: relative;
-  width: 35%;
-  height: auto;
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 5px;
-  border: 3px solid #ced4da;
-  box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
-  overflow-y: auto; /*スクロール可能*/
-}
-
 .popup-content h3 {
   margin: 20 0 10px 0;
   text-align: center;
