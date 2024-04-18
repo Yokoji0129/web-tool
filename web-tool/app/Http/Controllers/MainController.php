@@ -169,12 +169,12 @@ class MainController extends Controller
         //上記の処理で問題がなければアカウント作成
         {
             $account_object->add_account($id,$password,$random_key,$name);
-            return view('app', compact('return_data'));
+            return $return_data;
         }
         else
         {
             $return_data = 'no';
-            return view('app', compact('return_data'));
+            return $return_data;
         }
     }
 
