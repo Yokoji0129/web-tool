@@ -61,29 +61,37 @@ onMounted(() => {
 <template>
   <nav class="fixed-nav">
     <ul class="nav-list">
+      <!--利用注意-->
       <li class="nav-item-left">
         <p class="p" @click="toggleTooltip">利用注意</p>
-        <div class="tooltip" v-show="showTooltip">
+      </li>
+      <div class="tooltip" v-show="showTooltip">
+        <fieldset>
           このサービスは勉強用に作成されたものです、​
           このサービスに保存できる情報量には限界があります、予めご了承ください
-        </div>
-      </li>
+        </fieldset>
+      </div>
+      <!--日記本-->
       <li class="nav-item-center">
-        <p class="p" @click="toggleTooltip2">
-          日記本一覧({{ books.length }}冊)
-        </p>
-        <div class="tooltip2" v-show="showTooltip2">
-          <p class="book-list" v-for="(book, index) in books" :key="index">
-            {{ book[0].diary_name }}
-          </p>
-        </div>
+        <p class="p" @click="toggleTooltip2">日記本({{ books.length }}冊)</p>
       </li>
+      <div class="tooltip2" v-show="showTooltip2">
+        <fieldset>
+          <p class="diary-sort">日記並べ替え</p>
+          <!--お気に入り表示が押されたら通常表示に切り替えるコード書く-->
+          <button class="sort">お気に入り表示</button>
+          <button class="sort">50音順</button>
+        </fieldset>
+      </div>
+      <!--ユーザー名-->
       <li class="nav-item-right">
         <p class="p" @click="toggleTooltip3">ユーザー名: {{ accountName }}</p>
-        <div class="tooltip3" v-show="showTooltip3">
-          <button class="logout" @click="logout">ログアウト</button>
-        </div>
       </li>
+      <div class="tooltip3" v-show="showTooltip3">
+        <fieldset>
+          <button class="logout" @click="logout">ログアウト</button>
+        </fieldset>
+      </div>
     </ul>
   </nav>
   <!-- ローディングアニメーション -->
@@ -124,6 +132,7 @@ onMounted(() => {
   flex: 1;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.5s;
 }
 
 .nav-item-left:hover,
@@ -134,13 +143,13 @@ onMounted(() => {
 
 .tooltip {
   position: absolute;
-  width: 32.5%;
+  width: 25%;
   top: 100%;
-  left: 33.4%;
-  transform: translateX(-100%);
-  background-color: #ced4da;
-  padding: 5px 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  left: 0;
+  background-color: #ffffff;
+  padding: 5px 3px;
+  border-right: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
   z-index: 3;
 }
 
@@ -148,21 +157,42 @@ onMounted(() => {
   position: absolute;
   width: 15%;
   top: 100%;
-  transform: translateX(-0%);
-  background-color: #ced4da;
-  padding: 5px 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  left: 33.3%;
+  background-color: #ffffff;
+  padding: 5px 3px;
+  border-right: 1px solid #ced4da;
+  border-left: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
   z-index: 2;
+}
+
+.diary-sort {
+  font-weight: bold;
+}
+
+.sort {
+  margin-top: 10px;
+  background-color: #ced4da;
+  padding: 7px 0;
+  width: 100%;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.sort:hover {
+  background-color: #a9aeb3;
 }
 
 .tooltip3 {
   position: absolute;
   width: 15%;
   top: 100%;
-  transform: translateX(-0%);
-  background-color: #ced4da;
-  padding: 5px 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  left: 66.6%;
+  background-color: #ffffff;
+  padding: 5px 3px;
+  border-right: 1px solid #ced4da;
+  border-left: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
   z-index: 1;
 }
 
@@ -171,15 +201,26 @@ onMounted(() => {
 }
 
 .logout {
-  padding: 10px 20px;
-  background-color: #ffffff;
+  margin-top: 7px;
+  padding: 7px 0;
+  width: 100%;
+  background-color: #ced4da;
   border: none;
+  transition: background-color 0.3s;
 }
 
 .logout:hover {
-  background-color: #f8f9fa;
+  background-color: #a9aeb3;
 }
 
+/*タブレット*/
+@media screen and (max-width: 1024px) {
+  .tooltip,
+  .tooltip2,
+  .tooltip3{
+    width: 25%;
+  }
+}
 /*タブレット*/
 @media screen and (max-width: 768px) {
   .fixed-nav {
@@ -205,14 +246,17 @@ onMounted(() => {
   .tooltip {
     left: 50%;
     top: 33%;
-    width: 100%;
+    width: 90%;
+    border: 1px solid #ced4da;
     transform: translateX(-50%);
   }
 
   .tooltip2 {
-    width: 154px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
     top: 67%;
-    padding: 0px;
+    border: 1px solid #ced4da;
   }
 
   .book-list {
@@ -220,10 +264,11 @@ onMounted(() => {
   }
 
   .tooltip3 {
-    width: 100%;
+    border: 1px solid #ced4da;
+    width: 90%;
     top: 100%;
-    left: 0;
-    padding: 5px 10px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
