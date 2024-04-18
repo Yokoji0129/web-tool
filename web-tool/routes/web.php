@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'App\Http\Controllers\MainController@startpage');//ログイン
 Route::get('/newAccount', 'App\Http\Controllers\MainController@startpage');//アカウント新規作成
-Route::get('/accountName', 'App\Http\Controllers\MainController@startpage');//アカウント名作成
 Route::get('/diaryBooksList', 'App\Http\Controllers\MainController@startpage');//日記本一覧
 Route::get('/diary', 'App\Http\Controllers\MainController@startpage');//日記ページ
 Route::get('/search/{id}', 'App\Http\Controllers\MainController@search_id');//対象idが存在しなければtrueを存在すればfalseを返します
@@ -30,6 +29,10 @@ Route::post('/file', 'App\Http\Controllers\MainController@add_file');//とりあ
 Route::post('/logout', 'App\Http\Controllers\MainController@logout');//これを実行するとログイン状態が解除される
 Route::post('/delete/diary', 'App\Http\Controllers\MainController@delete_diary');//日記削除
 Route::post('/delete/page', 'App\Http\Controllers\MainController@delete_page');//ページ削除
+Route::post('/edit/page', 'App\Http\Controllers\MainController@edit_page');//ページ編集
+Route::get('/favorite/return', 'App\Http\Controllers\MainController@return_favorite');//お気に入り日記情報取得
+Route::post('/favorite/add', 'App\Http\Controllers\MainController@add_favorite');//お気に入り追加、日記idをidとして渡すとうまくいくはず
+Route::get('/favorite/delete', 'App\Http\Controllers\MainController@delete_favorite');//お気に入り削除、日記idをidとして渡すとうまくいくはず
 
 //以下のルートはテスト用
 Route::get('/test/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得
@@ -39,7 +42,9 @@ Route::get('/test/diary/{name}/{color}', 'App\Http\Controllers\MainController@te
 Route::get('/account/login/{id}/{password}', 'App\Http\Controllers\MainController@testlogin');//getでログインできるかのお試し
 Route::get('/account/{id}/{password}', 'App\Http\Controllers\MainController@make_account');//テストアカウント作成
 Route::get('/re', 'App\Http\Controllers\MainController@session');//requestを覗く
-Route::get('/diary/page/{id}/{title}/{txt}', 'App\Http\Controllers\MainController@test_add_page');//ページ追加のテスト、ファイルは受け付けないidにはログインしているアカウントの日記idを
+Route::get('/diary/page/{id}/{title}/{txt}', 'App\Http\Controllers\MainController@test_add_page');//ページ追加のテスト、
+Route::get('/edit/{id}/{title}/{txt}', 'App\Http\Controllers\MainController@test_edit_page');//ページデータ編集
+Route::get('/test/page/delete/{id}', 'App\Http\Controllers\MainController@test_delete_page');//ページ削除のテスト
 // Route::get('/{any}', function () {
 //     return view('app');
 // })->where('any', '.*');

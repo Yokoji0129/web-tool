@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->bigInteger('diary_id')->nullalbe(false);
             $table->id('page_id');
-            $table->string('page_title',255)->nullable(false);
-            $table->string('page_txt',255)->nullable(false);
+            $table->string('page_title',255)->nullable();
+            $table->string('page_txt',255)->nullable();
             $table->string('page_file1',255)->nullable();
             $table->string('page_file2',255)->nullable();
             $table->string('page_file3',255)->nullable();
