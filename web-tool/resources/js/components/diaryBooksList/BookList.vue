@@ -318,14 +318,15 @@ const deleteBook = (diaryId) => {
   .popup-content {
     width: 70%;
   }
+  .diaries {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2% 1%;
+  }
 }
 
 @media screen and (max-width: 768px) {
   .popup-content {
     width: 80%;
-  }
-  .diaries {
-    gap: 1% 1%;
   }
 }
 
@@ -335,6 +336,71 @@ const deleteBook = (diaryId) => {
   }
   .book-delete {
     padding: 5%;
+  }
+  .diaries {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 2% 7%;
+  }
+  .diary {
+    padding: 20px 0 150px 0;
+    width: 150px;
+    margin-left: 5px;
+  }
+  .book-paper {
+    border-right: 8px solid #ffffff;
+    width: 150px;
+    height: 230px;
+  }
+  .book-paper h2 {
+    background-color: #ffffff;
+    padding: 0px;
+  }
+  .book-backnumber-1 {
+    border-left: 10px solid rgb(107, 191, 93);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-2 {
+    border-left: 10px solid rgb(255, 222, 155);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-3 {
+    border-left: 10px solid rgb(161, 142, 130);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-4 {
+    border-left: 10px solid rgb(110, 204, 230);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-5 {
+    border-left: 10px solid rgb(207, 150, 163);
+    padding: 20px 0 134px 0;
+  }
+  .book-backnumber-6 {
+    border-left: 10px solid rgb(242, 195, 201);
+    padding: 20px 0 134px 0;
+  }
+  .book-backnumber-7 {
+    border-left: 10px solid rgb(182, 176, 162);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-8 {
+    border-left: 10px solid rgb(233, 239, 235);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-9 {
+    border-left: 10px solid rgb(245, 202, 225);
+    padding: 20px 0 134px 0;
+  }
+
+  .book-backnumber-10 {
+    border-left: 10px solid rgb(196, 235, 171);
+    padding: 20px 0 134px 0;
   }
 }
 </style>

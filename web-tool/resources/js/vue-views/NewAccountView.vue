@@ -109,7 +109,7 @@ const submitForm = async () => {
     <p class="login-back" @click="loginBack">ログイン画面に戻る</p>
     <h2>アカウント新規作成</h2>
     <form @submit.prevent="submitForm">
-      <input type="text" v-model="data.id" placeholder="ID" />
+      <input type="text" v-model="data.id" placeholder="ユーザーID" />
       <!--IDの条件満たしてる時と満たしてないときのデザイン-->
       <p class="no-id">□</p>
       <p
@@ -155,7 +155,7 @@ const submitForm = async () => {
 
 <style scoped>
 .create-account-box {
-  width: 700px;
+  width: 35%;
   margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
@@ -266,12 +266,35 @@ const submitForm = async () => {
   padding: 3px 8px;
 }
 
+@media screen and (max-width: 1440px) {
+  .no-id {
+    right: 15px;
+  }
+
+  .no-password {
+    right: 15px;
+  }
+  .bad-id {
+    position: absolute;
+    right: 10px;
+  }
+  .bad-password {
+    position: absolute;
+    right: 10px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .create-account-box {
+    width: 60%;
+  }
+}
+
 /*ウィンドウ幅が750px以下の場合*/
 @media screen and (max-width: 768px) {
   .create-account-box {
-    width: 300px;
-    margin: auto;
-    margin-top: 130px;
+    width: 70%;
+    margin: 250px auto;
   }
   .create-account-box input[type="text"],
   .create-account-box input[type="password"] {
@@ -280,13 +303,41 @@ const submitForm = async () => {
   .account-name-link {
     width: 100%;
   }
+  .no-id {
+    right: 33px;
+  }
+
+  .no-password {
+    right: 33px;
+  }
   .bad-id {
     position: absolute;
-    right: 15px;
+    right: 25px;
   }
   .bad-password {
     position: absolute;
-    right: 15px;
+    right: 25px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .create-account-box {
+    margin: 130px auto;
+  }
+  .no-id {
+    right: 20px;
+  }
+
+  .no-password {
+    right: 20px;
+  }
+  .bad-id {
+    position: absolute;
+    right: 10px;
+  }
+  .bad-password {
+    position: absolute;
+    right: 10px;
   }
 }
 </style>

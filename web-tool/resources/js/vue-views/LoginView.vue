@@ -87,7 +87,7 @@ const login = async () => {
   
 <style scoped>
 .login-box {
-  width: 700px;
+  width: 35%;
   margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
@@ -140,11 +140,22 @@ const login = async () => {
   margin-top: 10px;
 }
 
+@media screen and (max-width: 1024px) {
+  .login-box {
+    width: 60%;
+  }
+}
 /*ウィンドウ幅が750px以下の場合*/
 @media screen and (max-width: 768px) {
   .login-box {
-    width: 300px;
-    margin: 130px auto;
+    width: 70%;
+    margin: 250px auto;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .login-box {
+    margin: 160px auto;
   }
 }
 </style>
