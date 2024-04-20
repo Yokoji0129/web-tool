@@ -173,8 +173,7 @@ onMounted(() => {
 }
 
 main {
-  margin: 70px 5% 500px 10%;
-  padding: 20px;
+  margin: 100px 70px 300px 70px;
 }
 
 .popup-content h3 {
@@ -249,9 +248,20 @@ main {
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
   .popup-content {
-    width: 70%;
+    width: 60%;
+  }
+  main {
+    margin: 90px 40px 200px 40px;
+  }
+}
+@media screen and (max-width: 820px) {
+  .popup-content {
+    width: 60%;
+  }
+  main {
+    margin: 90px 70px 200px 70px;
   }
 }
 
@@ -268,6 +278,7 @@ main {
   .popup {
     flex-direction: column;
   }
+
 }
 
 @media screen and (max-width: 600px) {
@@ -279,6 +290,21 @@ main {
 @media screen and (max-width: 450px) {
   .popup-content {
     width: 70%;
+  }
+  main {
+    margin: 70px 25px 120px 25px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  main {
+    margin: 70px 15px 120px 15px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  main {
+    margin: 70px 70px 260px 70px;
   }
 }
 </style>
