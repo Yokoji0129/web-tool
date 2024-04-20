@@ -35,7 +35,8 @@ class Diary extends Model
                 'diary_top_file',
                 'diary_color',
                 'diary_text_color',
-                'diary_font'
+                'diary_font',
+                'diary_favorite'
             ]);
         return $data;
     }
@@ -48,7 +49,8 @@ class Diary extends Model
                 'diary_top_file',
                 'diary_color',
                 'diary_text_color',
-                'diary_font'
+                'diary_font',
+                'diary_favorite'
             ]);
         return $data;
     }
@@ -82,7 +84,8 @@ class Diary extends Model
                 'diary_top_file',
                 'diary_color',
                 'diary_text_color',
-                'diary_font'
+                'diary_font',
+                'diary_favorite'
             ]);
         return $data;
     }
