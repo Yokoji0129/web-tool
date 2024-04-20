@@ -531,7 +531,6 @@ class MainController extends Controller
             else
             {
                 $return_data = 'nodata';
-                return $return_data;
             }
         }
         else
