@@ -8,7 +8,7 @@ import TextColor from "../components/diaryBooksList/TextColor.vue";
 import DiaryImage from "../components/diaryBooksList/DiaryImage.vue";
 
 const books = ref([]); //本のリスト
-const loadingBook = ref(false);
+const loadingBook = ref(false);//ローディングフラグ
 const selectedBackColor = ref(null); //本の背景classを入れる
 const selectedTextColor = ref(null); //本のテキストカラーを入れる
 
@@ -20,23 +20,32 @@ const bookData = reactive({
   bookFont: "test",
 });
 
-const showPopup = ref(false); //ポップアップの表示制御
+const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
 const togglePopup = () => {
   showPopup.value = !showPopup.value;
 };
 
+const isFavoriteDisplayed = ref(false); //お気に入り表示フラグ
+
 //本の情報をとってくるメソッド
 const displayBooks = () => {
+  //isFavoriteDisplayedがtrueかfalseでAPIの切り替えをする
   axios
-    .get("/returndiary")
+    .get(isFavoriteDisplayed.value ? "/favorite/return" : "/returndiary")
     .then((response) => {
       books.value = response.data;
     })
     .catch((error) => {
       console.log(error);
-    });
+    })
+};
+
+//お気に入り表示と通常表示ボタンの表示切替
+const displayFavoriteBooks = () => {
+  isFavoriteDisplayed.value = !isFavoriteDisplayed.value;
+  displayBooks();
 };
 
 /**
@@ -90,6 +99,7 @@ const createBook = () => {
   bookData.bookTextColor = "";
   bookData.bookFont = "test";
   selectedBackColor.value = "";
+  selectedTextColor.value = ""
 };
 
 //ページ表示時に情報を表示させる
@@ -101,7 +111,11 @@ onMounted(() => {
 <template>
   <div class="container">
     <!--ユーザー名などのnavコンポーネント-->
-    <navList :books="books" />
+    <navList
+      :books="books"
+      :displayFavoriteBooks="displayFavoriteBooks"
+      :isFavoriteDisplayed="isFavoriteDisplayed"
+    />
     <main>
       <!--本一覧コンポーネント-->
       <BookList
@@ -278,7 +292,6 @@ main {
   .popup {
     flex-direction: column;
   }
-
 }
 
 @media screen and (max-width: 600px) {

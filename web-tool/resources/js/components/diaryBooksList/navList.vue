@@ -3,6 +3,8 @@ import { onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 const props = defineProps({
   books: Array,
+  displayFavoriteBooks: Function,
+  isFavoriteDisplayed: Boolean,
 });
 
 const showTooltip = ref(false);
@@ -67,20 +69,26 @@ onMounted(() => {
       </li>
       <div class="tooltip" v-show="showTooltip">
         <fieldset>
-          このサービスは勉強用に作成されたものです。<br>
-          このサービスに保存できる情報量には限界があります。<br>
+          このサービスは勉強用に作成されたものです。<br />
+          このサービスに保存できる情報量には限界があります。<br />
           予めご了承ください
         </fieldset>
       </div>
       <!--日記本-->
       <li class="nav-item-center">
-        <p class="p" @click="toggleTooltip2">日記本({{ books.length }}冊)</p>
+        <p class="p" @click="toggleTooltip2">
+          {{ isFavoriteDisplayed ? "お気に入り日記本" : "日記本" }}
+          ({{ books.length }}冊)
+        </p>
       </li>
       <div class="tooltip2" v-show="showTooltip2">
         <fieldset>
           <p class="diary-sort">日記並べ替え</p>
-          <!--お気に入り表示が押されたら通常表示に切り替えるコード書く-->
-          <button class="sort">お気に入り表示</button>
+          <input class="diary-search" type="text" placeholder="日記検索" />
+          <button class="sort" @click="displayFavoriteBooks">
+            <!--isFavoriteDisplayedがtrueになったら通常表示に切り替え-->
+            {{ isFavoriteDisplayed ? "通常表示" : "お気に入り表示" }}
+          </button>
           <button class="sort">50音順</button>
         </fieldset>
       </div>
@@ -167,11 +175,25 @@ onMounted(() => {
   z-index: 2;
 }
 
+.diary-search {
+  width: 95%;
+  padding: 5px 0;
+  border: 2px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.diary-search:hover {
+  border-color: #007bff;
+}
+
 .diary-sort {
   font-weight: bold;
+  cursor: pointer;
 }
 
 .sort {
+  cursor: pointer;
   margin-top: 10px;
   background-color: #ced4da;
   padding: 7px 0;
@@ -202,6 +224,7 @@ onMounted(() => {
 }
 
 .logout {
+  cursor: pointer;
   margin-top: 7px;
   padding: 7px 0;
   width: 100%;
@@ -218,7 +241,7 @@ onMounted(() => {
 @media screen and (max-width: 1024px) {
   .tooltip,
   .tooltip2,
-  .tooltip3{
+  .tooltip3 {
     width: 25%;
   }
 }

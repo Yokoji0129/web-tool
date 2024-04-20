@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 const props = defineProps({
   books: Array,
+  favoriteBooks: Array,
   togglePopup: Function,
   displayBooks: Function,
 });
@@ -16,6 +17,45 @@ const selectedBook = ref(null); //選択された日記の情報を入れる
 const toggleBookPopup = (book) => {
   showBookPopup.value = !showBookPopup.value;
   selectedBook.value = book;
+};
+
+//お気に入り追加メソッド
+const favoriteAddBook = (diaryId) => {
+  loading.value = true;
+  axios
+    .post("/favorite/add", {
+      id: diaryId,
+    })
+    .then((response) => {
+      window.alert("お気に入り追加しました");
+      toggleBookPopup();
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+//お気に入り削除メソッド
+const favoriteDeleteBook = (diaryId) => {
+  loading.value = true;
+  axios
+    .post("/favorite/delete", {
+      id: diaryId,
+    })
+    .then((response) => {
+      window.alert("お気に入りを削除しました");
+      props.displayBooks();
+      toggleBookPopup();
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 //日記の削除メソッド
@@ -38,9 +78,6 @@ const deleteBook = (diaryId, diaryName) => {
       .finally(() => {
         loading.value = false;
       });
-  } else {
-    // いいえが選択された場合の処理
-    console.log("いいえが選択されました");
   }
 };
 </script>
@@ -70,7 +107,20 @@ const deleteBook = (diaryId, diaryName) => {
         </div>
         <div class="book-select">
           <p class="book-open">日記を開く</p>
-          <p class="favorite">お気に入り追加</p>
+          <p
+            class="favorite"
+            v-if="selectedBook[0].diary_favorite === 1"
+            @click="favoriteDeleteBook(selectedBook[0].diary_id)"
+          >
+            お気に入り削除
+          </p>
+          <p
+            class="favorite"
+            v-else
+            @click="favoriteAddBook(selectedBook[0].diary_id)"
+          >
+            お気に入り追加
+          </p>
           <p
             class="book-delete"
             @click="
