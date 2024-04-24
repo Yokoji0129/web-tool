@@ -111,18 +111,10 @@ onMounted(() => {
 <template>
   <div class="container">
     <!--ユーザー名などのnavコンポーネント-->
-    <navList
-      :books="books"
-      :displayFavoriteBooks="displayFavoriteBooks"
-      :isFavoriteDisplayed="isFavoriteDisplayed"
-    />
+    <navList :books="books" :displayFavoriteBooks="displayFavoriteBooks" :isFavoriteDisplayed="isFavoriteDisplayed" />
     <main>
       <!--本一覧コンポーネント-->
-      <BookList
-        :books="books"
-        :togglePopup="togglePopup"
-        :displayBooks="displayBooks"
-      />
+      <BookList :books="books" :togglePopup="togglePopup" :displayBooks="displayBooks" />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
         <div class="popup-content">
@@ -130,26 +122,15 @@ onMounted(() => {
           <div>
             <h3>日記本新規作成</h3>
             <!--本のタイトル-->
-            <input
-              v-model="bookData.bookName"
-              type="text"
-              class="book-title"
-              placeholder="日記のタイトル"
-            />
+            <input v-model="bookData.bookName" type="text" class="book-title" placeholder="日記のタイトル" />
             <h3>日記デザイン選択</h3>
             <div class="color-select-box">
               <!--日記背景デザイン選択プルダウン-->
-              <BackColor
-                :bookData="bookData"
-                :selectedBackColor="selectedBackColor"
-                @update:selectedBackColor="selectedBackColor = $event"
-              />
+              <BackColor :bookData="bookData" :selectedBackColor="selectedBackColor"
+                @update:selectedBackColor="selectedBackColor = $event" />
               <!--テキストカラー選択プルダウン-->
-              <TextColor
-                :bookData="bookData"
-                :selectedTextColor="selectedTextColor"
-                @update:selectedTextColor="selectedTextColor = $event"
-              />
+              <TextColor :bookData="bookData" :selectedTextColor="selectedTextColor"
+                @update:selectedTextColor="selectedTextColor = $event" />
               <!--フォント選択プルダウン(まだできてない)-->
               <select v-model="bookData.bookFont" class="color-select">
                 <option value="test">フォント</option>
@@ -170,8 +151,7 @@ onMounted(() => {
           <DiaryImage
             :selectedBackColor="selectedBackColor"
             :selectedTextColor="selectedTextColor"
-            :bookData="bookData"
-          />
+            :bookData="bookData" />
           <!--ここに本のイメージ-->
         </div>
       </div>
@@ -233,6 +213,7 @@ main {
   max-height: 200px;
   object-fit: contain;
 }
+
 .color-select-box {
   display: flex;
 }
@@ -266,14 +247,17 @@ main {
   .popup-content {
     width: 60%;
   }
+
   main {
     margin: 90px 40px 200px 40px;
   }
 }
+
 @media screen and (max-width: 820px) {
   .popup-content {
     width: 60%;
   }
+
   main {
     margin: 90px 70px 200px 70px;
   }
@@ -304,6 +288,7 @@ main {
   .popup-content {
     width: 70%;
   }
+
   main {
     margin: 70px 25px 120px 25px;
   }

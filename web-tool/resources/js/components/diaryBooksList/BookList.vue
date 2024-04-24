@@ -274,6 +274,7 @@ const deleteBook = (diaryId, diaryName) => {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   width: 275px;
+  margin-top: 5px;
 }
 
 .diary h2 {
