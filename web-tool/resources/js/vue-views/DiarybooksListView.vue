@@ -184,7 +184,7 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  margin-top: 90px;
+  margin-top: 75px;
   display: flex;
   flex-direction: column;
 }
@@ -260,38 +260,18 @@ main {
   background-color: #0056b3;
 }
 
-@media screen and (max-width: 1440px) {
-  .popup-content {
-    width: 50%;
-  }
-}
-
-@media screen and (max-width: 1024px) {
+/*タブレット(1024px以下)*/
+@media only screen and (max-width: 1024px) {
   .popup-content {
     width: 60%;
   }
-
-  main {
-    margin: 90px 40px 200px 40px;
-  }
 }
 
-@media screen and (max-width: 820px) {
-  .popup-content {
-    width: 60%;
-  }
-
-  main {
-    margin: 90px 70px 200px 70px;
-  }
-}
-
-/*タブレット*/
-@media screen and (max-width: 768px) {
+/*タブレット(768px以下)*/
+@media only screen and (max-width: 768px) {
   .container {
-    margin-top: 132px;
+    margin-top: 120px;
   }
-
   .popup-content {
     width: 80%;
   }
@@ -299,33 +279,29 @@ main {
   .popup {
     flex-direction: column;
   }
-}
 
-@media screen and (max-width: 600px) {
   .color-select-box {
     flex-direction: column;
   }
 }
 
-@media screen and (max-width: 450px) {
+/*スマホ(480px以下)*/
+@media only screen and (max-width: 480px) {
+
+  main {
+    margin: 70px 15px 120px 20px;
+  }
+
   .popup-content {
     width: 70%;
   }
 
-  main {
-    margin: 70px 25px 120px 25px;
+  .popup {
+    flex-direction: column;
   }
-}
 
-@media screen and (max-width: 375px) {
-  main {
-    margin: 70px 15px 120px 15px;
-  }
-}
-
-@media screen and (max-width: 320px) {
-  main {
-    margin: 70px 70px 260px 70px;
+  .color-select-box {
+    flex-direction: column;
   }
 }
 </style>

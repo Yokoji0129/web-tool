@@ -142,7 +142,7 @@ onMounted(() => {
   background-color: #a9aeb3;
 }
 
-/*タブレット*/
+/*タブレット(1024px以下)*/
 @media screen and (max-width: 1024px) {
   .tooltip,
   .tooltip2,
@@ -150,7 +150,7 @@ onMounted(() => {
     width: 25%;
   }
 }
-/*タブレット*/
+/*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .fixed-nav {
     margin-top: 62px;

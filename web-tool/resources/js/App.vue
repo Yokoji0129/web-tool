@@ -18,7 +18,7 @@ p {
 .header {
   background-color: #f8f9fa;
   border-bottom: 1px solid #ced4da;
-  padding: 20px 0;
+  padding: 15px 0;
   text-align: center;
   position: fixed; 
   top: 0; 
@@ -38,7 +38,7 @@ p {
   text-align: center;
   background-color: #5a646d;
   color: #ffffff;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   position: fixed;
   left: 0; 
@@ -48,7 +48,7 @@ p {
   font-family: "Georgia", serif;
 }
 
-/* ウィンドウ幅が750px以下の場合のヘッダーのスタイル */
+/*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .header {
     padding: 5px 0;

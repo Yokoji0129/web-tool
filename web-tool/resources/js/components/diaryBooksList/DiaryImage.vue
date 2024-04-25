@@ -125,7 +125,7 @@ const props = defineProps({
   box-shadow: 2px 0px 0px rgba(0, 0, 0, 0.5);
 }
 
-/*タブレット*/
+/*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .book-paper {
     margin-left: 0px;
@@ -133,9 +133,10 @@ const props = defineProps({
   }
 }
 
-@media screen and (max-width: 450px) {
+/*スマホ(480px以下)*/
+@media screen and (max-width: 480px) {
   .book-paper {
-    margin-top: 10px;
+    margin-top:10px;
   }
 }
 </style>

@@ -392,29 +392,25 @@ const deleteBook = (diaryId, diaryName) => {
   cursor: pointer;
 }
 
-@media screen and (max-width: 1440px) {
-  .popup-content {
-    width: 50%;
-  }
-}
-
+/*タブレット(1024px以下)*/
 @media screen and (max-width: 1024px) {
   .popup-content {
-    width: 70%;
+    width: 60%;
   }
   .diaries {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2% 1%;
   }
 }
 
+/*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .popup-content {
     width: 80%;
   }
 }
 
-@media screen and (max-width: 450px) {
+/*スマホ(480px以下)*/
+@media screen and (max-width: 480px) {
   .book-open {
     margin: 5px 0;
   }
@@ -429,7 +425,7 @@ const deleteBook = (diaryId, diaryName) => {
   }
   .diaries {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 2% 7%;
+    gap: 5% 7%;
   }
   .diary {
     padding: 20px 0 150px 0;

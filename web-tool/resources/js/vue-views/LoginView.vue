@@ -140,12 +140,13 @@ const login = async () => {
   margin-top: 10px;
 }
 
+/*タブレット(1024px以下)*/
 @media screen and (max-width: 1024px) {
   .login-box {
     width: 60%;
   }
 }
-/*ウィンドウ幅が750px以下の場合*/
+/*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .login-box {
     width: 70%;
@@ -153,7 +154,8 @@ const login = async () => {
   }
 }
 
-@media screen and (max-width: 450px) {
+/*スマホ(480px以下)*/
+@media screen and (max-width: 480px) {
   .login-box {
     margin: 160px auto;
   }

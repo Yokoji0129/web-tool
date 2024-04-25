@@ -290,7 +290,6 @@ const submitForm = async () => {
   }
 }
 
-/*ウィンドウ幅が750px以下の場合*/
 @media screen and (max-width: 768px) {
   .create-account-box {
     width: 70%;
@@ -320,7 +319,7 @@ const submitForm = async () => {
   }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 480px) {
   .create-account-box {
     margin: 130px auto;
   }
