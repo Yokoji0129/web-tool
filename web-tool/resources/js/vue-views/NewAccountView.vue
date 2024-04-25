@@ -292,32 +292,11 @@ const submitForm = async () => {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 480px) {
   .create-account-box input[type="text"],
   .create-account-box input[type="password"] {
     width: 90%;
   }
-  .account-name-link {
-    width: 100%;
-  }
-  .no-id {
-    right: 33px;
-  }
-
-  .no-password {
-    right: 33px;
-  }
-  .bad-id {
-    position: absolute;
-    right: 25px;
-  }
-  .bad-password {
-    position: absolute;
-    right: 25px;
-  }
-}
-
-@media screen and (max-width: 480px) {
   .no-id {
     right: 20px;
   }
