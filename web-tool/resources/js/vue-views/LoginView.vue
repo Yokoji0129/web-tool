@@ -66,12 +66,7 @@ const login = async () => {
     <h2>ログイン</h2>
     <form @submit.prevent="login">
       <input v-model="data.id" type="text" name="id" placeholder="ユーザーID" />
-      <input
-        v-model="data.password"
-        type="password"
-        name="password"
-        placeholder="パスワード"
-      />
+      <input v-model="data.password" type="password" name="password" placeholder="パスワード" />
       <p class="error-text">{{ error }}</p>
       <button type="submit" class="login-button">ログイン</button>
       <RouterLink to="/newAccount">
@@ -88,12 +83,15 @@ const login = async () => {
 <style scoped>
 .login-box {
   width: 35%;
-  margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
   border: 2px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .login-box h2 {
@@ -146,18 +144,11 @@ const login = async () => {
     width: 60%;
   }
 }
+
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .login-box {
     width: 70%;
-    margin: 250px auto;
-  }
-}
-
-/*スマホ(480px以下)*/
-@media screen and (max-width: 480px) {
-  .login-box {
-    margin: 160px auto;
   }
 }
 </style>

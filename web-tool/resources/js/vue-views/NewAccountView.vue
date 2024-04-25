@@ -156,13 +156,15 @@ const submitForm = async () => {
 <style scoped>
 .create-account-box {
   width: 35%;
-  margin: 250px auto;
   padding: 20px;
   background-color: #f8f9fa;
   border: 2px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .create-account-box h2 {
@@ -291,10 +293,6 @@ const submitForm = async () => {
 }
 
 @media screen and (max-width: 768px) {
-  .create-account-box {
-    width: 70%;
-    margin: 250px auto;
-  }
   .create-account-box input[type="text"],
   .create-account-box input[type="password"] {
     width: 90%;
@@ -320,9 +318,6 @@ const submitForm = async () => {
 }
 
 @media screen and (max-width: 480px) {
-  .create-account-box {
-    margin: 130px auto;
-  }
   .no-id {
     right: 20px;
   }
