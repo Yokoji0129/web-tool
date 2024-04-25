@@ -8,7 +8,7 @@ import TextColor from "../components/diaryBooksList/TextColor.vue";
 import DiaryImage from "../components/diaryBooksList/DiaryImage.vue";
 
 const books = ref([]); //本のリスト
-const loadingBook = ref(false);//ローディングフラグ
+const loadingBook = ref(false); //ローディングフラグ
 const selectedBackColor = ref(null); //本の背景classを入れる
 const selectedTextColor = ref(null); //本のテキストカラーを入れる
 
@@ -39,7 +39,7 @@ const displayBooks = () => {
     })
     .catch((error) => {
       console.log(error);
-    })
+    });
 };
 
 //お気に入り表示と通常表示ボタンの表示切替
@@ -99,7 +99,7 @@ const createBook = () => {
   bookData.bookTextColor = "";
   bookData.bookFont = "test";
   selectedBackColor.value = "";
-  selectedTextColor.value = ""
+  selectedTextColor.value = "";
 };
 
 //ページ表示時に情報を表示させる
@@ -111,10 +111,18 @@ onMounted(() => {
 <template>
   <div class="container">
     <!--ユーザー名などのnavコンポーネント-->
-    <navList :books="books" :displayFavoriteBooks="displayFavoriteBooks" :isFavoriteDisplayed="isFavoriteDisplayed" />
+    <navList
+      :books="books"
+      :displayFavoriteBooks="displayFavoriteBooks"
+      :isFavoriteDisplayed="isFavoriteDisplayed"
+    />
     <main>
       <!--本一覧コンポーネント-->
-      <BookList :books="books" :togglePopup="togglePopup" :displayBooks="displayBooks" />
+      <BookList
+        :books="books"
+        :togglePopup="togglePopup"
+        :displayBooks="displayBooks"
+      />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
         <div class="popup-content">
@@ -122,15 +130,26 @@ onMounted(() => {
           <div>
             <h3>日記本新規作成</h3>
             <!--本のタイトル-->
-            <input v-model="bookData.bookName" type="text" class="book-title" placeholder="日記のタイトル" />
+            <input
+              v-model="bookData.bookName"
+              type="text"
+              class="book-title"
+              placeholder="日記のタイトル"
+            />
             <h3>日記デザイン選択</h3>
             <div class="color-select-box">
               <!--日記背景デザイン選択プルダウン-->
-              <BackColor :bookData="bookData" :selectedBackColor="selectedBackColor"
-                @update:selectedBackColor="selectedBackColor = $event" />
+              <BackColor
+                :bookData="bookData"
+                :selectedBackColor="selectedBackColor"
+                @update:selectedBackColor="selectedBackColor = $event"
+              />
               <!--テキストカラー選択プルダウン-->
-              <TextColor :bookData="bookData" :selectedTextColor="selectedTextColor"
-                @update:selectedTextColor="selectedTextColor = $event" />
+              <TextColor
+                :bookData="bookData"
+                :selectedTextColor="selectedTextColor"
+                @update:selectedTextColor="selectedTextColor = $event"
+              />
               <!--フォント選択プルダウン(まだできてない)-->
               <select v-model="bookData.bookFont" class="color-select">
                 <option value="test">フォント</option>
@@ -149,9 +168,13 @@ onMounted(() => {
         <div>
           <!--ここに本のイメージ-->
           <DiaryImage
+            :showTooltip="showTooltip"
+            :showTooltip2="showTooltip2"
+            :showTooltip3="showTooltip3"
             :selectedBackColor="selectedBackColor"
             :selectedTextColor="selectedTextColor"
-            :bookData="bookData" />
+            :bookData="bookData"
+          />
           <!--ここに本のイメージ-->
         </div>
       </div>

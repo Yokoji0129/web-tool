@@ -105,6 +105,7 @@ const deleteBook = (diaryId, diaryName) => {
         <div v-if="selectedBook">
           <h3 class="book-title">{{ selectedBook[0].diary_name }}</h3>
         </div>
+        <!--日記操作ボタン一覧-->
         <div class="book-select">
           <p class="book-open">日記を開く</p>
           <p
@@ -183,7 +184,7 @@ const deleteBook = (diaryId, diaryName) => {
   background-color: #4caf50;
   border: none;
   color: white;
-  padding: 10px 5%;
+  padding: 10px 3%;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -202,7 +203,7 @@ const deleteBook = (diaryId, diaryName) => {
   background-color: #4c8caf;
   border: none;
   color: white;
-  padding: 10px 5%;
+  padding: 10px 3%;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -220,7 +221,7 @@ const deleteBook = (diaryId, diaryName) => {
   background-color: #af4c4c;
   border: none;
   color: white;
-  padding: 10px 5%;
+  padding: 10px 3%;
   text-align: center;
   text-decoration: none;
   display: inline-block;

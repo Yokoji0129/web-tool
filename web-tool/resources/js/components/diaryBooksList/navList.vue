@@ -60,6 +60,7 @@ onMounted(() => {
 });
 </script>
 
+<!--日記本一覧ページのnavlist-->
 <template>
   <nav class="fixed-nav">
     <ul class="nav-list">
@@ -110,71 +111,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.fixed-nav {
-  text-align: center;
-  margin-top: 92px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #ffffff;
-  z-index: 999;
-  border-bottom: 1px solid #ced4da;
-}
-
-.nav-list {
-  background-color: #ffffff;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: space-between;
-}
-
-.nav-list .p {
-  margin: 0;
-  padding: 20px;
-}
-
-.nav-item-left,
-.nav-item-center,
-.nav-item-right {
-  flex: 1;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.5s;
-}
-
-.nav-item-left:hover,
-.nav-item-center:hover,
-.nav-item-right:hover {
-  background-color: #ced4da;
-}
-
-.tooltip {
-  position: absolute;
-  width: 25%;
-  top: 100%;
-  left: 0;
-  background-color: #ffffff;
-  padding: 5px 3px;
-  border-right: 1px solid #ced4da;
-  border-bottom: 1px solid #ced4da;
-  z-index: 3;
-}
-
-.tooltip2 {
-  position: absolute;
-  width: 15%;
-  top: 100%;
-  left: 33.3%;
-  background-color: #ffffff;
-  padding: 5px 3px;
-  border-right: 1px solid #ced4da;
-  border-left: 1px solid #ced4da;
-  border-bottom: 1px solid #ced4da;
-  z-index: 2;
-}
-
 .diary-search {
   width: 95%;
   padding: 5px 0;
@@ -203,37 +139,6 @@ onMounted(() => {
 }
 
 .sort:hover {
-  background-color: #a9aeb3;
-}
-
-.tooltip3 {
-  position: absolute;
-  width: 15%;
-  top: 100%;
-  left: 66.6%;
-  background-color: #ffffff;
-  padding: 5px 3px;
-  border-right: 1px solid #ced4da;
-  border-left: 1px solid #ced4da;
-  border-bottom: 1px solid #ced4da;
-  z-index: 1;
-}
-
-.book-list {
-  margin: 10px 0;
-}
-
-.logout {
-  cursor: pointer;
-  margin-top: 7px;
-  padding: 7px 0;
-  width: 100%;
-  background-color: #ced4da;
-  border: none;
-  transition: background-color 0.3s;
-}
-
-.logout:hover {
   background-color: #a9aeb3;
 }
 
@@ -281,10 +186,6 @@ onMounted(() => {
     width: 90%;
     top: 67%;
     border: 1px solid #ced4da;
-  }
-
-  .book-list {
-    margin: 0;
   }
 
   .tooltip3 {
