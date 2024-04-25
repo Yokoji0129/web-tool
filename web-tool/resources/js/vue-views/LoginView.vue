@@ -73,10 +73,10 @@ const login = async () => {
         <button class="signup-link">アカウント新規作成</button>
       </RouterLink>
     </form>
-    <!-- ローディングアニメーション -->
-    <div v-if="loadingLogin" class="loading-overlay">
-      <div class="spinner"></div>
-    </div>
+  </div>
+  <!-- ローディングアニメーション -->
+  <div v-if="loadingLogin" class="loading-overlay">
+    <div class="spinner"></div>
   </div>
 </template>
   
