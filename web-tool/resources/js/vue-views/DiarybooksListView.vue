@@ -36,6 +36,7 @@ const displayBooks = () => {
     .get(isFavoriteDisplayed.value ? "/favorite/return" : "/returndiary")
     .then((response) => {
       books.value = response.data;
+      console.log(response.data)
     })
     .catch((error) => {
       console.log(error);
@@ -168,9 +169,6 @@ onMounted(() => {
         <div>
           <!--ここに本のイメージ-->
           <DiaryImage
-            :showTooltip="showTooltip"
-            :showTooltip2="showTooltip2"
-            :showTooltip3="showTooltip3"
             :selectedBackColor="selectedBackColor"
             :selectedTextColor="selectedTextColor"
             :bookData="bookData"

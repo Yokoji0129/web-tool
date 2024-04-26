@@ -22,6 +22,16 @@ const toggleTooltip3 = () => {
   showTooltip3.value = !showTooltip3.value;
 };
 
+const isSorted = ref(false);//50音順の表示切替のフラグ
+
+//日記を50音順にする
+const sortJa = () => {
+  props.books.sort((a, b) => {
+    return a[0].diary_name.localeCompare(b[0].diary_name, "ja");
+  });
+}
+
+
 const accountName = ref("");
 const loadingLogin = ref(false);
 
@@ -90,7 +100,7 @@ onMounted(() => {
             <!--isFavoriteDisplayedがtrueになったら通常表示に切り替え-->
             {{ isFavoriteDisplayed ? "通常表示" : "お気に入り表示" }}
           </button>
-          <button class="sort">50音順</button>
+          <button class="sort" @click="sortJa">50音順</button>
         </fieldset>
       </div>
       <!--ユーザー名-->
