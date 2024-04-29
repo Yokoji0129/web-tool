@@ -7,6 +7,7 @@ const props = defineProps({
   favoriteBooks: Array,
   togglePopup: Function,
   displayBooks: Function,
+  filteredDiarys: Array
 });
 
 const loading = ref(false);
@@ -87,7 +88,7 @@ const deleteBook = (diaryId, diaryName) => {
     <!--作成した本のリスト-->
     <div
       class="book-paper"
-      v-for="(book, index) in books"
+      v-for="(book, index) in filteredDiarys"
       :key="index"
       @click="toggleBookPopup(book)"
     >

@@ -102,7 +102,6 @@ onMounted(() => {
       <div class="tooltip2" v-show="showTooltip2">
         <fieldset>
           <p class="diary-sort">日記並べ替え</p>
-          <input class="diary-search" type="text" placeholder="日記検索" />
           <button class="sort" @click="displayFavoriteBooks">
             <!--isFavoriteDisplayedがtrueになったら通常表示に切り替え-->
             {{ isFavoriteDisplayed ? "通常表示" : "お気に入り表示" }}
@@ -133,18 +132,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.diary-search {
-  width: 95%;
-  padding: 5px 0;
-  border: 2px solid #ccc;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.diary-search:hover {
-  border-color: #007bff;
-}
-
 .diary-sort {
   font-weight: bold;
   cursor: pointer;

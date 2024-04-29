@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed } from "vue";
 
 import navList from "../components/diaryBooksList/navList.vue";
 import BookList from "../components/diaryBooksList/BookList.vue";
@@ -20,6 +20,15 @@ const bookData = reactive({
   bookFont: "test",
 });
 
+//文字検索
+const searchTerm = ref("");
+const filteredDiarys = computed(() => {
+  //データベース内のアイテム名を含むアイテムだけをフィルタリング
+  return books.value.filter((book) =>
+    book[0].diary_name.includes(searchTerm.value)
+  );
+});
+
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
@@ -36,7 +45,7 @@ const displayBooks = () => {
     .get(isFavoriteDisplayed.value ? "/favorite/return" : "/returndiary")
     .then((response) => {
       books.value = response.data;
-      console.log(response.data)
+      console.log(response.data);
     })
     .catch((error) => {
       console.log(error);
@@ -112,6 +121,15 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="search-box">
+    <img src="../../../public/icon/search.png" alt="検索icon" width="24px" />
+    <input
+      type="text"
+      class="diary-search"
+      placeholder="日記検索"
+      v-model="searchTerm"
+    />
+  </div>
   <div class="container">
     <!--ユーザー名などのnavコンポーネント-->
     <navList
@@ -125,6 +143,7 @@ onMounted(() => {
         :books="books"
         :togglePopup="togglePopup"
         :displayBooks="displayBooks"
+        :filteredDiarys="filteredDiarys"
       />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
@@ -183,6 +202,25 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.search-box img {
+  position: absolute;
+  top: 28px;
+  right: 335px;
+  z-index: 1000;
+}
+.diary-search {
+  border: 2px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  padding: 15px 150px 15px 35px;
+  z-index: 999;
+}
+.diary-search:hover {
+  border-color: #007bff;
+}
 .container {
   margin-top: 75px;
   display: flex;
@@ -269,6 +307,15 @@ main {
 
 /*タブレット(768px以下)*/
 @media only screen and (max-width: 768px) {
+  .search-box img {
+    top: 18px;
+    right: 255px;
+  }
+  .diary-search {
+    top: 11px;
+    right: 20px;
+    padding: 10px 70px 10px 30px;
+  }
   .container {
     margin-top: 120px;
   }
@@ -287,7 +334,12 @@ main {
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
-
+  .search-box img {
+    z-index: 0;
+  }
+  .diary-search {
+    z-index: 0;
+  }
   main {
     margin: 70px 15px 120px 20px;
   }
