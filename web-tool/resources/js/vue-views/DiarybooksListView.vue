@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
 
-import navList from "../components/diaryBooksList/navList.vue";
+import NavList from "../components/diaryBooksList/NavList.vue";
 import BookList from "../components/diaryBooksList/BookList.vue";
 import BackColor from "../components/diaryBooksList/BackColor.vue";
 import TextColor from "../components/diaryBooksList/TextColor.vue";
@@ -20,14 +20,21 @@ const bookData = reactive({
   bookFont: "test",
 });
 
-//文字検索
+//検索文字入れ
 const searchTerm = ref("");
+//文字検索
 const filteredDiarys = computed(() => {
+  //配列がからの時(垢作成初期時など)にからの配列を返す
+  if (!Array.isArray(books.value)) {
+    return [];
+  }
+
   //データベース内のアイテム名を含むアイテムだけをフィルタリング
   return books.value.filter((book) =>
     book[0].diary_name.includes(searchTerm.value)
   );
 });
+
 
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
@@ -132,7 +139,7 @@ onMounted(() => {
   </div>
   <div class="container">
     <!--ユーザー名などのnavコンポーネント-->
-    <navList
+    <NavList
       :books="books"
       :displayFavoriteBooks="displayFavoriteBooks"
       :isFavoriteDisplayed="isFavoriteDisplayed"
