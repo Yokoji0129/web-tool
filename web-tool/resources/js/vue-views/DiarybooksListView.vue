@@ -130,28 +130,14 @@ onMounted(() => {
 <template>
   <div class="search-box">
     <img src="../../../public/icon/search.png" alt="検索icon" width="24px" />
-    <input
-      type="text"
-      class="diary-search"
-      placeholder="日記検索"
-      v-model="searchTerm"
-    />
+    <input type="text" class="diary-search" placeholder="日記検索" v-model="searchTerm" />
   </div>
   <div class="container">
     <!--ユーザー名などのnavコンポーネント-->
-    <NavList
-      :books="books"
-      :displayFavoriteBooks="displayFavoriteBooks"
-      :isFavoriteDisplayed="isFavoriteDisplayed"
-    />
+    <NavList :books="books" :displayFavoriteBooks="displayFavoriteBooks" :isFavoriteDisplayed="isFavoriteDisplayed" />
     <main>
       <!--本一覧コンポーネント-->
-      <BookList
-        :books="books"
-        :togglePopup="togglePopup"
-        :displayBooks="displayBooks"
-        :filteredDiarys="filteredDiarys"
-      />
+      <BookList :books="books" :togglePopup="togglePopup" :displayBooks="displayBooks" :filteredDiarys="filteredDiarys" />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
         <div class="popup-content">
@@ -159,26 +145,15 @@ onMounted(() => {
           <div>
             <h3>日記本新規作成</h3>
             <!--本のタイトル-->
-            <input
-              v-model="bookData.bookName"
-              type="text"
-              class="book-title"
-              placeholder="日記のタイトル"
-            />
+            <input v-model="bookData.bookName" type="text" class="book-title" placeholder="日記のタイトル" />
             <h3>日記デザイン選択</h3>
             <div class="color-select-box">
               <!--日記背景デザイン選択プルダウン-->
-              <BackColor
-                :bookData="bookData"
-                :selectedBackColor="selectedBackColor"
-                @update:selectedBackColor="selectedBackColor = $event"
-              />
+              <BackColor :bookData="bookData" :selectedBackColor="selectedBackColor"
+                @update:selectedBackColor="selectedBackColor = $event" />
               <!--テキストカラー選択プルダウン-->
-              <TextColor
-                :bookData="bookData"
-                :selectedTextColor="selectedTextColor"
-                @update:selectedTextColor="selectedTextColor = $event"
-              />
+              <TextColor :bookData="bookData" :selectedTextColor="selectedTextColor"
+                @update:selectedTextColor="selectedTextColor = $event" />
               <!--フォント選択プルダウン(まだできてない)-->
               <select v-model="bookData.bookFont" class="color-select">
                 <option value="test">フォント</option>
@@ -196,11 +171,8 @@ onMounted(() => {
         </div>
         <div>
           <!--ここに本のイメージ-->
-          <DiaryImage
-            :selectedBackColor="selectedBackColor"
-            :selectedTextColor="selectedTextColor"
-            :bookData="bookData"
-          />
+          <DiaryImage :selectedBackColor="selectedBackColor" :selectedTextColor="selectedTextColor"
+            :bookData="bookData" />
           <!--ここに本のイメージ-->
         </div>
       </div>
@@ -210,24 +182,27 @@ onMounted(() => {
 
 <style scoped>
 .search-box img {
-  position: absolute;
+  position: fixed;
   top: 28px;
   right: 335px;
   z-index: 1000;
 }
+
 .diary-search {
   border: 2px solid #ccc;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   top: 16px;
   right: 20px;
   padding: 15px 150px 15px 35px;
   z-index: 999;
 }
+
 .diary-search:hover {
   border-color: #007bff;
 }
+
 .container {
   margin-top: 75px;
   display: flex;
@@ -318,14 +293,17 @@ main {
     top: 18px;
     right: 255px;
   }
+
   .diary-search {
     top: 11px;
     right: 20px;
     padding: 10px 70px 10px 30px;
   }
+
   .container {
     margin-top: 120px;
   }
+
   .popup-content {
     width: 80%;
   }
@@ -344,9 +322,11 @@ main {
   .search-box img {
     z-index: 0;
   }
+
   .diary-search {
     z-index: 0;
   }
+
   main {
     margin: 70px 15px 120px 20px;
   }
@@ -361,6 +341,30 @@ main {
 
   .color-select-box {
     flex-direction: column;
+  }
+}
+
+@-moz-document url-prefix() {
+  .search-box img {
+    top: 25px;
+    right: 335px;
+  }
+
+  .diary-search {
+    top: 12px;
+    right: 23px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .search-box img {
+      top: 20px;
+      right: 250px;
+    }
+
+    .diary-search {
+      top: 12px;
+      right: 20px;
+    }
   }
 }
 </style>

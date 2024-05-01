@@ -208,26 +208,12 @@ onMounted(() => {
 
 /**firefox用のデザイン**/
 @-moz-document url-prefix() {
-  .tooltip {
-    bottom: -85%;
-  }
   .fixed-nav {
-    margin-top: 82px;
+    margin-top: 72px;
   }
   @media screen and (max-width: 768px) {
     .fixed-nav {
-      margin-top: 62px;
-    }
-    .tooltip {
-      left: 50%;
-      bottom: 0%;
-      width: 50%;
-      transform: translateX(-50%);
-    }
-    .tooltip2 {
-      width: 163px;
-      top: 66%;
-      padding: 0px;
+      margin-top: 61.5px;
     }
   }
 }
