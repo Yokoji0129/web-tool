@@ -58,7 +58,7 @@ const toggleMenu = () => {
   height: 60px;
   background-image: url(../../../public/icon/bars_hoso.png);
   align-self: flex-end;
-  margin: 10px;
+  margin: 10px 10px 0 0;
   transition: 0.3s;
 }
 
@@ -153,6 +153,17 @@ nav p {
   }
   nav {
     left: -290px;
+  }
+}
+
+@-moz-document url-prefix() {
+  nav {
+    top: 72px;
+  }
+  @media screen and (max-width: 768px) {
+    nav{
+      top: 62px;
+    }
   }
 }
 </style>

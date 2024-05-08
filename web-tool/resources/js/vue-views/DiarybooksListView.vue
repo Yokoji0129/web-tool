@@ -145,14 +145,12 @@ onMounted(() => {
     />
     <main>
       <!--本一覧コンポーネント-->
-      =======
       <BookList
         :books="books"
         :togglePopup="togglePopup"
         :displayBooks="displayBooks"
         :filteredDiarys="filteredDiarys"
       />
-      >>>>>>> origin/main
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
         <div class="popup-content">

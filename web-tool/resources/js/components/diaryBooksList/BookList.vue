@@ -287,7 +287,7 @@ const toggleBookPopup = (book) => {
     padding: 70px 0 285px 0;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 480px) {
 
     .book-backnumber-1,
     .book-backnumber-2,
