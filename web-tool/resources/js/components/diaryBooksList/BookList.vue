@@ -24,12 +24,7 @@ const toggleBookPopup = (book) => {
 <template>
   <div class="diaries">
     <!--作成した本のリスト-->
-    <div
-      class="book-paper"
-      v-for="(book, index) in filteredDiarys"
-      :key="index"
-      @click="toggleBookPopup(book)"
-    >
+    <div class="book-paper" v-for="(book, index) in filteredDiarys" :key="index" @click="toggleBookPopup(book)">
       <div :class="book[0].diary_color">
         <h2 :style="{ color: book[0].diary_text_color }">
           {{ book[0].diary_name }}
@@ -37,12 +32,8 @@ const toggleBookPopup = (book) => {
       </div>
     </div>
     <!--ポップアップ---->
-    <BookOperation
-      :displayBooks="props.displayBooks"
-      :showBookPopup="showBookPopup"
-      :selectedBook="selectedBook"
-      :toggleBookPopup="toggleBookPopup"
-    />
+    <BookOperation :displayBooks="props.displayBooks" :showBookPopup="showBookPopup" :selectedBook="selectedBook"
+      :toggleBookPopup="toggleBookPopup" />
     <!--日記追加-->
     <div class="diary" @click="togglePopup" v-if="isFavoriteDisplayed === false">
       <h2>+</h2>
@@ -204,26 +195,31 @@ const toggleBookPopup = (book) => {
     gap: 2% 1%;
   }
 }
+
 /*スマホ(480px以下)*/
 @media screen and (max-width: 480px) {
   .diaries {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 5% 7%;
   }
+
   .diary {
     padding: 20px 0 150px 0;
     width: 150px;
     margin-left: 5px;
   }
+
   .book-paper {
     border-right: 8px solid #ffffff;
     width: 150px;
     height: 230px;
   }
+
   .book-paper h2 {
     font-size: 16px;
     padding: 0;
   }
+
   .book-backnumber-1 {
     border-left: 10px solid rgb(107, 191, 93);
     padding: 30px 0 149px 0;
@@ -248,10 +244,12 @@ const toggleBookPopup = (book) => {
     border-left: 10px solid rgb(207, 150, 163);
     padding: 30px 0 149px 0;
   }
+
   .book-backnumber-6 {
     border-left: 10px solid rgb(242, 195, 201);
     padding: 30px 0 149px 0;
   }
+
   .book-backnumber-7 {
     border-left: 10px solid rgb(182, 176, 162);
     padding: 30px 0 149px 0;
@@ -270,6 +268,39 @@ const toggleBookPopup = (book) => {
   .book-backnumber-10 {
     border-left: 10px solid rgb(196, 235, 171);
     padding: 30px 0 149px 0;
+  }
+}
+
+/**firefox用のデザイン**/
+@-moz-document url-prefix() {
+
+  .book-backnumber-1,
+  .book-backnumber-2,
+  .book-backnumber-3,
+  .book-backnumber-4,
+  .book-backnumber-5,
+  .book-backnumber-6,
+  .book-backnumber-7,
+  .book-backnumber-8,
+  .book-backnumber-9,
+  .book-backnumber-10 {
+    padding: 70px 0 285px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+
+    .book-backnumber-1,
+    .book-backnumber-2,
+    .book-backnumber-3,
+    .book-backnumber-4,
+    .book-backnumber-5,
+    .book-backnumber-6,
+    .book-backnumber-7,
+    .book-backnumber-8,
+    .book-backnumber-9,
+    .book-backnumber-10 {
+      padding: 30px 0 153px 0;
+    }
   }
 }
 </style>
