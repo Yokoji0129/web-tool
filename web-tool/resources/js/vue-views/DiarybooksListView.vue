@@ -151,6 +151,7 @@ onMounted(() => {
         :togglePopup="togglePopup"
         :displayBooks="displayBooks"
         :filteredDiarys="filteredDiarys"
+        :isFavoriteDisplayed=isFavoriteDisplayed
       />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
@@ -210,7 +211,7 @@ onMounted(() => {
 
 <style scoped>
 .search-box img {
-  position: absolute;
+  position: fixed;
   top: 28px;
   right: 335px;
   z-index: 1000;
@@ -219,7 +220,7 @@ onMounted(() => {
   border: 2px solid #ccc;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   top: 16px;
   right: 20px;
   padding: 15px 150px 15px 35px;

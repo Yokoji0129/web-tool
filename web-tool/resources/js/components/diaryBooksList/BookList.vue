@@ -9,6 +9,7 @@ const props = defineProps({
   togglePopup: Function,
   displayBooks: Function,
   filteredDiarys: Array,
+  isFavoriteDisplayed: Boolean
 });
 const showBookPopup = ref(false);
 const selectedBook = ref(null); //選択された日記の情報を入れる
@@ -43,7 +44,7 @@ const toggleBookPopup = (book) => {
       :toggleBookPopup="toggleBookPopup"
     />
     <!--日記追加-->
-    <div class="diary" @click="togglePopup">
+    <div class="diary" @click="togglePopup" v-if="isFavoriteDisplayed === false">
       <h2>+</h2>
     </div>
   </div>
