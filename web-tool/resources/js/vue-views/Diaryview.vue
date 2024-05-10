@@ -11,8 +11,8 @@ const toggleMenu = () => {
 };
 
 const backPage = () => {
-  router.push("/diaryBooksList")
-}
+  router.push("/diaryBooksList");
+};
 </script>
 
 <template>
@@ -23,10 +23,19 @@ const backPage = () => {
         <!--メニューアイコン-->
         <div class="hamburger-icon-menu" @click="toggleMenu()"></div>
         <p class="back-page" @click="backPage">←日記一覧に戻る</p>
-        <h3 class="diary-title">日記タイトル</h3>
+        <!--menuOpenがtrueの時だけ背景色変える-->
+        <h3
+          class="diary-title"
+          :style="{ backgroundColor: menuOpen ? '#ced4da' : 'initial' }"
+        >
+          日記タイトル
+        </h3>
         <h3 class="table-contents">目次</h3>
         <!--目次内容(menuOpenがtrueでスクロールできるようにする)-->
-        <div class="table-contents-box" :style="{ overflow: menuOpen ? 'scroll' : 'hidden' }">
+        <div
+          class="table-contents-box"
+          :style="{ overflow: menuOpen ? 'scroll' : 'hidden' }"
+        >
           <p class="nav-link">0.test</p>
           <p class="nav-link">0.test</p>
           <p class="nav-link">0.test</p>
@@ -69,14 +78,15 @@ const backPage = () => {
 .back-page {
   cursor: pointer;
   position: absolute;
-  top: 3px;
-  left: 3px;
+  top: 20px;
+  left: 10px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 5px;
   transition: 0.3s;
 }
+
 .back-page:hover {
   background-color: rgba(74, 73, 73, 0.5);
 }
@@ -89,7 +99,7 @@ const backPage = () => {
   height: 40px;
   background-image: url(../../../public/icon/hamburger.png);
   align-self: flex-end;
-  margin: 5px 10px 0 0;
+  margin: 20px 10px 16px 0;
   transition: 0.3s;
 }
 
@@ -106,15 +116,14 @@ const backPage = () => {
 
 nav {
   position: fixed;
-  top: 82px;
-  left: -340px;
+  top: 0;
+  left: -330px;
   height: 100vh;
   width: 400px;
-  background-color: #ced4da;
   display: flex;
   flex-direction: column;
   transition: 0.3s;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
 }
 
 nav p {
@@ -123,6 +132,7 @@ nav p {
 }
 
 .nav-link {
+  cursor: pointer;
   padding: 10px;
   text-decoration: none;
   color: black;
@@ -160,36 +170,29 @@ nav p {
   text-align: center;
 }
 
-.logout {
-  cursor: pointer;
-  padding: 7px 0;
-  width: 100%;
-  background-color: #ced4da;
-  border: none;
-  transition: background-color 0.3s;
-}
-
-.logout:hover {
-  background-color: #a9aeb3;
-}
-
 .open {
   left: 0;
   background-color: #ffffff;
   transition: 0.3s;
+  border-right: 2px solid #ced4da;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
-
+  .back-page {
+    top: 20px;
+    left: 10px;
+  }
   .hamburger-icon,
   .hamburger-icon-menu {
     width: 40px;
     height: 40px;
+    margin: 20px 10px 6px 0;
   }
 
   nav {
-    top: 62px;
+    top: -10px;
     left: -290px;
     width: 350px;
   }
@@ -197,7 +200,6 @@ nav p {
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 450px) {
-
   .hamburger-icon,
   .hamburger-icon-menu {
     width: 40px;
@@ -219,4 +221,5 @@ nav p {
       top: 62px;
     }
   }
-}</style>
+}
+</style>
