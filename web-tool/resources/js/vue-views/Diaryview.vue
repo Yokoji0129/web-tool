@@ -30,7 +30,7 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
     </div>
     <!--右側デザイン-->
     <div class="right-contents">
-      <p>test</p>
+      <p>右側</p>
     </div>
   </div>
   <!--ページ遷移-->
@@ -73,7 +73,7 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
 
 .page-text {
   margin-top: 20px;
-  width: 90%;
+  width: 93%;
   height: 410px;
   font-size: 24px;
   line-height: 1.5;
@@ -155,26 +155,48 @@ select {
   }
 }
 
-/*タブレット(768px以下)*/
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .flex-box {
-    margin: 72px 0;
+    margin: 82px 0;
     flex-direction: column;
+  }
+  .color-select {
+    margin-bottom: 8px;
   }
   .left-contents {
     width: 100%;
   }
-
   .right-contents {
     width: 100%;
+  }
+  .page-text {
+    margin-top: 10px;
+    height: 250px;
   }
   .page-transition {
     bottom: 35px;
   }
 }
 
+/*タブレット(768px以下)*/
+@media screen and (max-width: 768px) {
+  .flex-box {
+    margin: 62px 0;
+    flex-direction: column;
+  }
+}
+
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
+  .page-title {
+    margin: 0;
+    font-size: 20px;
+  }
+  .page-text {
+    margin-top: 5px;
+    font-size: 16px;
+    width: 90%;
+  }
 }
 
 @-moz-document url-prefix() {
