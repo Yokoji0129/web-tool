@@ -24,18 +24,12 @@ const backPage = () => {
         <div class="hamburger-icon-menu" @click="toggleMenu()"></div>
         <p class="back-page" @click="backPage">←日記一覧に戻る</p>
         <!--menuOpenがtrueの時だけ背景色変える-->
-        <h3
-          class="diary-title"
-          :style="{ backgroundColor: menuOpen ? '#ced4da' : 'initial' }"
-        >
+        <h3 class="diary-title" :style="{ backgroundColor: menuOpen ? '#ced4da' : 'initial' }">
           日記タイトル
         </h3>
         <h3 class="table-contents">目次</h3>
         <!--目次内容(menuOpenがtrueでスクロールできるようにする)-->
-        <div
-          class="table-contents-box"
-          :style="{ overflow: menuOpen ? 'scroll' : 'hidden' }"
-        >
+        <div class="table-contents-box" :style="{ overflow: menuOpen ? 'scroll' : 'hidden' }">
           <p class="nav-link">0.test</p>
           <p class="nav-link">0.test</p>
           <p class="nav-link">0.test</p>
@@ -79,7 +73,7 @@ const backPage = () => {
   cursor: pointer;
   position: absolute;
   top: 20px;
-  left: 10px;
+  right: 20px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -98,7 +92,8 @@ const backPage = () => {
   width: 40px;
   height: 40px;
   background-image: url(../../../public/icon/hamburger.png);
-  align-self: flex-end;
+  position: fixed;
+  left: 20px;
   margin: 20px 10px 16px 0;
   transition: 0.3s;
 }
@@ -117,7 +112,7 @@ const backPage = () => {
 nav {
   position: fixed;
   top: 0;
-  left: -330px;
+  left: -400px;
   height: 100vh;
   width: 400px;
   display: flex;
@@ -147,7 +142,7 @@ nav p {
 .diary-title {
   text-align: center;
   font-family: "Georgia", serif;
-  margin: 5px 0;
+  margin: 82px 0 5px 0;
   padding: 5px 0;
   background-color: #ced4da;
 }
@@ -155,11 +150,6 @@ nav p {
 .table-contents {
   margin: 5px 10px;
   font-family: "Georgia", serif;
-}
-
-.table-contents-box {
-  max-height: 70%;
-  /**目次の高さが30%まで行ったらスクロールできるように**/
 }
 
 .username {
@@ -181,33 +171,34 @@ nav p {
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .back-page {
-    top: 20px;
-    left: 10px;
-  }
-  .hamburger-icon,
-  .hamburger-icon-menu {
-    width: 40px;
-    height: 40px;
-    margin: 20px 10px 6px 0;
+    top: 25px;
+    padding: 5px;
   }
 
   nav {
     top: -10px;
-    left: -290px;
     width: 350px;
+  }
+
+  .diary-title {
+    margin: 72px 0 5px 0;
   }
 }
 
 /*スマホ(480px以下)*/
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 480px) {
+  .back-page {
+    top: 25px;
+  }
+
   .hamburger-icon,
   .hamburger-icon-menu {
     width: 40px;
     height: 40px;
   }
 
-  nav {
-    left: -290px;
+  .open{
+    width: 100%;
   }
 }
 
