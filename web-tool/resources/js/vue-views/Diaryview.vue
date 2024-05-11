@@ -50,7 +50,6 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
 .left-contents {
   width: 50%;
   height: 100%;
-  background-color: red;
 }
 
 .text-area {
@@ -65,15 +64,28 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
   padding-top: 20px;
   resize: none;
   cursor: pointer;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+.page-title:hover {
+  border-color: #9aa0a7;
 }
 
 .page-text {
   margin-top: 20px;
   width: 90%;
-  height: 245px;
+  height: 410px;
   font-size: 24px;
+  line-height: 1.5;
   cursor: pointer;
   resize: none;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.page-text:hover {
+  border-color: #9aa0a7;
 }
 
 .left-contents textarea::selection {
@@ -104,8 +116,6 @@ select {
   justify-content: center;
   align-items: center;
   background-color: #5a646d;
-  border-bottom: 1px solid #ced4da;
-  border-top: 1px solid #ced4da;
 }
 
 .back-page,
@@ -120,19 +130,47 @@ select {
 }
 
 .back-page:hover,
-.next-page:hover{
+.next-page:hover {
   background-color: #0056b3;
 }
 
-.page-count{
+.page-count {
   padding: 3px 10px;
   border-radius: 50%;
   margin: 15px 10px;
   background-color: #ffffff;
 }
 
+/**デスクトップのtextarea調整**/
+@media screen and (max-width: 1980px) {
+  .page-text {
+    height: 230px;
+  }
+}
+
+/**ノートパソコンのtextarea調整**/
+@media screen and (max-width: 1600px) {
+  .page-text {
+    height: 135px;
+  }
+}
+
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
+  .flex-box {
+    margin: 72px 0;
+    flex-direction: column;
+  }
+  .left-contents {
+    width: 100%;
+  }
+
+  .right-contents {
+    width: 100%;
+  }
+  .page-transition {
+    bottom: 35px;
+  }
 }
 
 /*スマホ(480px以下)*/
