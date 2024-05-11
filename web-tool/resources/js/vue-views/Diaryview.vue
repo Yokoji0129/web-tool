@@ -1,217 +1,144 @@
 <script setup>
-import { RouterLink, useRouter } from "vue-router";
 import { ref } from "vue";
-import NavList from "../components/diary/NavList.vue";
-const menuOpen = ref(false);
-const router = useRouter();
-
-//ハンバーガーメニューの開閉
-const toggleMenu = () => {
-  menuOpen.value = !menuOpen.value;
-};
-
-const backPage = () => {
-  router.push("/diaryBooksList");
-};
+import BurgerMenu from "../components/diary/BurgerMenu.vue";
 </script>
 
 <template>
-  <div>
-    <header>
-      <!--メニュー欄-->
-      <nav :class="{ 'open': menuOpen }" @click="closeMenu">
-        <!--メニューアイコン-->
-        <div
-          class="hamburger-icon-menu"
-          :class="{ 'hamburger-icon-menu-close': menuOpen }"
-          @click="toggleMenu()"
-        ></div>
-        <p class="back-page" @click="backPage">←日記一覧に戻る</p>
-        <!--menuOpenがtrueの時だけ背景色変える-->
-        <h3 class="diary-title">日記タイトル</h3>
-        <h3 class="table-contents">目次</h3>
-        <!--目次内容(menuOpenがtrueでスクロールできるようにする)-->
-        <div class="table-contents-box">
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-          <p class="nav-link">0.test</p>
-        </div>
-      </nav>
-    </header>
+  <BurgerMenu />
+  <div class="flex-box">
+    <!--左側デザイン-->
+    <div class="left-contents">
+      <div class="fuction-box">
+        <select class="color-select">
+          <option value="">マーカー</option>
+          <option value="">マーカー 赤</option>
+          <option value="">マーカー 青</option>
+          <option value="">マーカー 緑</option>
+        </select>
+        <select class="color-select">
+          <option value="">文字色</option>
+          <option value="">文字色 赤</option>
+          <option value="">文字色 青</option>
+          <option value="">文字色 緑</option>
+        </select>
+      </div>
+      <div class="text-area">
+        <textarea class="page-title" placeholder="ページタイトル"></textarea>
+        <textarea class="page-text" placeholder="文章1"></textarea>
+        <textarea class="page-text" placeholder="文章2"></textarea>
+      </div>
+    </div>
+    <!--右側デザイン-->
+    <div class="right-contents">
+      <p>test</p>
+    </div>
+  </div>
+  <!--ページ遷移-->
+  <div class="page-transition">
+    <button class="back-page">前のページ</button>
+    <p class="page-count">0</p>
+    <button class="next-page">次のページ</button>
   </div>
 </template>
 
 <style scoped>
-.back-page {
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border-radius: 5px;
-  transition: 0.3s;
-  z-index: 1;
+.flex-box {
+  display: flex;
+  margin: 100px 20px 0 20px;
 }
 
-.back-page:hover {
-  background-color: rgba(74, 73, 73, 0.5);
+.left-contents {
+  width: 50%;
+  height: 100%;
+  background-color: red;
 }
 
-.hamburger-icon-menu {
+.text-area {
+  text-align: center;
+}
+
+.page-title {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 24px;
+  width: 95%;
+  padding-top: 20px;
+  resize: none;
   cursor: pointer;
-  background-size: contain;
-  width: 40px;
-  height: 40px;
-  background-color: #007bff;
+}
+
+.page-text {
+  margin-top: 20px;
+  width: 90%;
+  height: 245px;
+  font-size: 24px;
+  cursor: pointer;
+  resize: none;
+}
+
+.left-contents textarea::selection {
+  background-color: yellow;
+  color: red;
+}
+
+.fuction-box {
+  display: flex;
+}
+
+select {
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+}
+
+.right-contents {
+  width: 50%;
+  background-color: blue;
+}
+
+.page-transition {
+  display: flex;
   position: fixed;
-  left: 20px;
-  background-image: url(../../../public/icon/hamburger.png);
-  margin: 17px 10px 16px 0;
-  border: 4px solid #72b6ff;
-  border-radius: 5px;
-  transition: 0.3s;
-  z-index: 2;
-}
-.hamburger-icon-menu-close {
-  background-image: url(../../../public/icon/close.png);
+  width: 100%;
+  bottom: 46px;
+  justify-content: center;
+  align-items: center;
+  background-color: #5a646d;
+  border-bottom: 1px solid #ced4da;
+  border-top: 1px solid #ced4da;
 }
 
-.hamburger-icon-menu:hover {
-  transform: scale(1.1);
-  transition: 0.3s ease;
+.back-page,
+.next-page {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.back-page:hover,
+.next-page:hover{
   background-color: #0056b3;
 }
 
-.hamburger-icon:focus,
-.hamburger-icon-menu:focus {
-  outline: none;
-}
-
-nav {
-  position: fixed;
-  top: 0;
-  left: -400px;
-  height: 100vh;
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-  transition: 0.3s;
-  z-index: 999;
-}
-
-nav p {
-  margin: 0;
-  padding: 0;
-}
-
-.nav-link {
-  cursor: pointer;
-  padding: 10px;
-  text-decoration: none;
-  color: black;
-  transition: 0.3s;
-  font-family: "Georgia", serif;
-}
-
-.nav-link:hover {
-  background-color: #ced4da;
-}
-
-.diary-title {
-  text-align: center;
-  font-family: "Georgia", serif;
-  margin: 82px 0 5px 0;
-  padding: 5px 0;
-  background-color: #ced4da;
-}
-
-.table-contents {
-  margin: 5px 10px;
-  font-family: "Georgia", serif;
-}
-
-.username {
-  background-color: #ced4da;
-  margin-top: 5px;
-  margin-bottom: 0;
-  padding: 5px;
-  text-align: center;
-}
-
-.table-contents-box {
-  overflow: scroll;
-}
-
-.open {
-  left: 0;
+.page-count{
+  padding: 3px 10px;
+  border-radius: 50%;
+  margin: 15px 10px;
   background-color: #ffffff;
-  transition: 0.3s;
-  border-right: 2px solid #ced4da;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
-  .back-page {
-    top: 25px;
-    padding: 5px;
-  }
-
-  .hamburger-icon-menu {
-    width: 35px;
-    height: 35px;
-    left: 10px;
-    margin: 20px 10px 16px 0;
-    border: 4px solid #72b6ff;
-  }
-
-  nav {
-    top: -10px;
-    width: 350px;
-  }
-
-  .diary-title {
-    margin: 72px 0 5px 0;
-  }
 }
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
-  .back-page {
-    top: 25px;
-  }
-
-  .open {
-    width: 100%;
-  }
 }
 
 @-moz-document url-prefix() {
-  nav {
-    top: 72px;
-  }
-
-  @media screen and (max-width: 768px) {
-    nav {
-      top: 62px;
-    }
-  }
 }
 </style>
