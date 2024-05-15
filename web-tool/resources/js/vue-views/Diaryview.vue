@@ -32,15 +32,13 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
     <!--右側デザイン-->
     <div class="right-contents">
       <div class="file-box">
-        <label>
-          <input type="file" name="file">写真を選択
-        </label>
+        <label> <input type="file" name="file" />写真を選択 </label>
       </div>
       <div class="image-box">
-        <img class="image" src="../../../public/testImage/testImage.jpeg">
-        <img class="image" src="../../../public/testImage/test2.jpg">
-        <img class="image" src="../../../public/testImage/testImagetate.jpg">
-        <img class="image" src="../../../public/testImage/testImage.jpeg">
+        <img class="image" src="../../../public/testImage/testImage.jpeg" />
+        <img class="image" src="../../../public/testImage/test2.jpg" />
+        <img class="image" src="../../../public/testImage/testImagetate.jpg" />
+        <img class="image" src="../../../public/testImage/testImage.jpeg" />
       </div>
     </div>
   </div>
@@ -55,12 +53,12 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
 <style scoped>
 .flex-box {
   display: flex;
-  margin: 82px 0 0 0;
+  padding: 82px 0 0 0;
+  height: 90vh;
 }
 
 .left-contents {
   width: 50%;
-  height: 75vh;
   background-color: rgba(74, 73, 73, 0.5);
 }
 
@@ -87,7 +85,7 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
 .page-text {
   margin-top: 20px;
   width: 93%;
-  height: 410px;
+  height: 32vh;
   font-size: 24px;
   line-height: 1.5;
   cursor: pointer;
@@ -118,7 +116,6 @@ select {
 
 .right-contents {
   width: 50%;
-  height: 75vh;
   background-color: rgba(74, 73, 73, 0.5);
 }
 
@@ -127,7 +124,7 @@ select {
 }
 
 label {
-  padding: 12.8px 40% 12.8px 10px;
+  padding: 13px 40% 13px 10px;
   font-size: 14px;
   border: 2px solid #ccc;
   background-color: #ffffff;
@@ -145,17 +142,20 @@ input[type="file"] {
 }
 
 .image-box {
-  height: 465px;
-  overflow: scroll;
-  overflow-x: hidden;
+  height: 80vh;
+  overflow: auto;
   text-align: center;
 }
 
+
 .image {
-  margin: 10px 0;
-  width: auto;
+  margin: 30px auto;
+  max-width: 100%;
   height: auto;
+  display: block;
 }
+
+
 .page-transition {
   display: flex;
   position: fixed;
@@ -192,7 +192,11 @@ input[type="file"] {
 /**デスクトップのtextarea調整**/
 @media screen and (max-width: 1980px) {
   .page-text {
-    height: 230px;
+    height: 25vh;
+  }
+
+  .image-box {
+    height: 72vh;
   }
 }
 
@@ -204,13 +208,11 @@ input[type="file"] {
 
   .page-text {
     margin-top: 10px;
-    height: 20vh;
   }
 }
 
 @media screen and (max-width: 1024px) {
   .flex-box {
-    margin: 82px 0;
     flex-direction: column;
   }
 
@@ -230,10 +232,6 @@ input[type="file"] {
     margin-top: 10px;
   }
 
-  .page-text {
-    height: 250px;
-  }
-
   .page-transition {
     bottom: 35px;
   }
@@ -242,7 +240,7 @@ input[type="file"] {
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .flex-box {
-    margin: 62px 0;
+    margin: -21px 0;
     flex-direction: column;
   }
 }
@@ -261,5 +259,6 @@ input[type="file"] {
   }
 }
 
-@-moz-document url-prefix() {}
+@-moz-document url-prefix() {
+}
 </style>
