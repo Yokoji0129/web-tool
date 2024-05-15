@@ -68,7 +68,6 @@ option {
     cursor: pointer;
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
     margin-bottom: 20px;
     border: 2px solid #ccc;
     transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;

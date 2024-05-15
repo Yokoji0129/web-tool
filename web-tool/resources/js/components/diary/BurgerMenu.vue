@@ -64,7 +64,7 @@ const backPage = () => {
   top: 20px;
   right: 20px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(74, 73, 73, 0.5); 
   color: white;
   border-radius: 5px;
   transition: 0.3s;
@@ -72,7 +72,7 @@ const backPage = () => {
 }
 
 .back-page:hover {
-  background-color: rgba(74, 73, 73, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);;
 }
 
 .hamburger-icon-menu {
@@ -80,12 +80,11 @@ const backPage = () => {
   background-size: contain;
   width: 40px;
   height: 40px;
-  background-color: #007bff;
   position: fixed;
   left: 20px;
   background-image: url(../../../../public/icon/hamburger.png);
   margin: 17px 10px 16px 0;
-  border: 4px solid #72b6ff;
+  border: 4px solid #ccc;
   border-radius: 5px;
   transition: 0.3s;
   z-index: 2;
@@ -97,7 +96,6 @@ const backPage = () => {
 .hamburger-icon-menu:hover {
   transform: scale(1.1);
   transition: 0.3s ease;
-  background-color: #0056b3;
 }
 
 .hamburger-icon:focus,
