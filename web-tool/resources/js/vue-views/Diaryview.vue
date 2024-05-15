@@ -39,6 +39,8 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
         <img class="image" src="../../../public/testImage/test2.jpg" />
         <img class="image" src="../../../public/testImage/testImagetate.jpg" />
         <img class="image" src="../../../public/testImage/testImage.jpeg" />
+        <img class="image" src="../../../public/testImage/testImage.jpeg" />
+        <img class="image" src="../../../public/testImage/testImagetate.jpg" />
       </div>
     </div>
   </div>
@@ -144,8 +146,8 @@ input[type="file"] {
 .image-box {
   overflow: auto;
   text-align: center;
+  height: 78vh;
 }
-
 
 .image {
   margin: 30px auto;
@@ -153,7 +155,6 @@ input[type="file"] {
   height: auto;
   display: block;
 }
-
 
 .page-transition {
   display: flex;
@@ -213,6 +214,10 @@ input[type="file"] {
     height: 22vh;
     margin-top: 10px;
   }
+
+  .image-box {
+    height: 70vh;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -239,6 +244,9 @@ input[type="file"] {
   .page-transition {
     bottom: 35px;
   }
+  .image-box {
+    margin-bottom: 100px;
+  }
 }
 
 /*タブレット(768px以下)*/
@@ -261,7 +269,12 @@ input[type="file"] {
     font-size: 16px;
     width: 90%;
   }
+
+  .image {
+    margin: 15px auto;
+  }
 }
 
-@-moz-document url-prefix() {}
+@-moz-document url-prefix() {
+}
 </style>

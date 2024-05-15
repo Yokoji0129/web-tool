@@ -179,7 +179,6 @@ nav p {
     height: 35px;
     left: 10px;
     margin: 20px 10px 16px 0;
-    border: 4px solid #72b6ff;
   }
 
   nav {
