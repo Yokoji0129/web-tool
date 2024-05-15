@@ -124,7 +124,7 @@ select {
 }
 
 label {
-  padding: 13px 40% 13px 10px;
+  padding: 12px 40% 13px 10px;
   font-size: 14px;
   border: 2px solid #ccc;
   background-color: #ffffff;
@@ -142,7 +142,6 @@ input[type="file"] {
 }
 
 .image-box {
-  height: 80vh;
   overflow: auto;
   text-align: center;
 }
@@ -202,11 +201,16 @@ input[type="file"] {
 
 /**ノートパソコンのtextarea調整**/
 @media screen and (max-width: 1600px) {
+  .flex-box {
+    height: 80vh;
+  }
+
   .page-title {
     margin-top: 0;
   }
 
   .page-text {
+    height: 22vh;
     margin-top: 10px;
   }
 }
@@ -259,6 +263,5 @@ input[type="file"] {
   }
 }
 
-@-moz-document url-prefix() {
-}
+@-moz-document url-prefix() {}
 </style>
