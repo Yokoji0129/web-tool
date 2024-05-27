@@ -73,7 +73,7 @@ const deleteBook = (diaryId, diaryName) => {
 <template>
   <div v-if="showBookPopup" class="popup">
     <div class="popup-content">
-      <button class="close-btn" @click="toggleBookPopup">閉じる</button>
+      <button class="btn-close" @click="toggleBookPopup">閉じる</button>
       <!--選択された本のタイトルを表示-->
       <div v-if="selectedBook">
         <h3 class="book-title">{{ selectedBook[0].diary_name }}</h3>
@@ -113,35 +113,6 @@ const deleteBook = (diaryId, diaryName) => {
 </template>
 
 <style scoped>
-.delete-btn {
-  background-color: #ffffff;
-  position: absolute;
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0;
-  padding: 5px 12px;
-  cursor: pointer;
-  border-radius: 0 0 10px 0;
-}
-
-.delete-btn:hover {
-  background-color: #ced4da;
-}
-
-.close-btn {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background-color: #555;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.close-btn:hover {
-  background-color: #333;
-}
-
 .book-select {
   display: flex;
   justify-content: center;
@@ -149,10 +120,11 @@ const deleteBook = (diaryId, diaryName) => {
 }
 
 .book-open {
+  width: 150px;
   background-color: #4caf50;
   border: none;
   color: white;
-  padding: 10px 3%;
+  padding: 10px 0;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -168,10 +140,11 @@ const deleteBook = (diaryId, diaryName) => {
 }
 
 .favorite {
+  width: 150px;
   background-color: #4c8caf;
   border: none;
   color: white;
-  padding: 10px 3%;
+  padding: 10px 0;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -186,10 +159,11 @@ const deleteBook = (diaryId, diaryName) => {
   background-color: #365d78;
 }
 .book-delete {
+  width: 150px;
   background-color: #af4c4c;
   border: none;
   color: white;
-  padding: 10px 3%;
+  padding: 10px 0;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -209,6 +183,25 @@ const deleteBook = (diaryId, diaryName) => {
   color: #333;
 }
 
+@media screen and (max-width: 1400px) {
+  .book-select {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .book-open {
+    padding: 10px 0;
+    margin: 2px 5px;
+  }
+  .favorite {
+    padding: 10px 0;
+    margin: 2px 5px;
+  }
+  .book-delete {
+    padding: 10px 0;
+    margin: 2px 5px;
+  }
+}
 /*タブレット(1024px以下)*/
 @media screen and (max-width: 1024px) {
   .popup-content {
@@ -225,6 +218,9 @@ const deleteBook = (diaryId, diaryName) => {
 
 /*スマホ(480px以下)*/
 @media screen and (max-width: 480px) {
+  .popup-content {
+    padding: 20px;
+  }
   .book-open {
     margin: 5px 0;
   }
@@ -236,6 +232,15 @@ const deleteBook = (diaryId, diaryName) => {
   }
   .book-select {
     flex-direction: column;
+  }
+  .book-open {
+    width: 100%;
+  }
+  .favorite {
+    width: 100%;
+  }
+  .book-delete {
+    width: 100%;
   }
 }
 </style>

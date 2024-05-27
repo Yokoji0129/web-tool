@@ -106,3 +106,18 @@ option {
     overflow-y: auto;
     /*スクロール可能*/
 }
+
+.btn-close {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #555;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-close:hover {
+    background-color: #333;
+}

@@ -2,10 +2,20 @@
 import { ref } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 //右側デザインできたら保存ボタンを作る
+
+const showPopup = ref(false); //ポップアップの表示制御フラグ
+
+//ポップアップの表示非表示
+const togglePopup = () => {
+  showPopup.value = !showPopup.value;
+};
 </script>
 
 <template>
   <BurgerMenu />
+  <div class="diaryKeep-btn">
+    <button>ページ保存</button>
+  </div>
   <div class="flex-box">
     <!--左側デザイン-->
     <div class="left-contents">
@@ -35,12 +45,41 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
         <label> <input type="file" name="file" />写真を選択 </label>
       </div>
       <div class="image-box">
-        <img class="image" src="../../../public/testImage/testImage.jpeg" />
-        <img class="image" src="../../../public/testImage/test2.jpg" />
-        <img class="image" src="../../../public/testImage/testImagetate.jpg" />
-        <img class="image" src="../../../public/testImage/testImage.jpeg" />
-        <img class="image" src="../../../public/testImage/testImage.jpeg" />
-        <img class="image" src="../../../public/testImage/testImagetate.jpg" />
+        <div class="image-container">
+          <img class="delete-img" src="../../../public/icon/delete-img.png" />
+          <img
+            @click="togglePopup"
+            class="image"
+            src="../../../public/testImage/testImage.jpeg"
+          />
+        </div>
+        <div class="image-container">
+          <img class="delete-img" src="../../../public/icon/delete-img.png" />
+          <img class="image" src="../../../public/testImage/test2.jpg" />
+        </div>
+        <div class="image-container">
+          <img class="delete-img" src="../../../public/icon/delete-img.png" />
+          <img
+            class="image"
+            src="../../../public/testImage/testImagetate.jpg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--ポップアップ-->
+  <div v-if="showPopup" class="popup">
+    <div class="popup-content-img">
+      <button class="btn-close" @click="togglePopup">閉じる</button>
+      <div class="popup-img">
+        <img src="../../../public/testImage/testImage.jpeg" />
+      </div>
+      <div class="image-text">
+        <textarea placeholder="コメント"></textarea>
+      </div>
+      <div class="keepImgText-btn">
+        <button>保存</button>
       </div>
     </div>
   </div>
@@ -53,6 +92,22 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
 </template>
 
 <style scoped>
+.diaryKeep-btn {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+}
+.diaryKeep-btn button {
+  padding: 20px 60px;
+  font-size: 16px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 .flex-box {
   display: flex;
   padding: 82px 0 0 0;
@@ -75,7 +130,6 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
   width: 95%;
   padding-top: 20px;
   resize: none;
-  cursor: pointer;
   border: 1px solid #ced4da;
   border-radius: 5px;
 }
@@ -90,7 +144,6 @@ import BurgerMenu from "../components/diary/BurgerMenu.vue";
   height: 32vh;
   font-size: 24px;
   line-height: 1.5;
-  cursor: pointer;
   resize: none;
   padding: 10px;
   border: 1px solid #ced4da;
@@ -155,6 +208,18 @@ input[type="file"] {
   height: auto;
   display: block;
 }
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.delete-img {
+  cursor: pointer;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  width: 50px;
+}
 
 .page-transition {
   display: flex;
@@ -164,6 +229,46 @@ input[type="file"] {
   justify-content: center;
   align-items: center;
   background-color: #5a646d;
+}
+
+.popup-content-img {
+  position: relative;
+  width: auto;
+  height: auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  border: 3px solid #ced4da;
+  box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  /*スクロール可能*/
+}
+
+.popup-img img {
+  max-width: 100%;
+  margin: 20px 0 0 0;
+}
+
+.image-text textarea {
+  padding: 5px;
+  width: 97%;
+  height: 60px;
+  font-size: 20px;
+  resize: none;
+}
+
+.keepImgText-btn {
+  text-align: center;
+}
+.keepImgText-btn button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .back-page,
@@ -221,6 +326,13 @@ input[type="file"] {
 }
 
 @media screen and (max-width: 1024px) {
+  .diaryKeep-btn {
+    right: 15px;
+    top: 15px;
+  }
+  .diaryKeep-btn button {
+    padding: 15px 50px;
+  }
   .flex-box {
     flex-direction: column;
   }
@@ -247,6 +359,13 @@ input[type="file"] {
   .image-box {
     margin-bottom: 100px;
   }
+  .popup-content-img {
+    padding: 10px;
+  }
+
+  .popup-img img {
+    margin: 10px 0 0 0;
+  }
 }
 
 /*タブレット(768px以下)*/
@@ -255,23 +374,37 @@ input[type="file"] {
     margin: -21px 0;
     flex-direction: column;
   }
+  .diaryKeep-btn {
+    right: 10px;
+    top: 10px;
+  }
+  .diaryKeep-btn button {
+    padding: 10px 30px;
+  }
 }
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
+  .diaryKeep-btn button {
+    padding: 10px 10px;
+  }
   .page-title {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .page-text {
     margin-top: 5px;
-    font-size: 16px;
+    font-size: 14px;
     width: 90%;
   }
 
   .image {
     margin: 15px auto;
+  }
+
+  .delete-img {
+    top: 20px;
   }
 }
 

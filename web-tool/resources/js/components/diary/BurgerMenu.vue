@@ -84,7 +84,6 @@ const backPage = () => {
   left: 20px;
   background-image: url(../../../../public/icon/hamburger.png);
   margin: 17px 10px 16px 0;
-  border: 4px solid #ccc;
   border-radius: 5px;
   transition: 0.3s;
   z-index: 2;
@@ -105,7 +104,7 @@ const backPage = () => {
 
 nav {
   position: fixed;
-  top: 0;
+  top: 2px;
   left: -400px;
   height: 100vh;
   width: 400px;
@@ -182,7 +181,7 @@ nav p {
   }
 
   nav {
-    top: -10px;
+    top: -8px;
     width: 350px;
   }
 

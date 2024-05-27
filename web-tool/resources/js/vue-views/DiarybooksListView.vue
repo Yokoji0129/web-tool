@@ -246,21 +246,6 @@ main {
   color: #333;
 }
 
-.btn-close {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background-color: #555;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-close:hover {
-  background-color: #333;
-}
-
 .book-title {
   width: 100%;
   padding: 10px;
@@ -360,6 +345,7 @@ main {
 
   .popup-content {
     width: 70%;
+    padding: 20px;
   }
 
   .popup {
