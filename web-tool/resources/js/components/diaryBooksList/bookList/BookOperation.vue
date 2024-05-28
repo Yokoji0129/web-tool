@@ -15,8 +15,11 @@ const diaryOpen = (diaryId, selectBookNumber) => {
   axios
     .get(`/returnpage/${diaryId}`)
     .then((response) => {
-      //diaryのページにparamsで日記IDを渡す
-      router.push({ name: 'diary', params: { diaryId: diaryId, selectBookNumber: selectBookNumber }});
+      //diaryのページにparamsで日記IDと日記のlength番号を渡す
+      router.push({
+        name: "diary",
+        params: { diaryId: diaryId, selectBookNumber: selectBookNumber },
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -82,10 +85,6 @@ const deleteBook = (diaryId, diaryName) => {
       });
   }
 };
-
-const test = () => {
-  console.log(props.selectBookNumber)
-}
 </script>
 <!--日記操作ボタンをここに書く-->
 <template>
@@ -98,7 +97,10 @@ const test = () => {
       </div>
       <!--日記操作ボタン一覧-->
       <div class="book-select">
-        <p class="book-open" @click="diaryOpen(selectedBook[0].diary_id, selectBookNumber)">
+        <p
+          class="book-open"
+          @click="diaryOpen(selectedBook[0].diary_id, selectBookNumber)"
+        >
           日記を開く
         </p>
         <p
@@ -123,7 +125,6 @@ const test = () => {
         >
           日記を削除
         </p>
-        <button @click="test">aaaa</button>
       </div>
     </div>
   </div>

@@ -33,6 +33,8 @@ const pageData = reactive({
   pageText1: "",
   pageText2: "",
 });
+
+//ページ追加メソッド
 const pageAdd = () => {
   //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
   axios
@@ -48,7 +50,7 @@ const pageAdd = () => {
     .finally(() => {});
 };
 
-//ページ保存
+//ページ保存メソッド
 const pageKeep = () => {
   axios
     .post("/edit/page", {})

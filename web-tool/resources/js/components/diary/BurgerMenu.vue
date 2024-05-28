@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 const props = defineProps({
   diary: Array,
-  selectBookNumber: Number
+  selectBookNumber: String
 });
 const router = useRouter();
 const menuOpen = ref(false);
