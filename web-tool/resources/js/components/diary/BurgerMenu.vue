@@ -1,14 +1,16 @@
 <script setup>
 import { RouterLink, useRouter } from "vue-router";
 import { ref } from "vue";
-const menuOpen = ref(false);
-const router = useRouter();
 
+const props = defineProps({
+  diary: Array,
+});
+const menuOpen = ref(false);
 //ハンバーガーメニューの開閉
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value;
 };
-
+const router = useRouter();
 const backPage = () => {
   router.push("/diaryBooksList");
 };
@@ -25,7 +27,7 @@ const backPage = () => {
         @click="toggleMenu()"
       ></div>
       <p class="back-page" @click="backPage">←日記一覧に戻る</p>
-      <h3 class="diary-title">日記タイトル</h3>
+      <h3 class="diary-title">{{ diary}}</h3>
       <h3 class="table-contents">目次</h3>
       <div class="table-contents-box">
         <p class="nav-link">0.test</p>

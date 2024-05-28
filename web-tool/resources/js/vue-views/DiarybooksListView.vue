@@ -66,7 +66,6 @@ const displayFavoriteBooks = () => {
 
 /**
  * やること
- * 1.本のタイトルの文字数制限つける(文字が多いとデザインがおかしくなるため)
  * 2.本を追加した後からも本の情報を変えれるようにする
  * 3.本作成時フォントも変えれるようにする
  * 4.お気に入り本がないときにお気に入り本がありませんと表示させる
@@ -81,15 +80,18 @@ const createBook = () => {
     alert("タイトルを入力してください。");
     return;
   }
+  if (bookData.bookName.length > 8) {
+    alert("タイトルは8文字以内にしてください。")
+    return
+  }
   if (!bookData.bookBackColor) {
-    alert("日記の背景デザインを選択してください");
+    alert("日記の背景デザインを選択してください。");
     return;
   }
   if (!bookData.bookTextColor) {
-    alert("日記のテキストカラーを選択してください");
+    alert("日記のテキストカラーを選択してください。");
     return;
   }
-
   loadingBook.value = true;
   axios
     .post("/diaryadd", {
@@ -162,7 +164,7 @@ onMounted(() => {
               v-model="bookData.bookName"
               type="text"
               class="book-title"
-              placeholder="日記のタイトル"
+              placeholder="日記のタイトル(8文字以内)"
             />
             <h3>日記デザイン選択</h3>
             <div class="color-select-box">

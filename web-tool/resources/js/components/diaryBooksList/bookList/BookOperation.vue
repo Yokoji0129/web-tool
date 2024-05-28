@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink, useRouter } from "vue-router";
 import { ref } from "vue";
 const props = defineProps({
   displayBooks: Function,
@@ -6,8 +7,20 @@ const props = defineProps({
   selectedBook: Object,
   toggleBookPopup: Function,
 });
-
+const router = useRouter();
 const loading = ref(false);
+//日記開く
+const diaryOpen = (diaryId) => {
+  axios
+    .get(`/returnpage/${diaryId}`)
+    .then((response) => {
+      //diaryのページにparamsで日記IDを渡す
+      router.push({ name: 'diary', params: { diaryId: diaryId }});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 //お気に入り追加メソッド
 const favoriteAddBook = (diaryId) => {
   loading.value = true;
@@ -80,7 +93,9 @@ const deleteBook = (diaryId, diaryName) => {
       </div>
       <!--日記操作ボタン一覧-->
       <div class="book-select">
-        <p class="book-open">日記を開く</p>
+        <p class="book-open" @click="diaryOpen(selectedBook[0].diary_id)">
+          日記を開く
+        </p>
         <p
           class="favorite"
           v-if="selectedBook[0].diary_favorite === 1"

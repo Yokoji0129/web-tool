@@ -1,18 +1,71 @@
 <script setup>
-import { ref } from "vue";
+import { useRoute } from 'vue-router';
+import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
-//右側デザインできたら保存ボタンを作る
-
+const route = useRoute();
+const diaryId = route.params.diaryId;
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
 const togglePopup = () => {
   showPopup.value = !showPopup.value;
 };
+
+//日記の全情報入れる
+const diary = ref([]);
+const diaryInfo = () => {
+  axios
+    .get("returndiary")
+    .then((response) => {
+      console.log(response.data);
+      diary.value = response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+//ページ内容リスト
+const pageContentsList = ref([]);
+const pageData = reactive({
+  pageTitle: "",
+  pageText1: "",
+  pageText2: "",
+});
+const pageAdd = () => {
+  //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
+  axios
+    .post("/pageadd", {
+      id: test,
+      title: pageData.pageTitle,
+      txt: pageData.pageText1,
+    })
+    .then((response) => {})
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
+//ページ保存
+const pageKeep = () => {
+  axios
+    .post("/edit/page", {})
+    .then((response) => {})
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
+onMounted(() => {
+  console.log(diaryId);
+  diaryInfo();
+});
 </script>
 
 <template>
-  <BurgerMenu />
+  <BurgerMenu :diary="diary" />
   <div class="diaryKeep-btn">
     <button>ページ保存</button>
   </div>
@@ -34,9 +87,21 @@ const togglePopup = () => {
         </select>
       </div>
       <div class="text-area">
-        <textarea class="page-title" placeholder="ページタイトル"></textarea>
-        <textarea class="page-text" placeholder="文章1"></textarea>
-        <textarea class="page-text" placeholder="文章2"></textarea>
+        <textarea
+          class="page-title"
+          placeholder="ページタイトル"
+          v-model="pageData.pageTitle"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章1"
+          v-model="pageData.pageText1"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章2"
+          v-model="pageData.pageText2"
+        ></textarea>
       </div>
     </div>
     <!--右側デザイン-->

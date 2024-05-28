@@ -8,18 +8,22 @@ const props = defineProps({
 });
 
 const showTooltip = ref(false);
+const showTooltip2 = ref(false);
+const showTooltip3 = ref(false);
 const toggleTooltip = () => {
   showTooltip.value = !showTooltip.value;
+  showTooltip2.value = false
+  showTooltip3.value = false
 };
-
-const showTooltip2 = ref(false);
 const toggleTooltip2 = () => {
   showTooltip2.value = !showTooltip2.value;
+  showTooltip.value = false
+  showTooltip3.value = false
 };
-
-const showTooltip3 = ref(false);
 const toggleTooltip3 = () => {
   showTooltip3.value = !showTooltip3.value;
+  showTooltip.value = false
+  showTooltip2.value = false
 };
 
 const isSorted = ref(false); //50音順の表示切替のフラグ
