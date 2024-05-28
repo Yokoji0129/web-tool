@@ -5,17 +5,18 @@ const props = defineProps({
   displayBooks: Function,
   showBookPopup: Boolean,
   selectedBook: Object,
+  selectBookNumber: Number,
   toggleBookPopup: Function,
 });
 const router = useRouter();
 const loading = ref(false);
 //日記開く
-const diaryOpen = (diaryId) => {
+const diaryOpen = (diaryId, selectBookNumber) => {
   axios
     .get(`/returnpage/${diaryId}`)
     .then((response) => {
       //diaryのページにparamsで日記IDを渡す
-      router.push({ name: 'diary', params: { diaryId: diaryId }});
+      router.push({ name: 'diary', params: { diaryId: diaryId, selectBookNumber: selectBookNumber }});
     })
     .catch((error) => {
       console.log(error);
@@ -81,6 +82,10 @@ const deleteBook = (diaryId, diaryName) => {
       });
   }
 };
+
+const test = () => {
+  console.log(props.selectBookNumber)
+}
 </script>
 <!--日記操作ボタンをここに書く-->
 <template>
@@ -93,7 +98,7 @@ const deleteBook = (diaryId, diaryName) => {
       </div>
       <!--日記操作ボタン一覧-->
       <div class="book-select">
-        <p class="book-open" @click="diaryOpen(selectedBook[0].diary_id)">
+        <p class="book-open" @click="diaryOpen(selectedBook[0].diary_id, selectBookNumber)">
           日記を開く
         </p>
         <p
@@ -118,6 +123,7 @@ const deleteBook = (diaryId, diaryName) => {
         >
           日記を削除
         </p>
+        <button @click="test">aaaa</button>
       </div>
     </div>
   </div>

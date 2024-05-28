@@ -3,7 +3,8 @@ import { useRoute } from 'vue-router';
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 const route = useRoute();
-const diaryId = route.params.diaryId;
+const diaryId = route.params.diaryId;//日記を開くときに渡される日記ID
+const selectBookNumber = route.params.selectBookNumber;
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
@@ -36,7 +37,7 @@ const pageAdd = () => {
   //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
   axios
     .post("/pageadd", {
-      id: test,
+      id: diaryId,
       title: pageData.pageTitle,
       txt: pageData.pageText1,
     })
@@ -59,13 +60,12 @@ const pageKeep = () => {
 };
 
 onMounted(() => {
-  console.log(diaryId);
   diaryInfo();
 });
 </script>
 
 <template>
-  <BurgerMenu :diary="diary" />
+  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" />
   <div class="diaryKeep-btn">
     <button>ページ保存</button>
   </div>

@@ -4,7 +4,6 @@ import { ref } from "vue";
 import BookOperation from "./bookList/BookOperation.vue";
 
 const props = defineProps({
-  books: Array,
   favoriteBooks: Array,
   togglePopup: Function,
   displayBooks: Function,
@@ -13,18 +12,20 @@ const props = defineProps({
 });
 const showBookPopup = ref(false);
 const selectedBook = ref(null); //選択された日記の情報を入れる
+const selectBookNumber = ref(null)
 
 //日記のポップアップ
-const toggleBookPopup = (book) => {
+const toggleBookPopup = (book, index) => {
   showBookPopup.value = !showBookPopup.value;
   selectedBook.value = book;
+  selectBookNumber.value = index
 };
 </script>
 
 <template>
   <div class="diaries">
     <!--作成した本のリスト-->
-    <div class="book-paper" v-for="(book, index) in filteredDiarys" :key="index" @click="toggleBookPopup(book)">
+    <div class="book-paper" v-for="(book, index) in filteredDiarys" :key="index" @click="toggleBookPopup(book, index)">
       <div :class="book[0].diary_color">
         <h2 :style="{ color: book[0].diary_text_color }">
           {{ book[0].diary_name }}
@@ -32,8 +33,8 @@ const toggleBookPopup = (book) => {
       </div>
     </div>
     <!--ポップアップ---->
-    <BookOperation :displayBooks="props.displayBooks" :showBookPopup="showBookPopup" :selectedBook="selectedBook"
-      :toggleBookPopup="toggleBookPopup" />
+    <BookOperation :displayBooks="props.displayBooks" :showBookPopup="showBookPopup" :selectedBook="selectedBook" :selectBookNumber="selectBookNumber"
+      :toggleBookPopup="toggleBookPopup"/>
     <!--日記追加-->
     <div class="diary" @click="togglePopup" v-if="isFavoriteDisplayed === false">
       <h2>+</h2>
