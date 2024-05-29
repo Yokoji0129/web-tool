@@ -655,6 +655,18 @@ class MainController extends Controller
             {
                 if($ids['diary_id'] === $id)
                 {   
+                    $title = $request->title;
+                    $title_color = $request->title_color;
+                    $txt = $request->txt;
+                    $txt2 = $request->txt2;
+                    $marker_color = $request->marker_color;
+                    $txt_color = $request->txt_color;
+                    $file_txt1 = $request->file_txt1;
+                    $file_txt2 = $request->file_txt2;
+                    $file_txt3 = $request->file_txt3;
+                    $file_txt4 = $request->file_txt4;
+                    $file_txt5 = $request->file_txt5;
+                    $file_txt6 = $request->file_txt6;
                     $file1 = 'nodata';
                     $file2 = 'nodata';
                     $file3 = 'nodata';
@@ -662,7 +674,7 @@ class MainController extends Controller
                     $file5 = 'nodata';
                     $file6 = 'nodata';
 
-                    $page_object->add_data($id, $request->title, $request->title_color, $request->txt, $request->txt2, $request->marker_color, $request->txt_color, $file1, $request->file_txt1, $file2, $request->file_txt2, $file3, $request->file_txt3, $file4, $request->file_txt4, $file5, $request->file_txt5, $file6, $request->file_txt6);
+                    $page_object->add_data($id, $title, $title_color, $txt, $txt2, $marker_color, $txt_color, $file1, $file_txt1, $file2, $file_txt2, $file3, $file_txt3, $file4, $file_txt4, $file5, $file_txt5, $file6, $file_txt6);
                     return $return_data;
                 }
                 else
@@ -850,6 +862,18 @@ class MainController extends Controller
                 {
                     if($diary['diary_id'] === $page['diary_id'])
                     {
+                        $title = $request->title;
+                        $title_color = $request->title_color;
+                        $txt = $request->txt;
+                        $txt2 = $request->txt2;
+                        $marker_color = $request->marker_color;
+                        $txt_color = $request->txt_color;
+                        $file_txt1 = $request->file_txt1;
+                        $file_txt2 = $request->file_txt2;
+                        $file_txt3 = $request->file_txt3;
+                        $file_txt4 = $request->file_txt4;
+                        $file_txt5 = $request->file_txt5;
+                        $file_txt6 = $request->file_txt6;
                         $file1 = 'nodata';
                         $file2 = 'nodata';
                         $file3 = 'nodata';
@@ -857,7 +881,7 @@ class MainController extends Controller
                         $file5 = 'nodata';
                         $file6 = 'nodata';
 
-                        $page_object->edit_page($id, $request->title, $request->title_color, $request->txt, $request->txt2, $request->marker_color, $request->txt_color, $file1, $request->file_txt1, $file2, $request->file_txt2, $file3, $request->file_txt3, $file4, $request->file_txt4, $file5, $request->file_txt5, $file6, $request->file_txt6);
+                        $page_object->edit_page($id, $title, $title_color, $txt, $txt2, $marker_color, $txt_color, $file1, $file_txt1, $file2, $file_txt2, $file3, $file_txt3, $file4, $file_txt4, $file5, $file_txt5, $file6, $file_txt6);
                         $return_data = 'true';
                         return $return_data;
                     }
