@@ -4,7 +4,8 @@ import { ref } from "vue";
 
 const props = defineProps({
   diary: Array,
-  selectBookNumber: String
+  selectBookNumber: String,
+  pages: Array,
 });
 const router = useRouter();
 const menuOpen = ref(false);
@@ -20,7 +21,7 @@ const backPage = () => {
 <template>
   <div>
     <!--メニュー欄-->
-    <nav :class="{ open: menuOpen }" @click="closeMenu">
+    <nav :class="{ open: menuOpen }">
       <!--メニューアイコン-->
       <div
         class="hamburger-icon-menu"
@@ -28,33 +29,15 @@ const backPage = () => {
         @click="toggleMenu()"
       ></div>
       <p class="back-page" @click="backPage">←日記一覧に戻る</p>
-      <h3 class="diary-title">{{ diary[selectBookNumber] }}</h3>
+      <!--[]?を使ってundefinedのエラー回避-->
+      <h3 class="diary-title">{{ diary[selectBookNumber]?.[0]?.diary_name }}</h3>
       <h3 class="table-contents">目次</h3>
-      <div class="table-contents-box">
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
-        <p class="nav-link">0.test</p>
+      <div
+        class="table-contents-box"
+        v-for="(page, index) in pages"
+        :key="index"
+      >
+        <p class="nav-link">{{ page[0].page_title }}</p>
       </div>
     </nav>
   </div>
@@ -67,7 +50,7 @@ const backPage = () => {
   top: 20px;
   right: 20px;
   padding: 10px;
-  background-color: rgba(74, 73, 73, 0.5); 
+  background-color: rgba(74, 73, 73, 0.5);
   color: white;
   border-radius: 5px;
   transition: 0.3s;
@@ -75,7 +58,7 @@ const backPage = () => {
 }
 
 .back-page:hover {
-  background-color: rgba(0, 0, 0, 0.5);;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .hamburger-icon-menu {
@@ -116,6 +99,7 @@ nav {
   transition: 0.3s;
   background-color: #ffffff;
   z-index: 999;
+  overflow-y: scroll;
 }
 
 nav p {
@@ -125,7 +109,7 @@ nav p {
 
 .nav-link {
   cursor: pointer;
-  padding: 10px;
+  padding: 15px 10px;
   text-decoration: none;
   color: black;
   transition: 0.3s;
@@ -141,6 +125,7 @@ nav p {
   font-family: "Georgia", serif;
   margin: 82px 0 5px 0;
   padding: 5px 0;
+  font-size: 24px;
   background-color: #ced4da;
 }
 
@@ -155,10 +140,6 @@ nav p {
   margin-bottom: 0;
   padding: 5px;
   text-align: center;
-}
-
-.table-contents-box {
-  overflow: scroll;
 }
 
 .open {

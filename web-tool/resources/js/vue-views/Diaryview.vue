@@ -2,9 +2,21 @@
 import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
+
+//ページ操作テキストの表示フラグ(編集、削除、追加)
+const showEdit = ref(false);
+const showDelete = ref(false);
+const showAdd = ref(false);
+//スマホ用ページ操作表示フラグ
+const showMenu = ref(false);
+//ページ操作メニュー表示()スマホ専用
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value;
+};
+
 const route = useRoute();
 const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
-const selectBookNumber = route.params.selectBookNumber;
+const selectBookNumber = route.params.selectBookNumber; //日記を開くときに渡される日記index
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
@@ -18,7 +30,6 @@ const diaryInfo = () => {
   axios
     .get("returndiary")
     .then((response) => {
-      console.log(response.data);
       diary.value = response.data;
     })
     .catch((error) => {
@@ -26,8 +37,13 @@ const diaryInfo = () => {
     });
 };
 
-//ページ内容リスト
-const pageContentsList = ref([]);
+/**
+ * やること
+ * ページが書かれてあるところはページ保存ボタンにして、書かれてない空のページにはページ追加ボタンをつける
+ * ページが書かれてあるところはページ削除ボタン付ける
+ * **/
+
+//ページの要素追加データ
 const pageData = reactive({
   pageTitle: "",
   pageText1: "",
@@ -66,47 +82,139 @@ const pageAdd = () => {
       //画像6の文章
       file_txt6: "",
     })
-    .then((response) => {})
+    .then((response) => {
+      console.log("ページ追加されました");
+      displayPage();
+    })
     .catch((error) => {
       console.log(error);
     })
     .finally(() => {});
+    showMenu.value = false
+};
 
-  console.log(
-    diaryId,
-    pageData.pageTitle,
-    pageData.pageText1,
-    pageData.pageText2
-  );
+const pages = ref([]); //日記ページのデータを格納する配列
+const currentPageIndex = ref(0); //現在表示しているページのindex
+//ページ表示メソッド
+const displayPage = () => {
+  axios
+    .get(`/returnpage/${diaryId}`)
+    .then((response) => {
+      pages.value = response.data;
+      console.log(pages);
+      //現在のページに合わせて現在のページのデータを取得
+      const currentPage = pages.value[currentPageIndex.value][0];
+      console.log(currentPage);
+      //取得したページのデータを表示用の変数に設定
+      pageData.pageTitle = currentPage.page_title;
+      pageData.pageText1 = currentPage.page_txt1;
+      pageData.pageText2 = currentPage.page_txt2;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
-  pageData.pageTitle = "";
-  pageData.pageText1 = "";
-  pageData.pageText2 = "";
+//前のページに移動するメソッド
+const prevPage = () => {
+  if (currentPageIndex.value > 0) {
+    currentPageIndex.value--;
+    //indexを変更したら新しいページを表示
+    displayPage();
+  }
+};
+
+//次のページに移動するメソッド
+const nextPage = () => {
+  if (currentPageIndex.value < pages.value.length - 1) {
+    currentPageIndex.value++;
+    //indexを変更したら新しいページを表示
+    displayPage();
+  }
 };
 
 //ページ編集メソッド
-const pageEdit = () => {
-  //ここでページを編集して保存(このAPIではページ追加はできない)
-  axios
-    .post("/edit/page", {})
-    .then((response) => {})
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {});
-};
-
+//const pageEdit = () => {
+////ここでページを編集して保存(このAPIではページ追加はできない)
+//  axios
+//    .post("/edit/page", {})
+//    .then((response) => {})
+//    .catch((error) => {
+//      console.log(error);
+//    })
+//    .finally(() => {});
+//};
 onMounted(() => {
   diaryInfo();
+  displayPage();
 });
 </script>
 
 <template>
-  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" />
-  <div class="diaryKeep-btn">
-    <button @click="pageEdit">ページ保存</button>
-    <button @click="pageAdd">ページ追加</button>
+  <BurgerMenu
+    :diary="diary"
+    :selectBookNumber="selectBookNumber"
+    :pages="pages"
+  />
+  <div class="page-operation-btn">
+    <!--編集ボタン-->
+    <div
+      class="btn"
+      @mouseover="showEdit = true"
+      @mouseleave="showEdit = false"
+    >
+      <img src="../../../public/icon/edit-page.png" alt="" />
+      <span class="edit-text" v-if="showEdit">編集</span>
+    </div>
+    <!--削除ボタン-->
+    <div
+      class="btn"
+      @mouseover="showDelete = true"
+      @mouseleave="showDelete = false"
+    >
+      <img src="../../../public/icon/delete-page.png" alt="" />
+      <span class="delete-text" v-if="showDelete">削除</span>
+    </div>
+    <!--追加ボタン-->
+    <div
+      class="btn"
+      @click="pageAdd"
+      @mouseover="showAdd = true"
+      @mouseleave="showAdd = false"
+    >
+      <img src="../../../public/icon/add-page.png" alt="" />
+      <span class="add-text" v-if="showAdd">追加</span>
+    </div>
   </div>
+
+  <!--スマホ用ページ操作ボタン-->
+  <div class="page-operation-hamburger">
+    <img
+      src="../../../public/icon/hamburger-note.png"
+      alt=""
+      @click="toggleMenu"
+    />
+  </div>
+  <div class="menu" :class="{ visible: showMenu }" v-show="showMenu">
+    <div class="page-operation-btn-sp">
+      <!--編集ボタン-->
+      <div class="btn-sp">
+        <img src="../../../public/icon/edit-page.png" alt="" />
+        <p>ページ編集</p>
+      </div>
+      <!--削除ボタン-->
+      <div class="btn-sp">
+        <img src="../../../public/icon/delete-page.png" alt="" />
+        <p>ページ削除</p>
+      </div>
+      <!--追加ボタン-->
+      <div class="btn-sp" @click="pageAdd">
+        <img src="../../../public/icon/add-page.png" alt="" />
+        <p>ページ追加</p>
+      </div>
+    </div>
+  </div>
+  <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
     <div class="left-contents">
@@ -127,7 +235,7 @@ onMounted(() => {
       <div class="text-area">
         <textarea
           class="page-title"
-          placeholder="ページタイトル"
+          placeholder="ページタイトル1"
           v-model="pageData.pageTitle"
         ></textarea>
         <textarea
@@ -170,7 +278,6 @@ onMounted(() => {
       </div>
     </div>
   </div>
-
   <!--ポップアップ-->
   <div v-if="showPopup" class="popup">
     <div class="popup-content-img">
@@ -188,30 +295,87 @@ onMounted(() => {
   </div>
   <!--ページ遷移-->
   <div class="page-transition">
-    <button class="back-page">前のページ</button>
-    <p class="page-count">0</p>
-    <button class="next-page">次のページ</button>
+    <button class="back-page" @click="prevPage">前のページ</button>
+    <p class="page-count">{{ currentPageIndex + 1 }} / {{ pages.length }}</p>
+    <button class="next-page" @click="nextPage">次のページ</button>
   </div>
 </template>
 
 <style scoped>
-.diaryKeep-btn {
+.menu {
+  display: none;
+}
+.menu.visible {
+  display: block;
+}
+.page-operation-btn {
+  display: flex;
   position: fixed;
   right: 10px;
   top: 10px;
   z-index: 100;
 }
-.diaryKeep-btn button {
-  padding: 20px 60px;
-  margin: 0 10px;
-  font-size: 16px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px;
+.page-operation-btn img {
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  margin: 0 5px;
+  width: 60px;
 }
+
+.edit-text,
+.delete-text,
+.add-text {
+  text-align: center;
+  background-color: #f8f9fa;
+  font-size: 24px;
+  margin-top: 4px;
+  border-left: 3px solid #ced4da;
+  border-right: 3px solid #ced4da;
+  border-bottom: 3px solid #ced4da;
+}
+
+.btn:hover .edit-text {
+  display: block;
+}
+.btn:hover .delete-text {
+  display: block;
+}
+.btn:hover .add-text {
+  display: block;
+}
+
+.page-operation-hamburger {
+  display: none;
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+}
+.page-operation-hamburger img {
+  width: 60px;
+}
+
+.page-operation-btn-sp {
+  background-color: #ccc;
+  display: block;
+  position: fixed;
+  right: 0px;
+  top: 82px;
+  z-index: 100;
+}
+.page-operation-btn-sp img {
+  padding: 15px 0 0 0;
+  width: 60px;
+}
+.btn-sp {
+  text-align: center;
+}
+.btn-sp p {
+  background-color: #ced4da;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 5px;
+}
+
 .flex-box {
   display: flex;
   padding: 82px 0 0 0;
@@ -430,12 +594,11 @@ input[type="file"] {
 }
 
 @media screen and (max-width: 1024px) {
-  .diaryKeep-btn {
-    right: 15px;
-    top: 15px;
+  .page-operation-btn {
+    display: none;
   }
-  .diaryKeep-btn button {
-    padding: 15px 50px;
+  .page-operation-hamburger {
+    display: block;
   }
   .flex-box {
     flex-direction: column;
@@ -474,24 +637,28 @@ input[type="file"] {
 
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
+  .page-operation-hamburger {
+    right: -3px;
+    top: 1px;
+  }
+  .page-operation-btn-sp {
+    right: 0px;
+    top: 62px;
+  }
+  .page-operation-btn {
+    top: 7px;
+  }
+  .page-operation-btn img {
+    width: 50px;
+  }
   .flex-box {
     margin: -21px 0;
     flex-direction: column;
-  }
-  .diaryKeep-btn {
-    right: 10px;
-    top: 10px;
-  }
-  .diaryKeep-btn button {
-    padding: 10px 30px;
   }
 }
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
-  .diaryKeep-btn button {
-    padding: 10px 10px;
-  }
   .page-title {
     margin: 0;
     font-size: 18px;

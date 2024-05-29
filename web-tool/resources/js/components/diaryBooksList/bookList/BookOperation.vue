@@ -12,18 +12,11 @@ const router = useRouter();
 const loading = ref(false);
 //日記開く
 const diaryOpen = (diaryId, selectBookNumber) => {
-  axios
-    .get(`/returnpage/${diaryId}`)
-    .then((response) => {
-      //diaryのページにparamsで日記IDと日記のlength番号を渡す
-      router.push({
-        name: "diary",
-        params: { diaryId: diaryId, selectBookNumber: selectBookNumber },
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  //diaryのページにparamsで日記IDと日記のlength番号を渡す
+  router.push({
+    name: "diary",
+    params: { diaryId: diaryId, selectBookNumber: selectBookNumber },
+  });
 };
 //お気に入り追加メソッド
 const favoriteAddBook = (diaryId) => {

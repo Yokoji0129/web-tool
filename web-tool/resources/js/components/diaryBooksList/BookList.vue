@@ -16,6 +16,7 @@ const selectBookNumber = ref(null)
 
 //日記のポップアップ
 const toggleBookPopup = (book, index) => {
+  console.log(book)
   showBookPopup.value = !showBookPopup.value;
   selectedBook.value = book;
   selectBookNumber.value = index
