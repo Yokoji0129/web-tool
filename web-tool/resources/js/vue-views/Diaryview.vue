@@ -1,9 +1,9 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 const route = useRoute();
-const diaryId = route.params.diaryId;//日記を開くときに渡される日記ID
+const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
 const selectBookNumber = route.params.selectBookNumber;
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
@@ -34,24 +34,59 @@ const pageData = reactive({
   pageText2: "",
 });
 
-//ページ追加メソッド
+//ページ追加用メソッド
 const pageAdd = () => {
   //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
   axios
     .post("/pageadd", {
+      //日記ID
       id: diaryId,
+      //タイトル文字色
+      title_color: "",
+      //ページタイトル
       title: pageData.pageTitle,
+      //文章1
       txt: pageData.pageText1,
+      //文章2
+      txt2: pageData.pageText2,
+      //マーカーの色
+      marker_color: "",
+      //文章の文字の色
+      txt_color: "",
+      //画像1の文章
+      file_txt1: "",
+      //画像2の文章
+      file_txt2: "",
+      //画像3の文章
+      file_txt3: "",
+      //画像4の文章
+      file_txt4: "",
+      //画像5の文章
+      file_txt5: "",
+      //画像6の文章
+      file_txt6: "",
     })
     .then((response) => {})
     .catch((error) => {
       console.log(error);
     })
     .finally(() => {});
+
+  console.log(
+    diaryId,
+    pageData.pageTitle,
+    pageData.pageText1,
+    pageData.pageText2
+  );
+
+  pageData.pageTitle = "";
+  pageData.pageText1 = "";
+  pageData.pageText2 = "";
 };
 
-//ページ保存メソッド
-const pageKeep = () => {
+//ページ編集メソッド
+const pageEdit = () => {
+  //ここでページを編集して保存(このAPIではページ追加はできない)
   axios
     .post("/edit/page", {})
     .then((response) => {})
@@ -69,7 +104,8 @@ onMounted(() => {
 <template>
   <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" />
   <div class="diaryKeep-btn">
-    <button>ページ保存</button>
+    <button @click="pageEdit">ページ保存</button>
+    <button @click="pageAdd">ページ追加</button>
   </div>
   <div class="flex-box">
     <!--左側デザイン-->
@@ -167,6 +203,7 @@ onMounted(() => {
 }
 .diaryKeep-btn button {
   padding: 20px 60px;
+  margin: 0 10px;
   font-size: 16px;
   border: none;
   background-color: #007bff;

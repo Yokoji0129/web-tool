@@ -36,7 +36,7 @@ const toggleBookPopup = (book, index) => {
     <BookOperation :displayBooks="props.displayBooks" :showBookPopup="showBookPopup" :selectedBook="selectedBook" :selectBookNumber="selectBookNumber"
       :toggleBookPopup="toggleBookPopup"/>
     <!--日記追加-->
-    <div class="diary" @click="togglePopup" v-if="isFavoriteDisplayed === false">
+    <div class="diary" @click="togglePopup" v-if="!isFavoriteDisplayed">
       <h2>+</h2>
     </div>
   </div>
