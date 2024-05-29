@@ -46,7 +46,7 @@ class Page extends Model
                 'diary_id',
                 'page_id',  
                 'page_title',
-                'page_titile_color',
+                'page_title_color',
                 'page_txt1',
                 'page_txt2',
                 'page_marker_color',
