@@ -6,8 +6,9 @@ const props = defineProps({
   diary: Array,
   selectBookNumber: String,
   pages: Array,
-  pageData: Object
+  pageData: Object,
 });
+const emit = defineEmits(["update:currentPageIndex"]);
 const router = useRouter();
 const menuOpen = ref(false);
 //ハンバーガーメニューの開閉
@@ -19,12 +20,19 @@ const backPage = () => {
 };
 
 const jumpToPage = (pageIndex) => {
+  //currentPageIndexを子コンポーネント操作するためにemit使用
+  emit("update:currentPageIndex", pageIndex);
+
   const currentPage = props.pages[pageIndex][0];
   //取得したページのデータを表示用の変数に設定
   props.pageData.pageTitle = currentPage.page_title;
   props.pageData.pageText1 = currentPage.page_txt1;
   props.pageData.pageText2 = currentPage.page_txt2;
+
+  //ページに飛んだ時にhamburgerメニュー閉じる
+  toggleMenu();
 };
+
 </script>
 
 <template>
@@ -49,7 +57,7 @@ const jumpToPage = (pageIndex) => {
         :key="index"
       >
         <p class="nav-link" @click="jumpToPage(index)">
-          {{ page[0].page_title }}
+          {{ index+1 }}. {{ page[0].page_title }}
         </p>
       </div>
     </nav>

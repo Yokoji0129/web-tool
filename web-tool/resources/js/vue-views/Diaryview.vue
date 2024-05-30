@@ -152,6 +152,7 @@ onMounted(() => {
     :selectBookNumber="selectBookNumber"
     :pages="pages"
     :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event"
   />
   <PageOperation
     :toggleMenu="toggleMenu"
