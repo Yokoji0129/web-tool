@@ -9,6 +9,7 @@ const props = defineProps({
 const showEdit = ref(false);
 const showDelete = ref(false);
 const showAdd = ref(false);
+const showQuestion = ref(false)
 </script>
 
 <template>
@@ -41,6 +42,15 @@ const showAdd = ref(false);
       <img src="../../../../public/icon/add-page.png" alt="" />
       <span class="add-text" v-if="showAdd">追加</span>
     </div>
+    <!--使い方表示ボタン-->
+    <div
+      class="btn"
+      @mouseover="showQuestion = true"
+      @mouseleave="showQuestion = false"
+    >
+      <img src="../../../../public/icon/hatena.png" alt="" />
+      <span class="question-text" v-if="showQuestion">手順</span>
+    </div>
   </div>
 
   <!--スマホ用ページ操作ボタン-->
@@ -68,6 +78,10 @@ const showAdd = ref(false);
         <img src="../../../../public/icon/add-page.png" alt="" />
         <p>ページ追加</p>
       </div>
+      <div class="btn-sp">
+        <img src="../../../../public/icon/hatena.png" alt="" />
+        <p>使い方</p>
+      </div>
     </div>
   </div>
 </template>
@@ -94,7 +108,8 @@ menu {
 
 .edit-text,
 .delete-text,
-.add-text {
+.add-text,
+.question-text {
   text-align: center;
   background-color: #f8f9fa;
   font-size: 24px;
@@ -111,6 +126,9 @@ menu {
   display: block;
 }
 .btn:hover .add-text {
+  display: block;
+}
+.btn:hover .question-text{
   display: block;
 }
 

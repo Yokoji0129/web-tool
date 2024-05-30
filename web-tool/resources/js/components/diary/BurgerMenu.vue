@@ -15,10 +15,12 @@ const menuOpen = ref(false);
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value;
 };
+//日記一覧に戻る
 const backPage = () => {
   router.push("/diaryBooksList");
 };
 
+//押したタイトルのページに飛ぶメソッド
 const jumpToPage = (pageIndex) => {
   //currentPageIndexを子コンポーネント操作するためにemit使用
   emit("update:currentPageIndex", pageIndex);

@@ -9,6 +9,7 @@ const showMenu = ref(false);
 const toggleMenu = () => {
   showMenu.value = !showMenu.value;
 };
+const loadingPage = ref(false)
 
 const route = useRoute();
 const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
@@ -37,6 +38,7 @@ const diaryInfo = () => {
  * やること
  * ページが書かれてあるところはページ保存ボタンにして、書かれてない空のページにはページ追加ボタンをつける
  * ページが書かれてあるところはページ削除ボタン付ける
+ * ページ移動したときに一番上を表示させる(タブレットやスマホサイズの時)
  * **/
 
 //ページの要素追加データ
@@ -48,6 +50,7 @@ const pageData = reactive({
 
 //ページ追加用メソッド
 const pageAdd = () => {
+  loadingPage.value = true
   //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
   axios
     .post("/pageadd", {
@@ -85,7 +88,9 @@ const pageAdd = () => {
     .catch((error) => {
       console.log(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loadingPage.value = false
+    });
   showMenu.value = false;
 };
 
@@ -97,7 +102,7 @@ const displayPage = () => {
     .get(`/returnpage/${diaryId}`)
     .then((response) => {
       pages.value = response.data;
-      currentPage()
+      currentPage();
     })
     .catch((error) => {
       console.log(error);
@@ -117,7 +122,7 @@ const currentPage = () => {
 const prevPage = () => {
   if (currentPageIndex.value > 0) {
     currentPageIndex.value--;
-    currentPage()
+    currentPage();
   }
 };
 
@@ -125,7 +130,7 @@ const prevPage = () => {
 const nextPage = () => {
   if (currentPageIndex.value < pages.value.length - 1) {
     currentPageIndex.value++;
-    currentPage()
+    currentPage();
   }
 };
 
@@ -240,9 +245,13 @@ onMounted(() => {
   </div>
   <!--ページ遷移-->
   <div class="page-transition">
-    <button class="back-page" @click="prevPage">前のページ</button>
+    <button class="back-page" @click="prevPage" v-if="currentPageIndex >= 1">前のページ</button>
     <p class="page-count">{{ currentPageIndex + 1 }} / {{ pages.length }}</p>
     <button class="next-page" @click="nextPage">次のページ</button>
+  </div>
+  <!-- ローディングアニメーション -->
+  <div v-if="loadingPage" class="loading-overlay">
+    <div class="spinner"></div>
   </div>
 </template>
 
