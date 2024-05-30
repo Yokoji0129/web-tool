@@ -32,7 +32,6 @@ const jumpToPage = (pageIndex) => {
   //ページに飛んだ時にhamburgerメニュー閉じる
   toggleMenu();
 };
-
 </script>
 
 <template>
@@ -51,14 +50,16 @@ const jumpToPage = (pageIndex) => {
         {{ diary[selectBookNumber]?.[0]?.diary_name }}
       </h3>
       <h3 class="table-contents">目次</h3>
-      <div
-        class="table-contents-box"
-        v-for="(page, index) in pages"
-        :key="index"
-      >
-        <p class="nav-link" @click="jumpToPage(index)">
-          {{ index+1 }}. {{ page[0].page_title }}
-        </p>
+      <div style="overflow-y: scroll;">
+        <div
+          class="table-contents-box"
+          v-for="(page, index) in pages"
+          :key="index"
+        >
+          <p class="nav-link" @click="jumpToPage(index)">
+            {{ index + 1 }}. {{ page[0].page_title }}
+          </p>
+        </div>
       </div>
     </nav>
   </div>
@@ -119,8 +120,7 @@ nav {
   flex-direction: column;
   transition: 0.3s;
   background-color: #ffffff;
-  z-index: 999;
-  overflow-y: scroll;
+  z-index: 9999;
 }
 
 nav p {
