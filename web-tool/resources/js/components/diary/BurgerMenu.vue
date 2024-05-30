@@ -6,6 +6,7 @@ const props = defineProps({
   diary: Array,
   selectBookNumber: String,
   pages: Array,
+  pageData: Object
 });
 const router = useRouter();
 const menuOpen = ref(false);
@@ -15,6 +16,14 @@ const toggleMenu = () => {
 };
 const backPage = () => {
   router.push("/diaryBooksList");
+};
+
+const jumpToPage = (pageIndex) => {
+  const currentPage = props.pages[pageIndex][0];
+  //取得したページのデータを表示用の変数に設定
+  props.pageData.pageTitle = currentPage.page_title;
+  props.pageData.pageText1 = currentPage.page_txt1;
+  props.pageData.pageText2 = currentPage.page_txt2;
 };
 </script>
 
@@ -30,14 +39,18 @@ const backPage = () => {
       ></div>
       <p class="back-page" @click="backPage">←日記一覧に戻る</p>
       <!--[]?を使ってundefinedのエラー回避-->
-      <h3 class="diary-title">{{ diary[selectBookNumber]?.[0]?.diary_name }}</h3>
+      <h3 class="diary-title">
+        {{ diary[selectBookNumber]?.[0]?.diary_name }}
+      </h3>
       <h3 class="table-contents">目次</h3>
       <div
         class="table-contents-box"
         v-for="(page, index) in pages"
         :key="index"
       >
-        <p class="nav-link">{{ page[0].page_title }}</p>
+        <p class="nav-link" @click="jumpToPage(index)">
+          {{ page[0].page_title }}
+        </p>
       </div>
     </nav>
   </div>

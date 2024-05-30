@@ -2,7 +2,7 @@
 import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
-import PageOperation from "../components/diary/PageOperation.vue"
+import PageOperation from "../components/diary/PageOperation.vue";
 //スマホ用ページ操作表示フラグ
 const showMenu = ref(false);
 //ページ操作メニュー表示()スマホ専用
@@ -86,7 +86,7 @@ const pageAdd = () => {
       console.log(error);
     })
     .finally(() => {});
-    showMenu.value = false
+  showMenu.value = false;
 };
 
 const pages = ref([]); //日記ページのデータを格納する配列
@@ -97,26 +97,27 @@ const displayPage = () => {
     .get(`/returnpage/${diaryId}`)
     .then((response) => {
       pages.value = response.data;
-      console.log(pages);
-      //現在のページに合わせて現在のページのデータを取得
-      const currentPage = pages.value[currentPageIndex.value][0];
-      console.log(currentPage);
-      //取得したページのデータを表示用の変数に設定
-      pageData.pageTitle = currentPage.page_title;
-      pageData.pageText1 = currentPage.page_txt1;
-      pageData.pageText2 = currentPage.page_txt2;
+      currentPage()
     })
     .catch((error) => {
       console.log(error);
     });
 };
 
+const currentPage = () => {
+  //現在のページに合わせて現在のページのデータを取得
+  const currentPage = pages.value[currentPageIndex.value][0];
+  //取得したページのデータを表示用の変数に設定
+  pageData.pageTitle = currentPage.page_title;
+  pageData.pageText1 = currentPage.page_txt1;
+  pageData.pageText2 = currentPage.page_txt2;
+};
+
 //前のページに移動するメソッド
 const prevPage = () => {
   if (currentPageIndex.value > 0) {
     currentPageIndex.value--;
-    //indexを変更したら新しいページを表示
-    displayPage();
+    currentPage()
   }
 };
 
@@ -124,8 +125,7 @@ const prevPage = () => {
 const nextPage = () => {
   if (currentPageIndex.value < pages.value.length - 1) {
     currentPageIndex.value++;
-    //indexを変更したら新しいページを表示
-    displayPage();
+    currentPage()
   }
 };
 
@@ -151,8 +151,13 @@ onMounted(() => {
     :diary="diary"
     :selectBookNumber="selectBookNumber"
     :pages="pages"
+    :pageData="pageData"
   />
-  <PageOperation :toggleMenu="toggleMenu" :pageAdd="pageAdd" :showMenu="showMenu" />
+  <PageOperation
+    :toggleMenu="toggleMenu"
+    :pageAdd="pageAdd"
+    :showMenu="showMenu"
+  />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -422,7 +427,7 @@ input[type="file"] {
 
 .page-count {
   padding: 3px 10px;
-  border-radius: 50%;
+  border-radius: 50px;
   margin: 15px 10px;
   background-color: #ffffff;
 }
