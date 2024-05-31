@@ -3,6 +3,7 @@ import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 import PageOperation from "../components/diary/PageOperation.vue";
+import PageMove from "../components/diary/PageMove.vue"
 //スマホ用ページ操作表示フラグ
 const showMenu = ref(false);
 //ページ操作メニュー表示()スマホ専用
@@ -11,7 +12,7 @@ const toggleMenu = () => {
     showMenu.value = !showMenu.value;
   }
 };
-const loadingPage = ref(false)
+const loadingPage = ref(false);
 
 const route = useRoute();
 const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
@@ -43,6 +44,8 @@ const diaryInfo = () => {
  * ページ移動したときに一番上を表示させる(タブレットやスマホサイズの時)
  * **/
 
+const pages = ref([]); //日記ページのデータを格納する配列
+const currentPageIndex = ref(0); //現在表示しているページのindex
 //ページの要素追加データ
 const pageData = reactive({
   pageTitle: "",
@@ -52,7 +55,7 @@ const pageData = reactive({
 
 //ページ追加用メソッド
 const pageAdd = () => {
-  loadingPage.value = true
+  loadingPage.value = true;
   //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
   axios
     .post("/pageadd", {
@@ -84,29 +87,30 @@ const pageAdd = () => {
       file_txt6: "",
     })
     .then((response) => {
-      alert(`${pages.value.length + 1}ページ目が追加されました`)
-      toggleMenu()
+      alert(`${pages.value.length + 1}ページ目が追加されました`);
+      toggleMenu();
       displayPage();
     })
     .catch((error) => {
       console.log(error);
     })
     .finally(() => {
-      loadingPage.value = false
+      loadingPage.value = false;
     });
   showMenu.value = false;
 };
 
-const pages = ref([]); //日記ページのデータを格納する配列
-const currentPageIndex = ref(0); //現在表示しているページのindex
 //ページ表示メソッド
 const displayPage = () => {
   axios
     .get(`/returnpage/${diaryId}`)
     .then((response) => {
       pages.value = response.data;
-      console.log(response.data)
-      currentPage();
+      if (pages.value.length === 0) {
+        pageAdd(); //ページが空の場合(日記初回に開くとき)、新しいページを追加
+      } else {
+        currentPage();
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -123,25 +127,9 @@ const currentPage = () => {
   pageData.pageText2 = currentPage.page_txt2;
 };
 
-//前のページに移動するメソッド
-const prevPage = () => {
-  if (currentPageIndex.value > 0) {
-    currentPageIndex.value--;
-    currentPage();
-  }
-};
-
-//次のページに移動するメソッド
-const nextPage = () => {
-  if (currentPageIndex.value < pages.value.length - 1) {
-    currentPageIndex.value++;
-    currentPage();
-  }
-};
-
 //ページ編集メソッド
 const pageEdit = () => {
-  loadingPage.value = true
+  loadingPage.value = true;
   //ここでページを編集して保存(このAPIではページ追加はできない)
   axios
     .post("/edit/page", {
@@ -173,14 +161,14 @@ const pageEdit = () => {
       file_txt6: "",
     })
     .then((response) => {
-      toggleMenu()
-      displayPage()
+      toggleMenu();
+      displayPage();
     })
     .catch((error) => {
       console.log(error);
     })
     .finally(() => {
-      loadingPage.value = false
+      loadingPage.value = false;
     });
 };
 
@@ -211,9 +199,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event" />
-  <PageOperation :toggleMenu="toggleMenu" :pageAdd="pageAdd" :pageEdit="pageEdit" :pageDelete="pageDelete" :showMenu="showMenu" />
+  <BurgerMenu
+    :diary="diary"
+    :selectBookNumber="selectBookNumber"
+    :pages="pages"
+    :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event"
+  />
+  <PageOperation
+    :toggleMenu="toggleMenu"
+    :pageAdd="pageAdd"
+    :pageEdit="pageEdit"
+    :pageDelete="pageDelete"
+    :showMenu="showMenu"
+  />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -233,9 +232,21 @@ onMounted(() => {
         </select>
       </div>
       <div class="text-area">
-        <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"></textarea>
-        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
-        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
+        <textarea
+          class="page-title"
+          placeholder="ページタイトル"
+          v-model="pageData.pageTitle"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章1"
+          v-model="pageData.pageText1"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章2"
+          v-model="pageData.pageText2"
+        ></textarea>
       </div>
     </div>
     <!--右側デザイン-->
@@ -246,7 +257,11 @@ onMounted(() => {
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
+          <img
+            @click="togglePopup"
+            class="image"
+            src="../../../public/testImage/testImage.jpeg"
+          />
         </div>
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
@@ -254,7 +269,10 @@ onMounted(() => {
         </div>
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img class="image" src="../../../public/testImage/testImagetate.jpg" />
+          <img
+            class="image"
+            src="../../../public/testImage/testImagetate.jpg"
+          />
         </div>
       </div>
     </div>
@@ -275,11 +293,7 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <div class="page-transition">
-    <button class="back-page" @click="prevPage">前のページ</button>
-    <p class="page-count">{{ currentPageIndex + 1 }} / {{ pages.length }}</p>
-    <button class="next-page" @click="nextPage">次のページ</button>
-  </div>
+  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages" :currentPage="currentPage" />
   <!-- ローディングアニメーション -->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
@@ -401,16 +415,6 @@ input[type="file"] {
   width: 50px;
 }
 
-.page-transition {
-  display: flex;
-  position: fixed;
-  width: 100%;
-  bottom: 46px;
-  justify-content: center;
-  align-items: center;
-  background-color: #5a646d;
-}
-
 .popup-content-img {
   position: relative;
   width: auto;
@@ -450,29 +454,6 @@ input[type="file"] {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-.back-page,
-.next-page {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.back-page:hover,
-.next-page:hover {
-  background-color: #0056b3;
-}
-
-.page-count {
-  padding: 3px 10px;
-  border-radius: 50px;
-  margin: 15px 10px;
-  background-color: #ffffff;
 }
 
 /**デスクトップのtextarea調整**/
@@ -527,10 +508,6 @@ input[type="file"] {
     margin-top: 10px;
   }
 
-  .page-transition {
-    bottom: 35px;
-  }
-
   .image-box {
     margin-bottom: 100px;
   }
@@ -574,5 +551,6 @@ input[type="file"] {
   }
 }
 
-@-moz-document url-prefix() {}
+@-moz-document url-prefix() {
+}
 </style>
