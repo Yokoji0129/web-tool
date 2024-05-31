@@ -724,9 +724,9 @@ class MainController extends Controller
                 else
                 {
                     $return_data = 'noid';
-                    return $return_data;
                 }
             }
+            return $return_data;
         }
         else
         {
