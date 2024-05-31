@@ -3,7 +3,7 @@ import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 import PageOperation from "../components/diary/PageOperation.vue";
-import PageMove from "../components/diary/PageMove.vue"
+import PageMove from "../components/diary/PageMove.vue";
 //スマホ用ページ操作表示フラグ
 const showMenu = ref(false);
 //ページ操作メニュー表示()スマホ専用
@@ -42,6 +42,10 @@ const diaryInfo = () => {
  * ページが書かれてあるところはページ保存ボタンにして、書かれてない空のページにはページ追加ボタンをつける
  * ページが書かれてあるところはページ削除ボタン付ける
  * ページ移動したときに一番上を表示させる(タブレットやスマホサイズの時)
+ * ページタイトルで改行できないようにする
+ * リロードしたらdiaryIDが消えてしまうからページにいる間は消えないようにする
+ * ページ追加場所を指定できるようにする
+ * 
  * **/
 
 const pages = ref([]); //日記ページのデータを格納する配列
@@ -88,7 +92,6 @@ const pageAdd = () => {
     })
     .then((response) => {
       alert(`${pages.value.length + 1}ページ目が追加されました`);
-      toggleMenu();
       displayPage();
     })
     .catch((error) => {
@@ -161,6 +164,7 @@ const pageEdit = () => {
       file_txt6: "",
     })
     .then((response) => {
+      alert(`${currentPageIndex.value + 1}ページ目が保存されました`);
       toggleMenu();
       displayPage();
     })
@@ -174,22 +178,25 @@ const pageEdit = () => {
 
 // ページ削除メソッド
 const pageDelete = () => {
-  loadingPage.value = true;
-  axios
-    .post("/delete/page", {
-      //ページID
-      id: pages.value[currentPageIndex.value][0].page_id,
-    })
-    .then((response) => {
-      displayPage();
-      toggleMenu();
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loadingPage.value = false;
-    });
+  if (window.confirm("このページを本当に削除しますか？")) {
+    loadingPage.value = true;
+    axios
+      .post("/delete/page", {
+        //ページID
+        id: pages.value[currentPageIndex.value][0].page_id,
+      })
+      .then((response) => {
+        alert(`${currentPageIndex.value + 1}ページ目が削除されました`);
+        displayPage();
+        toggleMenu();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        loadingPage.value = false;
+      });
+  }
 };
 
 onMounted(() => {
@@ -293,7 +300,12 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages" :currentPage="currentPage" />
+  <PageMove
+    @update:currentPageIndex="currentPageIndex = $event"
+    :currentPageIndex="currentPageIndex"
+    :pages="pages"
+    :currentPage="currentPage"
+  />
   <!-- ローディングアニメーション -->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
