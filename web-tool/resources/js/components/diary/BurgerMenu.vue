@@ -59,7 +59,7 @@ const jumpToPage = (pageIndex) => {
           :key="index"
         >
           <p class="nav-link" @click="jumpToPage(index)">
-            {{ index + 1 }}. {{ page[0].page_title }}
+            {{ index + 1 }}. {{ page[0].page_title}}
           </p>
         </div>
       </div>
