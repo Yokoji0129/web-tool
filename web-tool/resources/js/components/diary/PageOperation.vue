@@ -3,6 +3,8 @@ import { ref } from "vue";
 const props = defineProps({
   toggleMenu: Function,
   pageAdd: Function,
+  pageEdit: Function,
+  pageDelete: Function,
   showMenu: Boolean
 });
 //ページ操作テキストの表示フラグ(編集、削除、追加)
@@ -17,15 +19,17 @@ const showQuestion = ref(false)
     <!--編集ボタン-->
     <div
       class="btn"
+      @click="pageEdit"
       @mouseover="showEdit = true"
       @mouseleave="showEdit = false"
     >
       <img src="../../../../public/icon/edit-page.png" alt="" />
-      <span class="edit-text" v-if="showEdit">編集</span>
+      <span class="edit-text" v-if="showEdit">保存</span>
     </div>
     <!--削除ボタン-->
     <div
       class="btn"
+      @click="pageDelete"
       @mouseover="showDelete = true"
       @mouseleave="showDelete = false"
     >
@@ -64,12 +68,12 @@ const showQuestion = ref(false)
   <div class="menu" :class="{ visible: showMenu }" v-show="showMenu">
     <div class="page-operation-btn-sp">
       <!--編集ボタン-->
-      <div class="btn-sp">
+      <div class="btn-sp" @click="pageEdit">
         <img src="../../../../public/icon/edit-page.png" alt="" />
-        <p>ページ編集</p>
+        <p>ページ保存</p>
       </div>
       <!--削除ボタン-->
-      <div class="btn-sp">
+      <div class="btn-sp" @click="pageDelete">
         <img src="../../../../public/icon/delete-page.png" alt="" />
         <p>ページ削除</p>
       </div>
