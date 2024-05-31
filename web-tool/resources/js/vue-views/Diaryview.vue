@@ -105,6 +105,7 @@ const displayPage = () => {
     .get(`/returnpage/${diaryId}`)
     .then((response) => {
       pages.value = response.data;
+      console.log(response.data)
       currentPage();
     })
     .catch((error) => {
@@ -145,7 +146,7 @@ const pageEdit = () => {
   axios
     .post("/edit/page", {
       //ページID
-      id: currentPageIndex.value + 1,
+      id: pages.value[currentPageIndex.value][0].page_id,
       //タイトル文字色
       title_color: "",
       //ページタイトル
@@ -172,7 +173,6 @@ const pageEdit = () => {
       file_txt6: "",
     })
     .then((response) => {
-      alert(`${currentPageIndex.value + 1}ページ目(タイトル:${pageData.pageTitle})が保存されました。`)
       toggleMenu()
       displayPage()
     })
@@ -190,10 +190,9 @@ const pageDelete = () => {
   axios
     .post("/delete/page", {
       //ページID
-      id: currentPageIndex.value + 1,
+      id: pages.value[currentPageIndex.value][0].page_id,
     })
     .then((response) => {
-
       displayPage();
       toggleMenu();
     })
