@@ -1,10 +1,13 @@
 <script setup>
+import { ref } from "vue";
 const props = defineProps({
   currentPageIndex: Number,
   pages: Array,
   currentPage: Function,
 });
 const emit = defineEmits(["update:currentPageIndex"]);
+let inputPageNumber = ref(props.currentPageIndex);
+let showInput = ref(false);
 //前のページに移動するメソッド
 const prevPage = () => {
   if (props.currentPageIndex > 0) {
@@ -20,15 +23,58 @@ const nextPage = () => {
     props.currentPage();
   }
 };
+
+//入力されたページに移動するメソッド
+//pagesのlengthより長い数字を入れられたときに飛べないように今度直す
+const goToPage = () => {
+  if (props.pages.length) {
+    emit("update:currentPageIndex", inputPageNumber.value - 1);
+    props.currentPage();
+  }
+  showInput.value = false;
+};
+
+//ページ入力を表示させるメソッド
+const toggleInput = () => {
+  showInput.value = !showInput.value;
+  inputPageNumber.value = props.currentPageIndex + 1; //現在のページ番号を設定
+};
 </script>
 <template>
   <div class="page-transition">
     <button class="back-page" @click="prevPage">前のページ</button>
-    <p class="page-count">{{ currentPageIndex + 1 }} / {{ pages.length }}</p>
+    <p class="page-count" @click="toggleInput">
+      {{ currentPageIndex + 1 }} / {{ pages.length }}
+    </p>
     <button class="next-page" @click="nextPage">次のページ</button>
+    <div v-if="showInput" class="input-container">
+      <input
+        type="number"
+        v-model="inputPageNumber"
+        min="1"
+        :max="pages.length"
+      />
+      <button class="go-page" @click="goToPage">ページ移動</button>
+    </div>
   </div>
 </template>
 <style scoped>
+.input-container {
+  position: fixed;
+  bottom: 105px;
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  background-color: #5a646d;
+}
+
+input[type="number"] {
+  width: 50px;
+  padding: 5px;
+  margin: 0 10px;
+  border-radius: 5px;
+  border: none;
+}
 .page-transition {
   display: flex;
   position: fixed;
@@ -63,6 +109,9 @@ const nextPage = () => {
 @media screen and (max-width: 1024px) {
   .page-transition {
     bottom: 35px;
+  }
+  .input-container {
+    bottom: 90px;
   }
 }
 </style>

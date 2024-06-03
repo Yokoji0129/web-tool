@@ -45,7 +45,7 @@ const diaryInfo = () => {
  * ページタイトルで改行できないようにする
  * リロードしたらdiaryIDが消えてしまうからページにいる間は消えないようにする
  * ページ追加場所を指定できるようにする
- * 
+ *
  * **/
 
 const pages = ref([]); //日記ページのデータを格納する配列
@@ -199,6 +199,28 @@ const pageDelete = () => {
   }
 };
 
+//ここから画像処理
+//ファイル選択とアップロード
+const selectedFile = ref(null);
+
+const onFileSelected = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    selectedFile.value = file;
+    console.log(selectedFile.value)
+    axios
+      .post("/file", {
+        file: selectedFile.value,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+};
+
 onMounted(() => {
   diaryInfo();
   displayPage();
@@ -259,7 +281,10 @@ onMounted(() => {
     <!--右側デザイン-->
     <div class="right-contents">
       <div class="file-box">
-        <label> <input type="file" name="file" />写真を選択 </label>
+        <label>
+          <input type="file" name="file" @change="onFileSelected" />写真を選択
+        </label>
+        <button @click="testUp">表示</button>
       </div>
       <div class="image-box">
         <div class="image-container">
@@ -310,6 +335,7 @@ onMounted(() => {
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
   </div>
+  <!--../../../public/-->
 </template>
 
 <style scoped>
