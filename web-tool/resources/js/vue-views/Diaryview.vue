@@ -331,11 +331,10 @@ onMounted(() => {
     :pages="pages"
     :currentPage="currentPage"
   />
-  <!-- ローディングアニメーション -->
+  <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
   </div>
-  <!--../../../public/-->
 </template>
 
 <style scoped>
