@@ -39,8 +39,6 @@ const diaryInfo = () => {
 
 /**
  * やること
- * ページが書かれてあるところはページ保存ボタンにして、書かれてない空のページにはページ追加ボタンをつける
- * ページが書かれてあるところはページ削除ボタン付ける
  * ページ移動したときに一番上を表示させる(タブレットやスマホサイズの時)
  * ページタイトルで改行できないようにする
  * リロードしたらdiaryIDが消えてしまうからページにいる間は消えないようにする
@@ -492,6 +490,7 @@ input[type="file"] {
   }
 
   .page-title {
+    height: 6vh;
     margin-top: 0;
   }
 
@@ -502,6 +501,14 @@ input[type="file"] {
 
   .image-box {
     height: 70vh;
+  }
+}
+@media screen and (max-width: 1300px) {
+  .page-title {
+    margin-top: 0;
+  }
+  .page-text {
+    height: 17vh;
   }
 }
 
