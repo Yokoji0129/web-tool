@@ -207,10 +207,20 @@ const onFileSelected = (event) => {
   const file = event.target.files[0];
   if (file) {
     selectedFile.value = file;
-    console.log(selectedFile.value)
+  }
+};
+
+//画像アップロードめ
+const uploadFile = () => {
+  if (selectedFile.value) {
+    const formData = new FormData();
+    formData.append("file", selectedFile.value);
+
     axios
-      .post("/file", {
-        file: selectedFile.value,
+      .post("/file", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((response) => {
         console.log(response.data);
@@ -218,6 +228,8 @@ const onFileSelected = (event) => {
       .catch((error) => {
         console.log(error);
       });
+  } else {
+    alert("ファイルを選択してください。");
   }
 };
 
@@ -228,20 +240,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu
-    :diary="diary"
-    :selectBookNumber="selectBookNumber"
-    :pages="pages"
-    :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event"
-  />
-  <PageOperation
-    :toggleMenu="toggleMenu"
-    :pageAdd="pageAdd"
-    :pageEdit="pageEdit"
-    :pageDelete="pageDelete"
-    :showMenu="showMenu"
-  />
+  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event" />
+  <PageOperation :toggleMenu="toggleMenu" :pageAdd="pageAdd" :pageEdit="pageEdit" :pageDelete="pageDelete"
+    :showMenu="showMenu" />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -261,39 +263,25 @@ onMounted(() => {
         </select>
       </div>
       <div class="text-area">
-        <textarea
-          class="page-title"
-          placeholder="ページタイトル"
-          v-model="pageData.pageTitle"
-        ></textarea>
-        <textarea
-          class="page-text"
-          placeholder="文章1"
-          v-model="pageData.pageText1"
-        ></textarea>
-        <textarea
-          class="page-text"
-          placeholder="文章2"
-          v-model="pageData.pageText2"
-        ></textarea>
+        <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"></textarea>
+        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
+        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
       </div>
     </div>
     <!--右側デザイン-->
     <div class="right-contents">
-      <div class="file-box">
-        <label>
-          <input type="file" name="file" @change="onFileSelected" />写真を選択
-        </label>
-        <button @click="testUp">表示</button>
-      </div>
+      <form @submit.prevent="uploadFile" enctype="multipart/form-data">
+        <div class="file-box">
+          <label>
+            <input type="file" name="file" @change="onFileSelected" />写真を選択
+          </label>
+          <button type="submit">表示</button>
+        </div>
+      </form>
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img
-            @click="togglePopup"
-            class="image"
-            src="../../../public/testImage/testImage.jpeg"
-          />
+          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
         </div>
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
@@ -301,10 +289,7 @@ onMounted(() => {
         </div>
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img
-            class="image"
-            src="../../../public/testImage/testImagetate.jpg"
-          />
+          <img class="image" src="../../../public/testImage/testImagetate.jpg" />
         </div>
       </div>
     </div>
@@ -325,12 +310,8 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove
-    @update:currentPageIndex="currentPageIndex = $event"
-    :currentPageIndex="currentPageIndex"
-    :pages="pages"
-    :currentPage="currentPage"
-  />
+  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages"
+    :currentPage="currentPage" />
   <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
@@ -588,6 +569,5 @@ input[type="file"] {
   }
 }
 
-@-moz-document url-prefix() {
-}
+@-moz-document url-prefix() {}
 </style>
