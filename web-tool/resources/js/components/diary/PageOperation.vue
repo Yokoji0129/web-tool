@@ -5,13 +5,41 @@ const props = defineProps({
   pageAdd: Function,
   pageEdit: Function,
   pageDelete: Function,
-  showMenu: Boolean
+  showMenu: Boolean,
+  pages: Array,
+  currentPageIndex: Number,
+  loadingPage: Object,
+  displayPage: Function
 });
+const emit = defineEmits(["update:loadingPage"]);
 //ページ操作テキストの表示フラグ(編集、削除、追加)
 const showEdit = ref(false);
 const showDelete = ref(false);
 const showAdd = ref(false);
-const showQuestion = ref(false)
+const showQuestion = ref(false);
+
+//ページ削除メソッド
+const pageDelete = () => {
+  if (window.confirm("このページを本当に削除しますか？")) {
+    emit("update:loadingPage", true);
+    axios
+      .post("/delete/page", {
+        //ページID
+        id: props.pages[props.currentPageIndex][0].page_id,
+      })
+      .then((response) => {
+        alert(`${props.currentPageIndex + 1}ページ目が削除されました`);
+        props.displayPage();
+        toggleMenu();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        emit("update:loadingPage", false);
+      });
+  }
+};
 </script>
 
 <template>
@@ -132,7 +160,7 @@ menu {
 .btn:hover .add-text {
   display: block;
 }
-.btn:hover .question-text{
+.btn:hover .question-text {
   display: block;
 }
 

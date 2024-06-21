@@ -174,29 +174,6 @@ const pageEdit = () => {
     });
 };
 
-// ページ削除メソッド
-const pageDelete = () => {
-  if (window.confirm("このページを本当に削除しますか？")) {
-    loadingPage.value = true;
-    axios
-      .post("/delete/page", {
-        //ページID
-        id: pages.value[currentPageIndex.value][0].page_id,
-      })
-      .then((response) => {
-        alert(`${currentPageIndex.value + 1}ページ目が削除されました`);
-        displayPage();
-        toggleMenu();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        loadingPage.value = false;
-      });
-  }
-};
-
 //ここから画像処理
 //ファイル選択とアップロード
 const selectedFile = ref(null);
@@ -238,10 +215,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event" />
-  <PageOperation :toggleMenu="toggleMenu" :pageAdd="pageAdd" :pageEdit="pageEdit" :pageDelete="pageDelete"
-    :showMenu="showMenu" />
+  <BurgerMenu
+    :diary="diary"
+    :selectBookNumber="selectBookNumber"
+    :pages="pages"
+    :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event"
+  />
+  <PageOperation
+    :toggleMenu="toggleMenu"
+    :pageAdd="pageAdd"
+    :pageEdit="pageEdit"
+    :pages="pages"
+    :currentPageIndex="currentPageIndex"
+    :showMenu="showMenu"
+    @update:loadingPage="loadingPage = $event"
+    :displayPage="displayPage"
+  />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -261,9 +251,21 @@ onMounted(() => {
         </select>
       </div>
       <div class="text-area">
-        <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"></textarea>
-        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
-        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
+        <textarea
+          class="page-title"
+          placeholder="ページタイトル"
+          v-model="pageData.pageTitle"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章1"
+          v-model="pageData.pageText1"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章2"
+          v-model="pageData.pageText2"
+        ></textarea>
       </div>
     </div>
     <!--右側デザイン-->
@@ -276,18 +278,15 @@ onMounted(() => {
           <button type="submit">表示</button>
         </div>
       </form>
+      <!--写真貼る場所-->
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
-        </div>
-        <div class="image-container">
-          <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img class="image" src="../../../public/testImage/test2.jpg" />
-        </div>
-        <div class="image-container">
-          <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img class="image" src="../../../public/testImage/testImagetate.jpg" />
+          <img
+            @click="togglePopup"
+            class="image"
+            src="../../../public/testImage/testImage.jpeg"
+          />
         </div>
       </div>
     </div>
@@ -308,8 +307,12 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages"
-    :currentPage="currentPage" />
+  <PageMove
+    @update:currentPageIndex="currentPageIndex = $event"
+    :currentPageIndex="currentPageIndex"
+    :pages="pages"
+    :currentPage="currentPage"
+  />
   <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
@@ -576,5 +579,6 @@ input[type="file"] {
   }
 }
 
-@-moz-document url-prefix() {}
+@-moz-document url-prefix() {
+}
 </style>
