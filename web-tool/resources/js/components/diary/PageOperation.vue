@@ -9,7 +9,7 @@ const props = defineProps({
   pages: Array,
   currentPageIndex: Number,
   loadingPage: Object,
-  displayPage: Function
+  displayPage: Function,
 });
 const emit = defineEmits(["update:loadingPage"]);
 //ページ操作テキストの表示フラグ(編集、削除、追加)
@@ -17,6 +17,15 @@ const showEdit = ref(false);
 const showDelete = ref(false);
 const showAdd = ref(false);
 const showQuestion = ref(false);
+
+//スマホ用ページ操作表示フラグ
+const showMenu = ref(false);
+//ページ操作メニュー表示()スマホ専用
+const toggleMenu = () => {
+  if (window.innerWidth <= 1024) {
+    showMenu.value = !showMenu.value;
+  }
+};
 
 //ページ削除メソッド
 const pageDelete = () => {

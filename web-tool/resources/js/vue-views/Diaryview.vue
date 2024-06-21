@@ -4,6 +4,12 @@ import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 import PageOperation from "../components/diary/PageOperation.vue";
 import PageMove from "../components/diary/PageMove.vue";
+const loadingPage = ref(false);
+const route = useRoute();
+const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
+const selectBookNumber = route.params.selectBookNumber; //日記を開くときに渡される日記index
+const showPopup = ref(false); //ポップアップの表示制御フラグ
+
 //スマホ用ページ操作表示フラグ
 const showMenu = ref(false);
 //ページ操作メニュー表示()スマホ専用
@@ -12,12 +18,6 @@ const toggleMenu = () => {
     showMenu.value = !showMenu.value;
   }
 };
-const loadingPage = ref(false);
-
-const route = useRoute();
-const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
-const selectBookNumber = route.params.selectBookNumber; //日記を開くときに渡される日記index
-const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
 const togglePopup = () => {
@@ -178,6 +178,7 @@ const pageEdit = () => {
 //ファイル選択とアップロード
 const selectedFile = ref(null);
 
+//ファイル選択メソッド
 const onFileSelected = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -185,7 +186,7 @@ const onFileSelected = (event) => {
   }
 };
 
-//画像アップロードめ
+//画像アップロード
 const uploadFile = () => {
   if (selectedFile.value) {
     const formData = new FormData();
@@ -198,10 +199,10 @@ const uploadFile = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log("アップロード成功", response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("アップロードエラー", error);
       });
   } else {
     alert("ファイルを選択してください。");
@@ -223,12 +224,12 @@ onMounted(() => {
     @update:currentPageIndex="currentPageIndex = $event"
   />
   <PageOperation
-    :toggleMenu="toggleMenu"
     :pageAdd="pageAdd"
     :pageEdit="pageEdit"
+    :showMenu="showMenu"
+    :toggleMenu="toggleMenu"
     :pages="pages"
     :currentPageIndex="currentPageIndex"
-    :showMenu="showMenu"
     @update:loadingPage="loadingPage = $event"
     :displayPage="displayPage"
   />
@@ -275,7 +276,7 @@ onMounted(() => {
           <label>
             <input type="file" name="file" @change="onFileSelected" />写真を選択
           </label>
-          <button type="submit">表示</button>
+          <button class="add-img" type="submit">写真を追加</button>
         </div>
       </form>
       <!--写真貼る場所-->
@@ -384,6 +385,7 @@ select {
 .right-contents {
   width: 50%;
   background-color: rgba(74, 73, 73, 0.5);
+  position: relative;
 }
 
 .file-box {
@@ -406,6 +408,21 @@ label:hover {
 
 input[type="file"] {
   display: none;
+}
+
+.add-img {
+  font-size: 14px;
+  padding: 12.7px 20px 12.7px 20px;
+  border: 2px solid #ccc;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: 0.3s;
+  position: absolute;
+  top: 0px;
+}
+.add-img:hover {
+  color: #007bff;
+  border-color: #007bff;
 }
 
 .image-box {
@@ -493,7 +510,7 @@ input[type="file"] {
   }
 
   .page-title {
-    height: 6vh;
+    height: 4vh;
     margin-top: 0;
   }
 
