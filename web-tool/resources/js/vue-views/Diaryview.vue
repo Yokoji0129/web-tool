@@ -6,8 +6,12 @@ import PageOperation from "../components/diary/PageOperation.vue";
 import PageMove from "../components/diary/PageMove.vue";
 const loadingPage = ref(false);
 const route = useRoute();
-const diaryId = route.params.diaryId; //日記を開くときに渡される日記ID
-const selectBookNumber = route.params.selectBookNumber; //日記を開くときに渡される日記index
+//日記を開くときに渡される日記ID
+const diaryId = ref(route.params.diaryId || localStorage.getItem("diaryId"));
+//日記を開くときに渡される日記index
+const selectBookNumber = ref(
+  route.params.selectBookNumber || localStorage.getItem("selectBookNumber")
+);
 const showPopup = ref(false); //ポップアップの表示制御フラグ
 
 //スマホ用ページ操作表示フラグ
@@ -62,7 +66,7 @@ const pageAdd = () => {
   axios
     .post("/pageadd", {
       //日記ID
-      id: diaryId,
+      id: diaryId.value,
       //タイトル文字色
       title_color: "",
       //ページタイトル
@@ -104,7 +108,7 @@ const pageAdd = () => {
 //ページ表示メソッド
 const displayPage = () => {
   axios
-    .get(`/returnpage/${diaryId}`)
+    .get(`/returnpage/${diaryId.value}`)
     .then((response) => {
       pages.value = response.data;
       if (pages.value.length === 0) {

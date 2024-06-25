@@ -12,6 +12,8 @@ const router = useRouter();
 const loading = ref(false);
 //日記開く
 const diaryOpen = (diaryId, selectBookNumber) => {
+  localStorage.setItem("diaryId", diaryId);
+  localStorage.setItem("selectBookNumber", selectBookNumber);
   //diaryのページにparamsで日記IDと日記のlength番号を渡す
   router.push({
     name: "diary",
