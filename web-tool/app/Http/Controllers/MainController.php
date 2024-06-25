@@ -967,6 +967,10 @@ class MainController extends Controller
 
     public function add_file(Request $request)
     {
-        return $request;
+        $file_name = request()->file->getClientOriginalName();
+        request()->file->storeAs('public/',$file_name);
+        $return_data = 'true';
+        return $return_data;
+        //dd(request()->all());
     }
 }
