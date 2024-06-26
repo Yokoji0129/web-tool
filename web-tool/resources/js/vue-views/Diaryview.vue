@@ -47,7 +47,7 @@ const diaryInfo = () => {
  * ページタイトルで改行できないようにする
  * リロードしたらdiaryIDが消えてしまうからページにいる間は消えないようにする
  * ページ追加場所を指定できるようにする
- *
+ *保存しないでページ移動押した際に保存するように警告を出す
  * **/
 
 const pages = ref([]); //日記ページのデータを格納する配列
@@ -220,57 +220,32 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu
-    :diary="diary"
-    :selectBookNumber="selectBookNumber"
-    :pages="pages"
-    :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event"
-  />
-  <PageOperation
-    :pageAdd="pageAdd"
-    :pageEdit="pageEdit"
-    :showMenu="showMenu"
-    :toggleMenu="toggleMenu"
-    :pages="pages"
-    :currentPageIndex="currentPageIndex"
-    @update:loadingPage="loadingPage = $event"
-    :displayPage="displayPage"
-  />
+  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event" />
+  <PageOperation :pageAdd="pageAdd" :pageEdit="pageEdit" :showMenu="showMenu" :toggleMenu="toggleMenu" :pages="pages"
+    :currentPageIndex="currentPageIndex" @update:loadingPage="loadingPage = $event" :displayPage="displayPage" />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
     <div class="left-contents">
       <div class="fuction-box">
         <select class="color-select">
-          <option value="">マーカー</option>
+          <option value="">マーカー色なし</option>
           <option value="">マーカー 赤</option>
           <option value="">マーカー 青</option>
           <option value="">マーカー 緑</option>
         </select>
         <select class="color-select">
-          <option value="">文字色</option>
+          <option value="">文字色なし</option>
           <option value="">文字色 赤</option>
           <option value="">文字色 青</option>
           <option value="">文字色 緑</option>
         </select>
       </div>
       <div class="text-area">
-        <textarea
-          class="page-title"
-          placeholder="ページタイトル"
-          v-model="pageData.pageTitle"
-        ></textarea>
-        <textarea
-          class="page-text"
-          placeholder="文章1"
-          v-model="pageData.pageText1"
-        ></textarea>
-        <textarea
-          class="page-text"
-          placeholder="文章2"
-          v-model="pageData.pageText2"
-        ></textarea>
+        <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"></textarea>
+        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
+        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
       </div>
     </div>
     <!--右側デザイン-->
@@ -287,11 +262,7 @@ onMounted(() => {
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img
-            @click="togglePopup"
-            class="image"
-            src="../../../public/testImage/testImage.jpeg"
-          />
+          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
         </div>
       </div>
     </div>
@@ -312,12 +283,8 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove
-    @update:currentPageIndex="currentPageIndex = $event"
-    :currentPageIndex="currentPageIndex"
-    :pages="pages"
-    :currentPage="currentPage"
-  />
+  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages"
+    :currentPage="currentPage" />
   <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
@@ -346,6 +313,7 @@ onMounted(() => {
   font-size: 24px;
   width: 95%;
   padding-top: 20px;
+  padding-bottom: 10px;
   resize: none;
   border: 1px solid #ced4da;
   border-radius: 5px;
@@ -424,6 +392,7 @@ input[type="file"] {
   position: absolute;
   top: 0px;
 }
+
 .add-img:hover {
   color: #007bff;
   border-color: #007bff;
@@ -527,10 +496,12 @@ input[type="file"] {
     height: 70vh;
   }
 }
+
 @media screen and (max-width: 1300px) {
   .page-title {
     margin-top: 0;
   }
+
   .page-text {
     height: 17vh;
   }
@@ -568,12 +539,21 @@ input[type="file"] {
   .popup-img img {
     margin: 10px 0 0 0;
   }
+
+  .file-box {
+    margin-top: 25px;
+  }
+
+  .add-img {
+    padding: 12.5px 20px 12.5px 20px;
+    margin-top: 13px;
+  }
 }
 
 /*タブレット(768px以下)*/
 @media screen and (max-width: 768px) {
   .flex-box {
-    margin: -21px 0;
+    margin: -20px 0;
     flex-direction: column;
   }
 }
@@ -601,5 +581,39 @@ input[type="file"] {
 }
 
 @-moz-document url-prefix() {
+  .flex-box {
+    padding: 72px 0 0 0;
+  }
+
+  .file-box {
+    margin: 15.5px 0 15px 0;
+  }
+
+  label {
+    padding: 16px 40% 15px 10px;
+    font-size: 14px;
+    border: 2px solid #ccc;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  @media screen and (max-width: 1024px) {
+
+    .file-box {
+      margin-top: 30px;
+    }
+
+    .add-img {
+      padding: 13px 20px 13px 20px;
+      margin-top: 14px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .flex-box {
+      padding: 81.5px 0 0 0;
+    }
+  }
 }
 </style>

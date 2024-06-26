@@ -41,11 +41,7 @@ const jumpToPage = (pageIndex) => {
     <!--メニュー欄-->
     <nav :class="{ open: menuOpen }">
       <!--メニューアイコン-->
-      <div
-        class="hamburger-icon-menu"
-        :class="{ 'hamburger-icon-menu-close': menuOpen }"
-        @click="toggleMenu()"
-      ></div>
+      <div class="hamburger-icon-menu" :class="{ 'hamburger-icon-menu-close': menuOpen }" @click="toggleMenu()"></div>
       <p class="back-page" @click="backPage">←日記一覧に戻る</p>
       <!--[]?を使ってundefinedのエラー回避-->
       <h3 class="diary-title">
@@ -53,13 +49,9 @@ const jumpToPage = (pageIndex) => {
       </h3>
       <h3 class="table-contents">目次</h3>
       <div style="overflow-y: scroll;">
-        <div
-          class="table-contents-box"
-          v-for="(page, index) in pages"
-          :key="index"
-        >
+        <div class="table-contents-box" v-for="(page, index) in pages" :key="index">
           <p class="nav-link" @click="jumpToPage(index)">
-            {{ index + 1 }}. {{ page[0].page_title}}
+            {{ index + 1 }}. {{ page[0].page_title }}
           </p>
         </div>
       </div>
@@ -91,6 +83,7 @@ const jumpToPage = (pageIndex) => {
   width: 40px;
   height: 40px;
   position: fixed;
+  top: 5px;
   left: 20px;
   background-image: url(../../../../public/icon/hamburger.png);
   margin: 17px 10px 16px 0;
@@ -98,6 +91,7 @@ const jumpToPage = (pageIndex) => {
   transition: 0.3s;
   z-index: 2;
 }
+
 .hamburger-icon-menu-close {
   background-image: url(../../../../public/icon/close.png);
 }
@@ -114,7 +108,7 @@ const jumpToPage = (pageIndex) => {
 
 nav {
   position: fixed;
-  top: 2px;
+  top: 0px;
   left: -400px;
   height: 100vh;
   width: 400px;
@@ -184,6 +178,7 @@ nav p {
     width: 35px;
     height: 35px;
     left: 10px;
+    top: -8px;
     margin: 20px 10px 16px 0;
   }
 
@@ -216,6 +211,44 @@ nav p {
   @media screen and (max-width: 768px) {
     nav {
       top: 62px;
+    }
+  }
+}
+
+@-moz-document url-prefix() {
+  .back-page {
+    top: 16px;
+  }
+
+  .hamburger-icon-menu {
+    top: 0px
+  }
+
+  nav {
+    top: 0px;
+  }
+
+  .diary-title {
+    margin: 72px 0 5px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .back-page {
+      top: 25px;
+      padding: 5px;
+    }
+
+    .hamburger-icon-menu {
+      width: 35px;
+      height: 35px;
+      left: 10px;
+      top: -8px;
+      margin: 20px 10px 16px 0;
+    }
+
+    nav {
+      top: -8px;
+      width: 350px;
     }
   }
 }

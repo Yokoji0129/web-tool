@@ -69,6 +69,7 @@ option {
     width: 100%;
     padding: 8px;
     margin-bottom: 20px;
+    background-color: #ffffff;
     border: 2px solid #ccc;
     transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
