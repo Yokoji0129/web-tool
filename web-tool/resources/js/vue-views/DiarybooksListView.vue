@@ -179,10 +179,6 @@ onMounted(() => {
                 :selectedTextColor="selectedTextColor"
                 @update:selectedTextColor="selectedTextColor = $event"
               />
-              <!--フォント選択プルダウン(まだできてない)-->
-              <select v-model="bookData.bookFont" class="color-select">
-                <option value="test">フォント</option>
-              </select>
             </div>
             <!--本を作成するボタン-->
             <div class="create-btn">
@@ -295,6 +291,12 @@ main {
 
 /*タブレット(1024px以下)*/
 @media only screen and (max-width: 1024px) {
+  .diary-search {
+    z-index: 0;
+  }
+  .search-box img {
+    z-index: 0;
+  }
   .popup-content {
     width: 60%;
   }
@@ -302,10 +304,6 @@ main {
 
 /*タブレット(768px以下)*/
 @media only screen and (max-width: 768px) {
-  .search-box img {
-    top: 18px;
-    right: 255px;
-  }
 
   .diary-search {
     top: 11px;
@@ -332,13 +330,6 @@ main {
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
-  .search-box img {
-    z-index: 0;
-  }
-
-  .diary-search {
-    z-index: 0;
-  }
 
   main {
     margin: 70px 15px 120px 20px;

@@ -204,6 +204,7 @@ const uploadFile = () => {
       })
       .then((response) => {
         console.log("アップロード成功", response.data);
+        selectedFile.value = null;
       })
       .catch((error) => {
         console.log("アップロードエラー", error);
@@ -220,10 +221,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event" />
-  <PageOperation :pageAdd="pageAdd" :pageEdit="pageEdit" :showMenu="showMenu" :toggleMenu="toggleMenu" :pages="pages"
-    :currentPageIndex="currentPageIndex" @update:loadingPage="loadingPage = $event" :displayPage="displayPage" />
+  <BurgerMenu
+    :diary="diary"
+    :selectBookNumber="selectBookNumber"
+    :pages="pages"
+    :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event"
+  />
+  <PageOperation
+    :pageAdd="pageAdd"
+    :pageEdit="pageEdit"
+    :showMenu="showMenu"
+    :toggleMenu="toggleMenu"
+    :pages="pages"
+    :currentPageIndex="currentPageIndex"
+    @update:loadingPage="loadingPage = $event"
+    :displayPage="displayPage"
+  />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -243,9 +257,21 @@ onMounted(() => {
         </select>
       </div>
       <div class="text-area">
-        <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"></textarea>
-        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
-        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
+        <textarea
+          class="page-title"
+          placeholder="ページタイトル"
+          v-model="pageData.pageTitle"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章1"
+          v-model="pageData.pageText1"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章2"
+          v-model="pageData.pageText2"
+        ></textarea>
       </div>
     </div>
     <!--右側デザイン-->
@@ -253,7 +279,8 @@ onMounted(() => {
       <form @submit.prevent="uploadFile" enctype="multipart/form-data">
         <div class="file-box">
           <label>
-            <input type="file" name="file" @change="onFileSelected" />写真を選択
+            <input type="file" name="file" @change="onFileSelected" />
+            {{ selectedFile ? "画像名 : " + selectedFile.name : "写真未選択" }}
           </label>
           <button class="add-img" type="submit">写真を追加</button>
         </div>
@@ -262,7 +289,11 @@ onMounted(() => {
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
+          <img
+            @click="togglePopup"
+            class="image"
+            src="../../../public/testImage/testImage.jpeg"
+          />
         </div>
       </div>
     </div>
@@ -283,8 +314,12 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages"
-    :currentPage="currentPage" />
+  <PageMove
+    @update:currentPageIndex="currentPageIndex = $event"
+    :currentPageIndex="currentPageIndex"
+    :pages="pages"
+    :currentPage="currentPage"
+  />
   <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
@@ -578,6 +613,9 @@ input[type="file"] {
   .delete-img {
     top: 20px;
   }
+  label {
+    padding: 12px 20px 13px 20px;
+  }
 }
 
 @-moz-document url-prefix() {
@@ -599,7 +637,6 @@ input[type="file"] {
   }
 
   @media screen and (max-width: 1024px) {
-
     .file-box {
       margin-top: 30px;
     }
