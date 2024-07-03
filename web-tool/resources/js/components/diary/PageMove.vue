@@ -13,6 +13,8 @@ const prevPage = () => {
   if (props.currentPageIndex > 0) {
     emit("update:currentPageIndex", props.currentPageIndex - 1);
     props.currentPage();
+    //ページ移動したときに一番上に戻る(スマホ、タブレットの場合)
+    window.scrollTo(0, 0);
   }
 };
 
@@ -21,15 +23,18 @@ const nextPage = () => {
   if (props.currentPageIndex < props.pages.length - 1) {
     emit("update:currentPageIndex", props.currentPageIndex + 1);
     props.currentPage();
+    //ページ移動したときに一番上に戻る(スマホ、タブレットの場合)
+    window.scrollTo(0, 0);
   }
 };
 
 //入力されたページに移動するメソッド
-//pagesのlengthより長い数字を入れられたときに飛べないように今度直す
 const goToPage = () => {
   if (props.pages.length) {
     emit("update:currentPageIndex", inputPageNumber.value - 1);
     props.currentPage();
+    //ページ移動したときに一番上に戻る(スマホ、タブレットの場合)
+    window.scrollTo(0, 0);
   }
   showInput.value = false;
 };

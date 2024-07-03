@@ -28,6 +28,12 @@ const togglePopup = () => {
   showPopup.value = !showPopup.value;
 };
 
+//タイトルを改行させないようにするメソッド
+const preventNewline = (event) => {
+  //改行を空文字にして消すやつ
+  event.target.value = event.target.value.replace(/\n/, '');
+};
+
 //日記の全情報入れる
 const diary = ref([]);
 const diaryInfo = () => {
@@ -44,8 +50,6 @@ const diaryInfo = () => {
 /**
  * やること
  * ページ移動したときに一番上を表示させる(タブレットやスマホサイズの時)
- * ページタイトルで改行できないようにする
- * リロードしたらdiaryIDが消えてしまうからページにいる間は消えないようにする
  * ページ追加場所を指定できるようにする
  *保存しないでページ移動押した際に保存するように警告を出す
  * **/
@@ -192,6 +196,7 @@ const onFileSelected = (event) => {
 
 //画像アップロード
 const uploadFile = () => {
+  loadingPage.value = true;
   if (selectedFile.value) {
     const formData = new FormData();
     formData.append("file", selectedFile.value);
@@ -208,6 +213,9 @@ const uploadFile = () => {
       })
       .catch((error) => {
         console.log("アップロードエラー", error);
+      })
+      .finally(() => {
+        loadingPage.value = false;
       });
   } else {
     alert("ファイルを選択してください。");
@@ -221,23 +229,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu
-    :diary="diary"
-    :selectBookNumber="selectBookNumber"
-    :pages="pages"
-    :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event"
-  />
-  <PageOperation
-    :pageAdd="pageAdd"
-    :pageEdit="pageEdit"
-    :showMenu="showMenu"
-    :toggleMenu="toggleMenu"
-    :pages="pages"
-    :currentPageIndex="currentPageIndex"
-    @update:loadingPage="loadingPage = $event"
-    :displayPage="displayPage"
-  />
+  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event" />
+  <PageOperation :pageAdd="pageAdd" :pageEdit="pageEdit" :showMenu="showMenu" :toggleMenu="toggleMenu" :pages="pages"
+    :currentPageIndex="currentPageIndex" @update:loadingPage="loadingPage = $event" :displayPage="displayPage" />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -257,21 +252,12 @@ onMounted(() => {
         </select>
       </div>
       <div class="text-area">
-        <textarea
-          class="page-title"
-          placeholder="ページタイトル"
-          v-model="pageData.pageTitle"
-        ></textarea>
-        <textarea
-          class="page-text"
-          placeholder="文章1"
-          v-model="pageData.pageText1"
-        ></textarea>
-        <textarea
-          class="page-text"
-          placeholder="文章2"
-          v-model="pageData.pageText2"
-        ></textarea>
+        <div class="page-title-box">
+          <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"
+            @input="preventNewline"></textarea>
+        </div>
+        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
+        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
       </div>
     </div>
     <!--右側デザイン-->
@@ -289,11 +275,7 @@ onMounted(() => {
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img
-            @click="togglePopup"
-            class="image"
-            src="../../../public/testImage/testImage.jpeg"
-          />
+          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
         </div>
       </div>
     </div>
@@ -314,12 +296,8 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove
-    @update:currentPageIndex="currentPageIndex = $event"
-    :currentPageIndex="currentPageIndex"
-    :pages="pages"
-    :currentPage="currentPage"
-  />
+  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages"
+    :currentPage="currentPage" />
   <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>
@@ -613,6 +591,7 @@ input[type="file"] {
   .delete-img {
     top: 20px;
   }
+
   label {
     padding: 12px 20px 13px 20px;
   }
