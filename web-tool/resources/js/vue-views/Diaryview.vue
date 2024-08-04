@@ -196,7 +196,6 @@ const onFileSelected = (event) => {
 
 //画像アップロード
 const uploadFile = () => {
-  loadingPage.value = true;
   if (selectedFile.value) {
     const formData = new FormData();
     formData.append("file", selectedFile.value);
@@ -210,13 +209,11 @@ const uploadFile = () => {
       .then((response) => {
         console.log("アップロード成功", response.data);
         selectedFile.value = null;
+        pageEdit()
       })
       .catch((error) => {
         console.log("アップロードエラー", error);
       })
-      .finally(() => {
-        loadingPage.value = false;
-      });
   } else {
     alert("ファイルを選択してください。");
   }
