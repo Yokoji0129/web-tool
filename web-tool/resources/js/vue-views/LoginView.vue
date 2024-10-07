@@ -44,20 +44,20 @@ const validateForm = async () => {
 const router = useRouter();
 
 const login = async () => {
-  const isValid = await validateForm();
-  if (!isValid) return;
-  axios
-    .post("/login", {
+  try {
+    const isValid = await validateForm();
+    if (!isValid) return;
+
+    const response = await axios.post("/login", {
       id: data.id,
       password: data.password,
-    })
-    .then((response) => {
-      console.log(response);
-      router.push("/diaryBooksList");
-    })
-    .catch((error) => {
-      console.log(error);
     });
+    console.log(response);
+    router.push("/diaryBooksList");
+  } catch (error) {
+    console.error(error);
+    error.value = "ログインに失敗しました。"; // エラーメッセージを設定
+  }
 };
 </script>
 
@@ -66,7 +66,12 @@ const login = async () => {
     <h2>ログイン</h2>
     <form @submit.prevent="login">
       <input v-model="data.id" type="text" name="id" placeholder="ユーザーID" />
-      <input v-model="data.password" type="password" name="password" placeholder="パスワード" />
+      <input
+        v-model="data.password"
+        type="password"
+        name="password"
+        placeholder="パスワード"
+      />
       <p class="error-text">{{ error }}</p>
       <button type="submit" class="login-button">ログイン</button>
       <RouterLink to="/newAccount">

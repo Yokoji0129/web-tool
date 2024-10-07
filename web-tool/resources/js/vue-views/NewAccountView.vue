@@ -80,33 +80,32 @@ const loginBack = () => {
 
 //フォーム送信メソッド
 const submitForm = async () => {
-  //awaitでvalidateの処理が終わるまで待つ
-  const isValid = await validateForm();
-  //falseだったら非同期処理がされないで処理が止まる
-  if (!isValid) return;
+  try {
+    // awaitでvalidateの処理が終わるまで待つ
+    const isValid = await validateForm();
+    // falseだったら非同期処理がされないで処理が止まる
+    if (!isValid) return;
 
-  axios
-    .post("/post", {
+    const response = await axios.post("/post", {
       id: data.id,
       password: data.password,
       confirmPassword: data.confirmPassword,
       accountName: data.accountName,
-    })
-    .then((response) => {
-      console.log(response);
-      //フォーム送信成功時ログインページ遷移する
-      router.push("/");
-    })
-    .catch((error) => {
-      console.log(error);
     });
+    console.log(response);
+    // フォーム送信成功時ログインページ遷移する
+    router.push("/");
+  } catch (error) {
+    console.error(error);
+    // エラーメッセージを設定する場合などの処理をここに追加できます
+  }
 };
+
 </script>
 
 
 <template>
   <div class="create-account-box">
-    <p class="login-back" @click="loginBack">ログイン画面に戻る</p>
     <h2>アカウント新規作成</h2>
     <form @submit.prevent="submitForm">
       <input type="text" v-model="data.id" placeholder="ユーザーID" />
@@ -145,6 +144,13 @@ const submitForm = async () => {
       <!--エラーの際テキスト表示-->
       <p class="error-text">{{ error }}</p>
       <button class="account-name-link" type="submit">作成</button>
+      <button
+        class="account-name-link"
+        style="margin-top: 10px"
+        @click="loginBack"
+      >
+        ログイン画面に戻る
+      </button>
     </form>
   </div>
   <!-- ローディングアニメーション -->
@@ -171,15 +177,6 @@ const submitForm = async () => {
   text-align: center;
   margin-bottom: 20px;
   color: #333;
-}
-
-.login-back {
-  cursor: pointer;
-  margin: 0;
-  color: #333;
-}
-.login-back:hover {
-  color: #007bff;
 }
 
 .create-account-box input[type="text"],
@@ -226,29 +223,29 @@ const submitForm = async () => {
 
 .no-id {
   position: absolute;
-  top: 125px;
+  top: 100px;
   right: 20px;
   margin: 0;
 }
 
 .no-password {
   position: absolute;
-  top: 180px;
+  top: 155px;
   right: 20px;
   margin: 0;
 }
 
 .bad-id {
   position: absolute;
-  top: 125px;
-  right: 15px;
+  top: 100px;
+  right: 10px;
   margin: 0;
 }
 
 .bad-password {
   position: absolute;
-  top: 180px;
-  right: 15px;
+  top: 155px;
+  right: 10px;
   margin: 0;
 }
 
