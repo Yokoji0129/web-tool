@@ -47,34 +47,32 @@ const accountName = ref("");
 const loadingLogin = ref(false);
 
 //アカウント名取得
-const account = () => {
-  axios
-    .get("/searchname")
-    .then((response) => {
-      accountName.value = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const account = async () => {
+  try {
+    const response = await axios.get("/searchname");
+    accountName.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
+
 
 const router = useRouter();
 
 //ログアウトメソッド
-const logout = () => {
+const logout = async () => {
   loadingLogin.value = true;
-  axios
-    .post("/logout", {})
-    .then((response) => {
-      router.push("/");
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loadingBook.value = false;
-    });
+
+  try {
+    await axios.post("/logout", {});
+    router.push("/");
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loadingLogin.value = false;
+  }
 };
+
 
 onMounted(() => {
   account();

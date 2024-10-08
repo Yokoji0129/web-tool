@@ -21,63 +21,60 @@ const diaryOpen = (diaryId, selectBookNumber) => {
   });
 };
 //お気に入り追加メソッド
-const favoriteAddBook = (diaryId) => {
+const favoriteAddBook = async (diaryId) => {
   loading.value = true;
-  axios
-    .post("/favorite/add", {
+
+  try {
+    await axios.post("/favorite/add", {
       id: diaryId,
-    })
-    .then((response) => {
-      window.alert("お気に入り追加しました");
-      props.toggleBookPopup();
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loading.value = false;
     });
+
+    window.alert("お気に入り追加しました");
+    props.toggleBookPopup();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
 };
+
 //お気に入り削除メソッド
-const favoriteDeleteBook = (diaryId) => {
+const favoriteDeleteBook = async (diaryId) => {
   loading.value = true;
-  axios
-    .post("/favorite/delete", {
+
+  try {
+    await axios.post("/favorite/delete", {
       id: diaryId,
-    })
-    .then((response) => {
-      window.alert("お気に入りを削除しました");
-      props.toggleBookPopup();
-      props.displayBooks();
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loading.value = false;
     });
+
+    window.alert("お気に入りを削除しました");
+    props.toggleBookPopup();
+    props.displayBooks();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
 };
 
 //日記の削除メソッド
-const deleteBook = (diaryId, diaryName) => {
+const deleteBook = async (diaryId, diaryName) => {
   //日記削除警告
   if (window.confirm(diaryName + "を本当に削除しますか？")) {
     loading.value = true;
 
-    axios
-      .post("/delete/diary", {
+    try {
+      await axios.post("/delete/diary", {
         id: diaryId,
-      })
-      .then((response) => {
-        props.displayBooks();
-        props.toggleBookPopup();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        loading.value = false;
       });
+
+      props.displayBooks();
+      props.toggleBookPopup();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      loading.value = false;
+    }
   }
 };
 </script>
