@@ -45,16 +45,15 @@ const togglePopup = () => {
 const isFavoriteDisplayed = ref(false); //お気に入り表示フラグ
 
 //本の情報をとってくるメソッド
-const displayBooks = () => {
-  //isFavoriteDisplayedがtrueかfalseでAPIの切り替えをする
-  axios
-    .get(isFavoriteDisplayed.value ? "/favorite/return" : "/returndiary")
-    .then((response) => {
-      books.value = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const displayBooks = async () => {
+  try {
+    const response = await axios.get(
+      isFavoriteDisplayed.value ? "/favorite/return" : "/returndiary"
+    );
+    books.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 //お気に入り表示と通常表示ボタンの表示切替
@@ -72,7 +71,7 @@ const displayFavoriteBooks = () => {
  * **/
 
 //本をpostするメソッド
-const createBook = () => {
+const createBook = async () => {
   //タイトルが記入されていなかったら
   if (!bookData.bookName) {
     //returnで本が未設定のまま作成されないようにする
@@ -80,8 +79,8 @@ const createBook = () => {
     return;
   }
   if (bookData.bookName.length > 8) {
-    alert("タイトルは8文字以内にしてください。")
-    return
+    alert("タイトルは8文字以内にしてください。");
+    return;
   }
   if (!bookData.bookBackColor) {
     alert("日記の背景デザインを選択してください。");
@@ -92,25 +91,24 @@ const createBook = () => {
     return;
   }
   loadingBook.value = true;
-  axios
-    .post("/diaryadd", {
+
+  try {
+    await axios.post("/diaryadd", {
       name: bookData.bookName,
       color: bookData.bookBackColor,
       textColor: bookData.bookTextColor,
       font: bookData.bookFont,
-    })
-    .then((response) => {
-      //作成したときにポップアップを閉じる
-      togglePopup();
-      //本の表示
-      displayBooks();
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loadingBook.value = false;
     });
+
+    // 作成したときにポップアップを閉じる
+    togglePopup();
+    // 本の表示
+    displayBooks();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loadingBook.value = false;
+  }
 
   //ポップアップ内の入力情報をリセットする
   bookData.bookName = "";
@@ -151,6 +149,7 @@ onMounted(() => {
         :togglePopup="togglePopup"
         :displayBooks="displayBooks"
         :filteredDiarys="filteredDiarys"
+        :isFavoriteDisplayed="isFavoriteDisplayed"
       />
       <!--ポップアップ-->
       <div v-if="showPopup" class="popup">
@@ -304,7 +303,6 @@ main {
 
 /*タブレット(768px以下)*/
 @media only screen and (max-width: 768px) {
-
   .diary-search {
     top: 11px;
     right: 20px;
@@ -330,7 +328,6 @@ main {
 
 /*スマホ(480px以下)*/
 @media only screen and (max-width: 480px) {
-
   main {
     margin: 70px 15px 120px 20px;
   }

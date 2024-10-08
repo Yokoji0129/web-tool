@@ -4,29 +4,41 @@ import { ref } from "vue";
 import BookOperation from "./bookList/BookOperation.vue";
 
 const props = defineProps({
-  favoriteBooks: Array,
+  books: Array,
   togglePopup: Function,
   displayBooks: Function,
   filteredDiarys: Array,
-  isFavoriteDisplayed: Boolean
+  isFavoriteDisplayed: Boolean,
 });
 const showBookPopup = ref(false);
 const selectedBook = ref(null); //選択された日記の情報を入れる
-const selectBookNumber = ref(null)
+const selectBookNumber = ref(null);
 
 //日記のポップアップ
 const toggleBookPopup = (book, index) => {
-  console.log(book)
+  console.log(book);
   showBookPopup.value = !showBookPopup.value;
   selectedBook.value = book;
-  selectBookNumber.value = index
+  selectBookNumber.value = index;
 };
 </script>
 
 <template>
+  <h3 v-if="!books.length" class="diary-book-none">
+    {{
+      isFavoriteDisplayed
+        ? "お気に入り日記はありません"
+        : "日記を追加してください"
+    }}
+  </h3>
   <div class="diaries">
     <!--作成した本のリスト-->
-    <div class="book-paper" v-for="(book, index) in filteredDiarys" :key="index" @click="toggleBookPopup(book, index)">
+    <div
+      class="book-paper"
+      v-for="(book, index) in filteredDiarys"
+      :key="index"
+      @click="toggleBookPopup(book, index)"
+    >
       <div :class="book[0].diary_color">
         <h2 :style="{ color: book[0].diary_text_color }">
           {{ book[0].diary_name }}
@@ -34,8 +46,13 @@ const toggleBookPopup = (book, index) => {
       </div>
     </div>
     <!--ポップアップ---->
-    <BookOperation :displayBooks="props.displayBooks" :showBookPopup="showBookPopup" :selectedBook="selectedBook" :selectBookNumber="selectBookNumber"
-      :toggleBookPopup="toggleBookPopup"/>
+    <BookOperation
+      :displayBooks="props.displayBooks"
+      :showBookPopup="showBookPopup"
+      :selectedBook="selectedBook"
+      :selectBookNumber="selectBookNumber"
+      :toggleBookPopup="toggleBookPopup"
+    />
     <!--日記追加-->
     <div class="diary" @click="togglePopup" v-if="!isFavoriteDisplayed">
       <h2>+</h2>
@@ -44,6 +61,9 @@ const toggleBookPopup = (book, index) => {
 </template>
 
 <style scoped>
+.diary-book-none {
+  text-align: center;
+}
 .diaries {
   margin-top: 20px;
   display: grid;
@@ -275,7 +295,6 @@ const toggleBookPopup = (book, index) => {
 
 /**firefox用のデザイン**/
 @-moz-document url-prefix() {
-
   .book-backnumber-1,
   .book-backnumber-2,
   .book-backnumber-3,
@@ -290,7 +309,6 @@ const toggleBookPopup = (book, index) => {
   }
 
   @media screen and (max-width: 480px) {
-
     .book-backnumber-1,
     .book-backnumber-2,
     .book-backnumber-3,
