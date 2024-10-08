@@ -31,20 +31,18 @@ const togglePopup = () => {
 //タイトルを改行させないようにするメソッド
 const preventNewline = (event) => {
   //改行を空文字にして消すやつ
-  event.target.value = event.target.value.replace(/\n/, '');
+  event.target.value = event.target.value.replace(/\n/, "");
 };
 
 //日記の全情報入れる
 const diary = ref([]);
-const diaryInfo = () => {
-  axios
-    .get("returndiary")
-    .then((response) => {
-      diary.value = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const diaryInfo = async () => {
+  try {
+    const response = await axios.get("returndiary");
+    diary.value = response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 /**
@@ -64,11 +62,11 @@ const pageData = reactive({
 });
 
 //ページ追加用メソッド
-const pageAdd = () => {
+const pageAdd = async () => {
   loadingPage.value = true;
-  //ページ追加用日記idはid,タイトルはtitle,テキストはtxt(今は1だけ)
-  axios
-    .post("/pageadd", {
+
+  try {
+    await axios.post("/pageadd", {
       //日記ID
       id: diaryId.value,
       //タイトル文字色
@@ -95,35 +93,34 @@ const pageAdd = () => {
       file_txt5: "",
       //画像6の文章
       file_txt6: "",
-    })
-    .then((response) => {
-      alert(`${pages.value.length + 1}ページ目が追加されました`);
-      displayPage();
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loadingPage.value = false;
     });
+
+    alert(`${pages.value.length + 1}ページ目が追加されました`);
+    displayPage();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loadingPage.value = false;
+  }
+
   showMenu.value = false;
 };
 
 //ページ表示メソッド
-const displayPage = () => {
-  axios
-    .get(`/returnpage/${diaryId.value}`)
-    .then((response) => {
-      pages.value = response.data;
-      if (pages.value.length === 0) {
-        pageAdd(); //ページが空の場合(日記初回に開くとき)、新しいページを追加
-      } else {
-        currentPage();
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const displayPage = async () => {
+  try {
+    const response = await axios.get(`/returnpage/${diaryId.value}`);
+    pages.value = response.data;
+
+    if (pages.value.length === 0) {
+      // ページが空の場合(日記初回に開くとき)、新しいページを追加
+      pageAdd();
+    } else {
+      currentPage();
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //ページ移動したときに表示内容変える
@@ -137,11 +134,11 @@ const currentPage = () => {
 };
 
 //ページ編集メソッド
-const pageEdit = () => {
+const pageEdit = async () => {
   loadingPage.value = true;
-  //ここでページを編集して保存(このAPIではページ追加はできない)
-  axios
-    .post("/edit/page", {
+
+  try {
+    await axios.post("/edit/page", {
       //ページID
       id: pages.value[currentPageIndex.value][0].page_id,
       //タイトル文字色
@@ -168,18 +165,16 @@ const pageEdit = () => {
       file_txt5: "",
       //画像6の文章
       file_txt6: "",
-    })
-    .then((response) => {
-      alert(`${currentPageIndex.value + 1}ページ目が保存されました`);
-      toggleMenu();
-      displayPage();
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loadingPage.value = false;
     });
+
+    alert(`${currentPageIndex.value + 1}ページ目が保存されました`);
+    toggleMenu();
+    displayPage();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loadingPage.value = false;
+  }
 };
 
 //ここから画像処理
@@ -195,29 +190,29 @@ const onFileSelected = (event) => {
 };
 
 //画像アップロード
-const uploadFile = () => {
+const uploadFile = async () => {
   if (selectedFile.value) {
     const formData = new FormData();
     formData.append("file", selectedFile.value);
 
-    axios
-      .post("/file", formData, {
+    try {
+      const response = await axios.post("/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
-      .then((response) => {
-        console.log("アップロード成功", response.data);
-        selectedFile.value = null;
-        pageEdit()
-      })
-      .catch((error) => {
-        console.log("アップロードエラー", error);
-      })
+      });
+
+      console.log("アップロード成功", response.data);
+      selectedFile.value = null;
+      pageEdit();
+    } catch (error) {
+      console.log("アップロードエラー", error);
+    }
   } else {
     alert("ファイルを選択してください。");
   }
 };
+
 
 onMounted(() => {
   diaryInfo();
@@ -226,10 +221,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <BurgerMenu :diary="diary" :selectBookNumber="selectBookNumber" :pages="pages" :pageData="pageData"
-    @update:currentPageIndex="currentPageIndex = $event" />
-  <PageOperation :pageAdd="pageAdd" :pageEdit="pageEdit" :showMenu="showMenu" :toggleMenu="toggleMenu" :pages="pages"
-    :currentPageIndex="currentPageIndex" @update:loadingPage="loadingPage = $event" :displayPage="displayPage" />
+  <BurgerMenu
+    :diary="diary"
+    :selectBookNumber="selectBookNumber"
+    :pages="pages"
+    :pageData="pageData"
+    @update:currentPageIndex="currentPageIndex = $event"
+  />
+  <PageOperation
+    :pageAdd="pageAdd"
+    :pageEdit="pageEdit"
+    :showMenu="showMenu"
+    :toggleMenu="toggleMenu"
+    :pages="pages"
+    :currentPageIndex="currentPageIndex"
+    @update:loadingPage="loadingPage = $event"
+    :displayPage="displayPage"
+  />
   <!--ここまでスマホ用ページ操作ボタン-->
   <div class="flex-box">
     <!--左側デザイン-->
@@ -250,11 +258,23 @@ onMounted(() => {
       </div>
       <div class="text-area">
         <div class="page-title-box">
-          <textarea class="page-title" placeholder="ページタイトル" v-model="pageData.pageTitle"
-            @input="preventNewline"></textarea>
+          <textarea
+            class="page-title"
+            placeholder="ページタイトル"
+            v-model="pageData.pageTitle"
+            @input="preventNewline"
+          ></textarea>
         </div>
-        <textarea class="page-text" placeholder="文章1" v-model="pageData.pageText1"></textarea>
-        <textarea class="page-text" placeholder="文章2" v-model="pageData.pageText2"></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章1"
+          v-model="pageData.pageText1"
+        ></textarea>
+        <textarea
+          class="page-text"
+          placeholder="文章2"
+          v-model="pageData.pageText2"
+        ></textarea>
       </div>
     </div>
     <!--右側デザイン-->
@@ -272,7 +292,11 @@ onMounted(() => {
       <div class="image-box">
         <div class="image-container">
           <img class="delete-img" src="../../../public/icon/delete-img.png" />
-          <img @click="togglePopup" class="image" src="../../../public/testImage/testImage.jpeg" />
+          <img
+            @click="togglePopup"
+            class="image"
+            src="../../../public/testImage/testImage.jpeg"
+          />
         </div>
       </div>
     </div>
@@ -293,8 +317,12 @@ onMounted(() => {
     </div>
   </div>
   <!--ページ遷移-->
-  <PageMove @update:currentPageIndex="currentPageIndex = $event" :currentPageIndex="currentPageIndex" :pages="pages"
-    :currentPage="currentPage" />
+  <PageMove
+    @update:currentPageIndex="currentPageIndex = $event"
+    :currentPageIndex="currentPageIndex"
+    :pages="pages"
+    :currentPage="currentPage"
+  />
   <!--ローディングアニメーション-->
   <div v-if="loadingPage" class="loading-overlay">
     <div class="spinner"></div>

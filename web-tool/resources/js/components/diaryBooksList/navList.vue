@@ -28,7 +28,7 @@ const toggleTooltip3 = () => {
 
 const isSorted = ref(false); //50音順の表示切替のフラグ
 
-// 日記を50音順にする
+//日記を50音順にする
 const sortJa = () => {
   if (!isSorted.value) {
     isSorted.value = true;
@@ -56,7 +56,6 @@ const account = async () => {
   }
 };
 
-
 const router = useRouter();
 
 //ログアウトメソッド
@@ -72,7 +71,6 @@ const logout = async () => {
     loadingLogin.value = false;
   }
 };
-
 
 onMounted(() => {
   account();

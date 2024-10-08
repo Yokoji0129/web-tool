@@ -28,25 +28,24 @@ const toggleMenu = () => {
 };
 
 //ページ削除メソッド
-const pageDelete = () => {
+const pageDelete = async () => {
   if (window.confirm("このページを本当に削除しますか？")) {
     emit("update:loadingPage", true);
-    axios
-      .post("/delete/page", {
-        //ページID
+
+    try {
+      await axios.post("/delete/page", {
+        // ページID
         id: props.pages[props.currentPageIndex][0].page_id,
-      })
-      .then((response) => {
-        alert(`${props.currentPageIndex + 1}ページ目が削除されました`);
-        props.displayPage();
-        toggleMenu();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        emit("update:loadingPage", false);
       });
+
+      alert(`${props.currentPageIndex + 1}ページ目が削除されました`);
+      props.displayPage();
+      toggleMenu();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      emit("update:loadingPage", false);
+    }
   }
 };
 </script>
@@ -54,22 +53,41 @@ const pageDelete = () => {
 <template>
   <div class="page-operation-btn">
     <!--編集ボタン-->
-    <div class="btn" @click="pageEdit" @mouseover="showEdit = true" @mouseleave="showEdit = false">
+    <div
+      class="btn"
+      @click="pageEdit"
+      @mouseover="showEdit = true"
+      @mouseleave="showEdit = false"
+    >
       <img src="../../../../public/icon/edit-page.png" alt="" />
       <span class="edit-text" v-if="showEdit">保存</span>
     </div>
     <!--削除ボタン-->
-    <div class="btn" @click="pageDelete" @mouseover="showDelete = true" @mouseleave="showDelete = false">
+    <div
+      class="btn"
+      @click="pageDelete"
+      @mouseover="showDelete = true"
+      @mouseleave="showDelete = false"
+    >
       <img src="../../../../public/icon/delete-page.png" alt="" />
       <span class="delete-text" v-if="showDelete">削除</span>
     </div>
     <!--追加ボタン-->
-    <div class="btn" @click="pageAdd" @mouseover="showAdd = true" @mouseleave="showAdd = false">
+    <div
+      class="btn"
+      @click="pageAdd"
+      @mouseover="showAdd = true"
+      @mouseleave="showAdd = false"
+    >
       <img src="../../../../public/icon/add-page.png" alt="" />
       <span class="add-text" v-if="showAdd">追加</span>
     </div>
     <!--使い方表示ボタン-->
-    <div class="btn" @mouseover="showQuestion = true" @mouseleave="showQuestion = false">
+    <div
+      class="btn"
+      @mouseover="showQuestion = true"
+      @mouseleave="showQuestion = false"
+    >
       <img src="../../../../public/icon/hatena.png" alt="" />
       <span class="question-text" v-if="showQuestion">手順</span>
     </div>
@@ -77,7 +95,11 @@ const pageDelete = () => {
 
   <!--スマホ用ページ操作ボタン-->
   <div class="page-operation-hamburger">
-    <img src="../../../../public/icon/hamburger-note.png" alt="" @click="toggleMenu" />
+    <img
+      src="../../../../public/icon/hamburger-note.png"
+      alt=""
+      @click="toggleMenu"
+    />
   </div>
   <div class="menu" :class="{ visible: showMenu }" v-show="showMenu">
     <div class="page-operation-btn-sp">
