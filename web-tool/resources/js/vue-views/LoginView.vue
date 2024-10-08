@@ -2,6 +2,8 @@
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, reactive } from "vue";
+import { isLoading } from "../../assets/config";
+import LoadingScreen from "../components/LoadingScreen.vue";
 
 const data = reactive({
   id: "",
@@ -9,10 +11,9 @@ const data = reactive({
 });
 
 const error = ref("");
-const loadingLogin = ref(false);
 
 const idSearch = async () => {
-  loadingLogin.value = true;
+  isLoading.value = true;
   try {
     const response = await axios.get(`/search/${data.id}`);
     return response.data;
@@ -20,7 +21,7 @@ const idSearch = async () => {
     console.log(error);
     return false;
   } finally {
-    loadingLogin.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -80,9 +81,7 @@ const login = async () => {
     </form>
   </div>
   <!-- ローディングアニメーション -->
-  <div v-if="loadingLogin" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
+  <LoadingScreen :isLoading="isLoading" />
 </template>
   
 <style scoped>

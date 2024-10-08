@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { isLoading } from "../../../assets/config";
 const props = defineProps({
   toggleMenu: Function,
   pageAdd: Function,
@@ -8,10 +9,8 @@ const props = defineProps({
   showMenu: Boolean,
   pages: Array,
   currentPageIndex: Number,
-  loadingPage: Object,
   displayPage: Function,
 });
-const emit = defineEmits(["update:loadingPage"]);
 //ページ操作テキストの表示フラグ(編集、削除、追加)
 const showEdit = ref(false);
 const showDelete = ref(false);
@@ -30,7 +29,7 @@ const toggleMenu = () => {
 //ページ削除メソッド
 const pageDelete = async () => {
   if (window.confirm("このページを本当に削除しますか？")) {
-    emit("update:loadingPage", true);
+    isLoading.value = true
 
     try {
       await axios.post("/delete/page", {
@@ -44,7 +43,7 @@ const pageDelete = async () => {
     } catch (error) {
       console.log(error);
     } finally {
-      emit("update:loadingPage", false);
+      isLoading.value = false
     }
   }
 };

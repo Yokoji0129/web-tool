@@ -1,14 +1,15 @@
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
+import { isLoading } from "../../assets/config";
 
 import NavList from "../components/diaryBooksList/NavList.vue";
 import BookList from "../components/diaryBooksList/BookList.vue";
 import BackColor from "../components/diaryBooksList/BackColor.vue";
 import TextColor from "../components/diaryBooksList/TextColor.vue";
 import DiaryImage from "../components/diaryBooksList/DiaryImage.vue";
+import LoadingScreen from "../components/LoadingScreen.vue";
 
 const books = ref([]); //本のリスト
-const loadingBook = ref(false); //ローディングフラグ
 const selectedBackColor = ref(null); //本の背景classを入れる
 const selectedTextColor = ref(null); //本のテキストカラーを入れる
 
@@ -90,7 +91,7 @@ const createBook = async () => {
     alert("日記のテキストカラーを選択してください。");
     return;
   }
-  loadingBook.value = true;
+  isLoading.value = true;
 
   try {
     await axios.post("/diaryadd", {
@@ -107,7 +108,7 @@ const createBook = async () => {
   } catch (error) {
     console.error(error);
   } finally {
-    loadingBook.value = false;
+    isLoading.value = false;
   }
 
   //ポップアップ内の入力情報をリセットする
@@ -184,9 +185,7 @@ onMounted(() => {
               <button @click="createBook">作成</button>
             </div>
             <!-- ローディングアニメーション -->
-            <div v-if="loadingBook" class="loading-overlay">
-              <div class="spinner"></div>
-            </div>
+            <LoadingScreen :isLoading="isLoading" />
           </div>
         </div>
         <div>

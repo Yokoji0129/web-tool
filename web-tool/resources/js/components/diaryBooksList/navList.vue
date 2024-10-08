@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
+import { isLoading } from "../../../assets/config";
+import LoadingScreen from "../LoadingScreen.vue";
 const props = defineProps({
   books: Array,
   displayFavoriteBooks: Function,
@@ -44,7 +46,6 @@ const sortJa = () => {
 };
 
 const accountName = ref("");
-const loadingLogin = ref(false);
 
 //アカウント名取得
 const account = async () => {
@@ -60,7 +61,7 @@ const router = useRouter();
 
 //ログアウトメソッド
 const logout = async () => {
-  loadingLogin.value = true;
+  isLoading.value = true;
 
   try {
     await axios.post("/logout", {});
@@ -68,7 +69,7 @@ const logout = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    loadingLogin.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -126,9 +127,7 @@ onMounted(() => {
     </ul>
   </nav>
   <!-- ローディングアニメーション -->
-  <div v-if="loadingLogin" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
+  <LoadingScreen :isLoading="isLoading" />
 </template>
 
 <style scoped>

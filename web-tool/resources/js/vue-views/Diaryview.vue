@@ -1,10 +1,11 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
+import { isLoading } from "../../assets/config";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 import PageOperation from "../components/diary/PageOperation.vue";
 import PageMove from "../components/diary/PageMove.vue";
-const loadingPage = ref(false);
+import LoadingScreen from "../components/LoadingScreen.vue";
 const route = useRoute();
 //日記を開くときに渡される日記ID
 const diaryId = ref(route.params.diaryId || localStorage.getItem("diaryId"));
@@ -63,7 +64,7 @@ const pageData = reactive({
 
 //ページ追加用メソッド
 const pageAdd = async () => {
-  loadingPage.value = true;
+  isLoading.value = true;
 
   try {
     await axios.post("/pageadd", {
@@ -100,7 +101,7 @@ const pageAdd = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    loadingPage.value = false;
+    isLoading.value = false;
   }
 
   showMenu.value = false;
@@ -135,7 +136,7 @@ const currentPage = () => {
 
 //ページ編集メソッド
 const pageEdit = async () => {
-  loadingPage.value = true;
+  isLoading.value = true;
 
   try {
     await axios.post("/edit/page", {
@@ -173,7 +174,7 @@ const pageEdit = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    loadingPage.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -235,7 +236,7 @@ onMounted(() => {
     :toggleMenu="toggleMenu"
     :pages="pages"
     :currentPageIndex="currentPageIndex"
-    @update:loadingPage="loadingPage = $event"
+    @update:isLoading="isLoading = $event"
     :displayPage="displayPage"
   />
   <!--ここまでスマホ用ページ操作ボタン-->
@@ -324,9 +325,7 @@ onMounted(() => {
     :currentPage="currentPage"
   />
   <!--ローディングアニメーション-->
-  <div v-if="loadingPage" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
+  <LoadingScreen :isLoading="isLoading" />
 </template>
 
 <style scoped>

@@ -2,6 +2,8 @@
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, reactive } from "vue";
+import { isLoading } from "../../assets/config";
+import LoadingScreen from "../components/LoadingScreen.vue";
 
 //フォーム入力のデータリアクティブ
 const data = reactive({
@@ -11,13 +13,12 @@ const data = reactive({
   accountName: "",
 });
 const error = ref(""); //フォーム入力エラー文字入れ
-const loadingLogin = ref(false);
 const id = ref(""); //ユーザーidが存在するかの情報が入る
 
 //IDが存在するか検索するためのメソッド
 const idSearch = async () => {
   //tryは非同期処理が成功するか失敗するかに関係なく実行される。
-  loadingLogin.value = true;
+  isLoading.value = true;
   try {
     const response = await axios.get(`/search/${data.id}`);
     id.value = response.data;
@@ -26,7 +27,7 @@ const idSearch = async () => {
     console.log(error);
     return false;
   } finally {
-    loadingLogin.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -154,9 +155,7 @@ const submitForm = async () => {
     </form>
   </div>
   <!-- ローディングアニメーション -->
-  <div v-if="loadingLogin" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
+  <LoadingScreen :isLoading="isLoading" />
 </template>
 
 <style scoped>

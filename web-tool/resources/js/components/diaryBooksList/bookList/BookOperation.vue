@@ -1,6 +1,8 @@
 <script setup>
 import { RouterLink, useRouter } from "vue-router";
 import { ref } from "vue";
+import { isLoading } from "../../../../assets/config";
+import LoadingScreen from "../../LoadingScreen.vue";
 const props = defineProps({
   displayBooks: Function,
   showBookPopup: Boolean,
@@ -9,7 +11,6 @@ const props = defineProps({
   toggleBookPopup: Function,
 });
 const router = useRouter();
-const loading = ref(false);
 //日記開く
 const diaryOpen = (diaryId, selectBookNumber) => {
   localStorage.setItem("diaryId", diaryId);
@@ -22,7 +23,7 @@ const diaryOpen = (diaryId, selectBookNumber) => {
 };
 //お気に入り追加メソッド
 const favoriteAddBook = async (diaryId) => {
-  loading.value = true;
+  isLoading.value = true;
 
   try {
     await axios.post("/favorite/add", {
@@ -34,13 +35,13 @@ const favoriteAddBook = async (diaryId) => {
   } catch (error) {
     console.log(error);
   } finally {
-    loading.value = false;
+    isLoading.value = false;
   }
 };
 
 //お気に入り削除メソッド
 const favoriteDeleteBook = async (diaryId) => {
-  loading.value = true;
+  isLoading.value = true;
 
   try {
     await axios.post("/favorite/delete", {
@@ -53,7 +54,7 @@ const favoriteDeleteBook = async (diaryId) => {
   } catch (error) {
     console.log(error);
   } finally {
-    loading.value = false;
+    isLoading.value = false;
   }
 };
 
@@ -61,7 +62,7 @@ const favoriteDeleteBook = async (diaryId) => {
 const deleteBook = async (diaryId, diaryName) => {
   //日記削除警告
   if (window.confirm(diaryName + "を本当に削除しますか？")) {
-    loading.value = true;
+    isLoading.value = true;
 
     try {
       await axios.post("/delete/diary", {
@@ -73,7 +74,7 @@ const deleteBook = async (diaryId, diaryName) => {
     } catch (error) {
       console.log(error);
     } finally {
-      loading.value = false;
+      isLoading.value = false;
     }
   }
 };
@@ -121,9 +122,7 @@ const deleteBook = async (diaryId, diaryName) => {
     </div>
   </div>
   <!--ローディングアニメーション-->
-  <div v-if="loading" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
+  <LoadingScreen :isLoading="isLoading" />
 </template>
 
 <style scoped>
