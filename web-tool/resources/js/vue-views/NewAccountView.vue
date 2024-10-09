@@ -1,28 +1,34 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, reactive } from "vue";
 import { isLoading } from "../../assets/config";
 import LoadingScreen from "../components/LoadingScreen.vue";
 
+//ユーザーデータオブジェクト
+interface UserData {
+  id: string;
+  password: string;
+  confirmPassword: string;
+  accountName: string;
+}
+
 //フォーム入力のデータリアクティブ
-const data = reactive({
+const data = reactive<UserData>({
   id: "",
   password: "",
   confirmPassword: "",
   accountName: "",
 });
-const error = ref(""); //フォーム入力エラー文字入れ
-const id = ref(""); //ユーザーidが存在するかの情報が入る
+const error = ref<string>(""); //フォーム入力エラー文字入れ
 
-//IDが存在するか検索するためのメソッド
-const idSearch = async () => {
+//IDが存在するか検索するためのメソッド(trueの場合のみアカウント作成できるように)
+const idSearch = async (): Promise<boolean> => {
   //tryは非同期処理が成功するか失敗するかに関係なく実行される。
   isLoading.value = true;
   try {
     const response = await axios.get(`/search/${data.id}`);
-    id.value = response.data;
-    return response.data;
+    return response.data;// true or falseが返ってくる
   } catch (error) {
     console.log(error);
     return false;
@@ -32,13 +38,11 @@ const idSearch = async () => {
 };
 
 //ID,パスワードの長さが8文字未満、または33文字以上の場合(英数字含む)の正規表現
-const Alphanumeric = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,32}$/;
+const Alphanumeric: RegExp = /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]{8,32}$/;
 
 //フォーム入力条件メソッド
-const validateForm = async () => {
-  //idResultにIDが存在するかしないかのtrue or falseが格納される
-  //awaitでidSearchの非同期処理が終わるまでそれ以降の処理を待つ
-  const idResult = await idSearch();
+const validateForm = async (): Promise<boolean> => {
+  const idResult: boolean = await idSearch();//IDの存在チェック
 
   //ID,passwordのどれかが一つでも空欄だった場合
   if (
@@ -75,15 +79,15 @@ const validateForm = async () => {
 };
 
 const router = useRouter(); //特定の処理後にページ遷移させるための変数
-const loginBack = () => {
+const loginBack = (): void => {
   router.push("/");
 };
 
 //フォーム送信メソッド
-const submitForm = async () => {
+const submitForm = async (): Promise<void> => {
   try {
     // awaitでvalidateの処理が終わるまで待つ
-    const isValid = await validateForm();
+    const isValid: boolean = await validateForm();
     // falseだったら非同期処理がされないで処理が止まる
     if (!isValid) return;
 
@@ -92,7 +96,7 @@ const submitForm = async () => {
       password: data.password,
       confirmPassword: data.confirmPassword,
       accountName: data.accountName,
-    });
+    } as UserData);//送る際に型指定
     console.log(response);
     // フォーム送信成功時ログインページ遷移する
     router.push("/");
@@ -101,7 +105,6 @@ const submitForm = async () => {
     // エラーメッセージを設定する場合などの処理をここに追加できます
   }
 };
-
 </script>
 
 
