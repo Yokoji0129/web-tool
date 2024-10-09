@@ -1,11 +1,12 @@
-<script setup>
+<script setup lang="ts">
+import { defineProps } from 'vue';
 const props = defineProps({
   isLoading: Boolean,
 });
 </script>
 
 <template>
-  <div v-if="isLoading" class="loading-overlay">
+  <div v-if="props.isLoading" class="loading-overlay">
     <div class="spinner"></div>
   </div>
 </template>
