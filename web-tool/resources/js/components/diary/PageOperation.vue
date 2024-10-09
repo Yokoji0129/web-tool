@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import { isLoading } from "../../../assets/config";
 const props = defineProps({
   toggleMenu: Function,
   pageAdd: Function,
@@ -12,6 +11,7 @@ const props = defineProps({
   displayPage: Function,
 });
 //ページ操作テキストの表示フラグ(編集、削除、追加)
+const isLoading = ref(false)
 const showEdit = ref(false);
 const showDelete = ref(false);
 const showAdd = ref(false);

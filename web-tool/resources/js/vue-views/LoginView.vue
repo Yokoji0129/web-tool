@@ -2,9 +2,8 @@
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, reactive } from "vue";
-import { isLoading } from "../../assets/config";
 import LoadingScreen from "../components/LoadingScreen.vue";
-
+const isLoading = ref(false)
 const data = reactive({
   id: "",
   password: "",

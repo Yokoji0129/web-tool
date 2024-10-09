@@ -1,11 +1,11 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
-import { isLoading } from "../../assets/config";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 import PageOperation from "../components/diary/PageOperation.vue";
 import PageMove from "../components/diary/PageMove.vue";
 import LoadingScreen from "../components/LoadingScreen.vue";
+const isLoading = ref(false)
 const route = useRoute();
 //日記を開くときに渡される日記ID
 const diaryId = ref(route.params.diaryId || localStorage.getItem("diaryId"));

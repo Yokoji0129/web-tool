@@ -1,7 +1,6 @@
 <script setup>
 import { RouterLink, useRouter } from "vue-router";
 import { ref } from "vue";
-import { isLoading } from "../../../../assets/config";
 import LoadingScreen from "../../LoadingScreen.vue";
 const props = defineProps({
   displayBooks: Function,
@@ -10,6 +9,7 @@ const props = defineProps({
   selectBookNumber: Number,
   toggleBookPopup: Function,
 });
+const isLoading = ref(false)
 const router = useRouter();
 //日記開く
 const diaryOpen = (diaryId, selectBookNumber) => {

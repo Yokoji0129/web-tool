@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import { isLoading } from "../../../assets/config";
 import LoadingScreen from "../LoadingScreen.vue";
 const props = defineProps({
   books: Array,
@@ -9,6 +8,7 @@ const props = defineProps({
   isFavoriteDisplayed: Boolean,
 });
 
+const isLoading = ref(false)
 const showTooltip = ref(false);
 const showTooltip2 = ref(false);
 const showTooltip3 = ref(false);

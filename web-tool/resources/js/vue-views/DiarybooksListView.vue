@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
-import { isLoading } from "../../assets/config";
 
 import NavList from "../components/diaryBooksList/NavList.vue";
 import BookList from "../components/diaryBooksList/BookList.vue";
@@ -8,7 +7,7 @@ import BackColor from "../components/diaryBooksList/BackColor.vue";
 import TextColor from "../components/diaryBooksList/TextColor.vue";
 import DiaryImage from "../components/diaryBooksList/DiaryImage.vue";
 import LoadingScreen from "../components/LoadingScreen.vue";
-
+const isLoading = ref(false)
 const books = ref([]); //本のリスト
 const selectedBackColor = ref(null); //本の背景classを入れる
 const selectedTextColor = ref(null); //本のテキストカラーを入れる
