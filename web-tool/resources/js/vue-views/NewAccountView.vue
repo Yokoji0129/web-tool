@@ -198,7 +198,7 @@ const submitForm = async (): Promise<void> => {
 .create-account-box input[type="text"]:hover,
 .create-account-box input[type="password"]:hover {
   border-color: #007bff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }
 
 .account-name-link {

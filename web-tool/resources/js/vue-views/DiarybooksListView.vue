@@ -222,6 +222,7 @@ onMounted(() => {
 
 .diary-search:hover {
   border-color: #007bff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }
 
 .container {
@@ -254,7 +255,7 @@ main {
 
 .book-title:hover {
   border-color: #007bff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }
 
 .selected-image {
