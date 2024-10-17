@@ -1,19 +1,35 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, reactive, computed } from "vue";
-
+import axios from "axios";
 import NavList from "../components/diaryBooksList/NavList.vue";
 import BookList from "../components/diaryBooksList/BookList.vue";
 import BackColor from "../components/diaryBooksList/BackColor.vue";
 import TextColor from "../components/diaryBooksList/TextColor.vue";
 import DiaryImage from "../components/diaryBooksList/DiaryImage.vue";
 import LoadingScreen from "../components/LoadingScreen.vue";
-const isLoading = ref(false)
-const books = ref([]); //本のリスト
-const selectedBackColor = ref(null); //本の背景classを入れる
-const selectedTextColor = ref(null); //本のテキストカラーを入れる
+const isLoading = ref<boolean>(false);
+interface Book {
+  diary_color: string;
+  diary_favorite: number;
+  diary_font: string;
+  diary_id: number;
+  diary_name: string;
+  diary_text_color: string;
+  diary_top_file: string;
+}
+const books = ref<Book[]>([]); //本のリスト
+const selectedBackColor = ref<string | undefined>(undefined); //本の背景classを入れる
+const selectedTextColor = ref<string | undefined>(undefined); //本のテキストカラーを入れる
+
+interface BookData {
+  bookName: string;
+  bookBackColor: string;
+  bookTextColor: string;
+  bookFont: string;
+}
 
 //日記作成データ
-const bookData = reactive({
+const bookData = reactive<BookData>({
   bookName: "",
   bookBackColor: "",
   bookTextColor: "",
@@ -21,9 +37,9 @@ const bookData = reactive({
 });
 
 //検索文字入れ
-const searchTerm = ref("");
+const searchTerm = ref<string>("");
 //文字検索
-const filteredDiarys = computed(() => {
+const filteredDiarys = computed<Book[]>(() => {
   //配列がからの時(垢作成初期時など)にからの配列を返す
   if (!Array.isArray(books.value)) {
     return [];
@@ -35,29 +51,30 @@ const filteredDiarys = computed(() => {
   );
 });
 
-const showPopup = ref(false); //ポップアップの表示制御フラグ
+const showPopup = ref<boolean>(false); //ポップアップの表示制御フラグ
 
 //ポップアップの表示非表示
-const togglePopup = () => {
+const togglePopup = (): void => {
   showPopup.value = !showPopup.value;
 };
 
-const isFavoriteDisplayed = ref(false); //お気に入り表示フラグ
+const isFavoriteDisplayed = ref<boolean>(false); //お気に入り表示フラグ
 
 //本の情報をとってくるメソッド
-const displayBooks = async () => {
+const displayBooks = async (): Promise<void> => {
   try {
-    const response = await axios.get(
+    const response = await axios.get<Book[]>(
       isFavoriteDisplayed.value ? "/favorite/return" : "/returndiary"
     );
     books.value = response.data;
+    console.log(response.data);
   } catch (error) {
     console.error(error);
   }
 };
 
 //お気に入り表示と通常表示ボタンの表示切替
-const displayFavoriteBooks = () => {
+const displayFavoriteBooks = ():void => {
   isFavoriteDisplayed.value = !isFavoriteDisplayed.value;
   displayBooks();
 };
@@ -71,7 +88,7 @@ const displayFavoriteBooks = () => {
  * **/
 
 //本をpostするメソッド
-const createBook = async () => {
+const createBook = async (): Promise<void> => {
   //タイトルが記入されていなかったら
   if (!bookData.bookName) {
     //returnで本が未設定のまま作成されないようにする
