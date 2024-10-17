@@ -1,23 +1,29 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
 import { ref, reactive } from "vue";
 import LoadingScreen from "../components/LoadingScreen.vue";
-const isLoading = ref(false)
-const data = reactive({
+const isLoading = ref<boolean>(false)
+
+interface Data{
+  id: string;
+  password: string;
+}
+
+const data = reactive<Data>({
   id: "",
   password: "",
 });
 
-const error = ref("");
+const error = ref<string>("");
 
-const idSearch = async () => {
+const idSearch = async (): Promise<boolean> => {
   isLoading.value = true;
   try {
     const response = await axios.get(`/search/${data.id}`);
-    return response.data;
+    return response.data;//false or true
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   } finally {
     isLoading.value = false;
@@ -25,7 +31,7 @@ const idSearch = async () => {
 };
 
 //フォーム入力条件メソッド
-const validateForm = async () => {
+const validateForm = async (): Promise<boolean> => {
   const idResult = await idSearch();
   //ID, passwordのどれかが一つでも空欄だった場合
   if (!data.id.trim() || !data.password.trim()) {
@@ -43,16 +49,15 @@ const validateForm = async () => {
 
 const router = useRouter();
 
-const login = async () => {
+const login = async (): Promise<void> => {
   try {
     const isValid = await validateForm();
     if (!isValid) return;
 
-    const response = await axios.post("/login", {
+    await axios.post("/login", {
       id: data.id,
       password: data.password,
     });
-    console.log(response);
     router.push("/diaryBooksList");
   } catch (error) {
     console.error(error);

@@ -31,7 +31,7 @@ const idSearch = async (): Promise<boolean> => {
     const response = await axios.get(`/search/${data.id}`);
     return response.data;// true or falseが返ってくる
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   } finally {
     isLoading.value = false;
