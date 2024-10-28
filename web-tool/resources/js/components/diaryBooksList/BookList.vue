@@ -1,22 +1,32 @@
-<script setup>
+<script setup lang="ts">
+import { defineProps } from 'vue';
 import { ref } from "vue";
-
 import BookOperation from "./bookList/BookOperation.vue";
 
-const props = defineProps({
-  books: Array,
-  togglePopup: Function,
-  displayBooks: Function,
-  filteredDiarys: Array,
-  isFavoriteDisplayed: Boolean,
-});
-const showBookPopup = ref(false);
-const selectedBook = ref(null); //選択された日記の情報を入れる
-const selectBookNumber = ref(null);
+interface Book {
+  diary_color: string;
+  diary_favorite: number;
+  diary_font: string;
+  diary_id: number;
+  diary_name: string;
+  diary_text_color: string;
+  diary_top_file: string;
+}
+
+const props = defineProps<{
+  books: Book[],
+  togglePopup: () => void,
+  displayBooks: () => void,
+  filteredDiarys: Book[],
+  isFavoriteDisplayed: boolean,
+}>();
+
+const showBookPopup = ref<boolean>(false);
+const selectedBook = ref<Book | undefined>(undefined); //選択された日記の情報を入れる
+const selectBookNumber = ref<number | undefined>(undefined);
 
 //日記のポップアップ
-const toggleBookPopup = (book, index) => {
-  console.log(book);
+const toggleBookPopup = (book: Book, index: number): void => {
   showBookPopup.value = !showBookPopup.value;
   selectedBook.value = book;
   selectBookNumber.value = index;

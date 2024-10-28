@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
-const props = defineProps({
-  isLoading: Boolean,
-});
+const props = defineProps<{
+  isLoading: boolean,
+}>();
 </script>
 
 <template>

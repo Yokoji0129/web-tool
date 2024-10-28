@@ -32,8 +32,8 @@ const backgroundColors: BackgroundColor[] = [
 ];
 
 //本のイメージclass取得(日記作成ポップアップでの見本)
-const bookBackColorSelect = () => {
-  const selectedColor = props.bookData.bookBackColor;
+const bookBackColorSelect = (): void => {
+  const selectedColor: string = props.bookData.bookBackColor;
   emit('update:selectedBackColor', selectedColor);
   console.log(selectedColor)
 };

@@ -46,7 +46,7 @@ const filteredDiarys = computed<Book[]>(() => {
   }
 
   //データベース内のアイテム名を含むアイテムだけをフィルタリング
-  return books.value.filter((book) =>
+  return books.value.filter((book: Book) =>
     book[0].diary_name.includes(searchTerm.value)
   );
 });

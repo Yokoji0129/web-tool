@@ -26,8 +26,8 @@ const textColors: TextColor[] = [
   { id: "黄", color: "yellow" },
 ];
 
-const bookTextColorSelect = () => {
-  const selectedTextColor = props.bookData.bookTextColor;
+const bookTextColorSelect = (): void => {
+  const selectedTextColor:string = props.bookData.bookTextColor;
   emit("update:selectedTextColor", selectedTextColor);
   console.log(selectedTextColor)
 };
