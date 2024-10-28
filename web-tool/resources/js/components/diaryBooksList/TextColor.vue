@@ -1,38 +1,35 @@
-<script setup>
-const props = defineProps({
-  bookData: Object,
-  selectedTextColor: String,
-});
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue';
+
+interface BookData {
+  bookTextColor: string
+}
+
+const props = defineProps<{
+  bookData: BookData,
+  selectedTextColor: string,
+}>();
 
 const emit = defineEmits(["update:selectedTextColor"]);
 
+interface TextColor {
+  id: string;
+  color: string
+}
+
 //テキストカラー選択肢
-const textColors = [
-  {
-    id: "黒",
-    color: "#000000",
-  },
-  {
-    id: "赤",
-    color: "red",
-  },
-  {
-    id: "青",
-    color: "blue",
-  },
-  {
-    id: "緑",
-    color: "green",
-  },
-  {
-    id: "黄",
-    color: "yellow",
-  },
+const textColors: TextColor[] = [
+  { id: "黒", color: "#000000" },
+  { id: "赤", color: "red" },
+  { id: "青", color: "blue" },
+  { id: "緑", color: "green" },
+  { id: "黄", color: "yellow" },
 ];
 
 const bookTextColorSelect = () => {
   const selectedTextColor = props.bookData.bookTextColor;
   emit("update:selectedTextColor", selectedTextColor);
+  console.log(selectedTextColor)
 };
 </script>
 
