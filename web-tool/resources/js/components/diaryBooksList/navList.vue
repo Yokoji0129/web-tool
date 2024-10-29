@@ -9,23 +9,14 @@ const props = defineProps({
 });
 
 const isLoading = ref(false)
-const showTooltip = ref(false);
-const showTooltip2 = ref(false);
-const showTooltip3 = ref(false);
-const toggleTooltip = () => {
-  showTooltip.value = !showTooltip.value;
-  showTooltip2.value = false
-  showTooltip3.value = false
-};
-const toggleTooltip2 = () => {
-  showTooltip2.value = !showTooltip2.value;
-  showTooltip.value = false
-  showTooltip3.value = false
-};
-const toggleTooltip3 = () => {
-  showTooltip3.value = !showTooltip3.value;
-  showTooltip.value = false
-  showTooltip2.value = false
+
+const tooltipsVisible = ref([false, false, false]); //ツールチップの表示状態を配列で管理
+
+//メニュー内容の表示非表示
+const toggleTooltip = (index) => {
+  //indexが一致したら値を反転させて、一致しなかった物はすべてfalseにする
+  tooltipsVisible.value = tooltipsVisible.value.map((visible, i) => (i === index ? !visible : false));
+  console.log(tooltipsVisible.value)
 };
 
 const isSorted = ref(false); //50音順の表示切替のフラグ
@@ -84,9 +75,9 @@ onMounted(() => {
     <ul class="nav-list">
       <!--利用注意-->
       <li class="nav-item-left">
-        <p class="p" @click="toggleTooltip">利用注意</p>
+        <p class="p" @click="toggleTooltip(0)">利用注意</p>
       </li>
-      <div class="tooltip" v-show="showTooltip">
+      <div class="tooltip" v-show="tooltipsVisible[0]">
         <fieldset>
           このサービスは勉強用に作成されたものです。<br />
           このサービスに保存できる情報量には限界があります。<br />
@@ -95,12 +86,12 @@ onMounted(() => {
       </div>
       <!--日記本-->
       <li class="nav-item-center">
-        <p class="p" @click="toggleTooltip2">
+        <p class="p" @click="toggleTooltip(1)">
           {{ isFavoriteDisplayed ? "お気に入り日記本" : "日記本" }}
           ({{ books.length }}冊)
         </p>
       </li>
-      <div class="tooltip2" v-show="showTooltip2">
+      <div class="tooltip2" v-show="tooltipsVisible[1]">
         <fieldset>
           <p class="diary-sort">日記並べ替え</p>
           <button class="sort" @click="displayFavoriteBooks">
@@ -117,9 +108,9 @@ onMounted(() => {
       </div>
       <!--ユーザー名-->
       <li class="nav-item-right">
-        <p class="p" @click="toggleTooltip3">ユーザー名: {{ accountName }}</p>
+        <p class="p" @click="toggleTooltip(2)">ユーザー名: {{ accountName }}</p>
       </li>
-      <div class="tooltip3" v-show="showTooltip3">
+      <div class="tooltip3" v-show="tooltipsVisible[2]">
         <fieldset>
           <button class="logout" @click="logout">ログアウト</button>
         </fieldset>
