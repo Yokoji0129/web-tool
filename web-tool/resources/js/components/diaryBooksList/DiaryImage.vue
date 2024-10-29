@@ -1,15 +1,25 @@
-<script setup>
-const props = defineProps({
-  selectedBackColor: String,
-  selectedTextColor: String,
-  bookData: Object,
+<script setup lang="ts">
+import { defineProps, withDefaults } from 'vue';
+
+interface BookData {
+  bookName: string;
+}
+
+const props = withDefaults(defineProps<{
+  selectedBackColor: string,
+  selectedTextColor: string,
+  bookData: BookData,
+}>(), {
+  //初期値がundefinedだからデフォルトの値を入れておく
+  selectedBackColor: '', //デフォルトの背景色
+  selectedTextColor: '#000000', //デフォルトのテキスト色
 });
 </script>
 
 <template>
   <div class="book-paper">
     <div>
-      <!--本のイメージが選択されている場合-->
+      <!-- 本のイメージが選択されている場合 -->
       <div :class="selectedBackColor">
         <h4 class="image-h4" :style="{ color: selectedTextColor }">
           {{ bookData.bookName }}
@@ -18,6 +28,7 @@ const props = defineProps({
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .book-paper {

@@ -7,7 +7,7 @@ interface BookData {
 
 const props = defineProps<{
   bookData: BookData,
-  selectedTextColor: string,
+  selectedTextColor?: string,
 }>();
 
 const emit = defineEmits(["update:selectedTextColor"]);
