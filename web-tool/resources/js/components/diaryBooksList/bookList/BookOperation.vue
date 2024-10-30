@@ -1,28 +1,43 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink, useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import LoadingScreen from "../../LoadingScreen.vue";
-const props = defineProps({
-  displayBooks: Function,
-  showBookPopup: Boolean,
-  selectedBook: Object,
-  selectBookNumber: Number,
-  toggleBookPopup: Function,
-});
-const isLoading = ref(false)
+import axios from "axios";
+
+interface Book {
+  diary_color: string;
+  diary_favorite: number;
+  diary_font: string;
+  diary_id: number;
+  diary_name: string;
+  diary_text_color: string;
+  diary_top_file: string;
+}
+
+const props = defineProps<{
+  displayBooks: () => void,
+  showBookPopup: boolean,
+  selectedBook: Book | undefined,
+  selectBookNumber: number | undefined,
+  toggleBookPopup: () => void,
+}>();
+
+const isLoading = ref<boolean>(false)
 const router = useRouter();
+
 //日記開く
-const diaryOpen = (diaryId, selectBookNumber) => {
-  localStorage.setItem("diaryId", diaryId);
-  localStorage.setItem("selectBookNumber", selectBookNumber);
+const diaryOpen = (diaryId: number, selectBookNumber: number): void => {
+  //localstrageは値を文字列として保存するから文字列に変換
+  localStorage.setItem("diaryId", diaryId.toString());
+  localStorage.setItem("selectBookNumber", selectBookNumber.toString());
   //diaryのページにparamsで日記IDと日記のlength番号を渡す
   router.push({
     name: "diary",
-    params: { diaryId: diaryId, selectBookNumber: selectBookNumber },
+    params: { diaryId: diaryId.toString(), selectBookNumber: selectBookNumber.toString() },
   });
 };
 //お気に入り追加メソッド
-const favoriteAddBook = async (diaryId) => {
+const favoriteAddBook = async (diaryId: number): Promise<void> => {
   isLoading.value = true;
 
   try {
@@ -40,7 +55,7 @@ const favoriteAddBook = async (diaryId) => {
 };
 
 //お気に入り削除メソッド
-const favoriteDeleteBook = async (diaryId) => {
+const favoriteDeleteBook = async (diaryId: number): Promise<void> => {
   isLoading.value = true;
 
   try {
@@ -59,7 +74,7 @@ const favoriteDeleteBook = async (diaryId) => {
 };
 
 //日記の削除メソッド
-const deleteBook = async (diaryId, diaryName) => {
+const deleteBook = async (diaryId: number, diaryName: string): Promise<void> => {
   //日記削除警告
   if (window.confirm(diaryName + "を本当に削除しますか？")) {
     isLoading.value = true;

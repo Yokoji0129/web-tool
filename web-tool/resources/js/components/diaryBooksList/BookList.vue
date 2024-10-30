@@ -26,7 +26,7 @@ const selectedBook = ref<Book | undefined>(undefined); //選択された日記�
 const selectBookNumber = ref<number | undefined>(undefined);
 
 //日記のポップアップ
-const toggleBookPopup = (book: Book, index: number): void => {
+const toggleBookPopup = (book?: Book, index?: number): void => {
   showBookPopup.value = !showBookPopup.value;
   selectedBook.value = book;
   selectBookNumber.value = index;
