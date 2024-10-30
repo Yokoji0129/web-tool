@@ -5,7 +5,7 @@ import { ref, reactive } from "vue";
 import LoadingScreen from "../components/LoadingScreen.vue";
 const isLoading = ref<boolean>(false)
 
-interface Data{
+interface Data {
   id: string;
   password: string;
 }
@@ -71,12 +71,7 @@ const login = async (): Promise<void> => {
     <h2>ログイン</h2>
     <form @submit.prevent="login">
       <input v-model="data.id" type="text" name="id" placeholder="ユーザーID" />
-      <input
-        v-model="data.password"
-        type="password"
-        name="password"
-        placeholder="パスワード"
-      />
+      <input v-model="data.password" type="password" name="password" placeholder="パスワード" />
       <p class="error-text">{{ error }}</p>
       <button type="submit" class="login-button">ログイン</button>
       <RouterLink to="/newAccount">
@@ -87,7 +82,7 @@ const login = async (): Promise<void> => {
   <!-- ローディングアニメーション -->
   <LoadingScreen :isLoading="isLoading" />
 </template>
-  
+
 <style scoped>
 .login-box {
   width: 35%;
@@ -157,6 +152,9 @@ const login = async (): Promise<void> => {
 @media screen and (max-width: 768px) {
   .login-box {
     width: 70%;
+  }
+  .login-box h2 {
+    font-size: 20px;
   }
 }
 </style>

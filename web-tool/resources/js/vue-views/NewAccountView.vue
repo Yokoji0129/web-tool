@@ -116,44 +116,24 @@ const submitForm = async (): Promise<void> => {
       <input type="text" v-model="data.id" placeholder="ユーザーID" />
       <!--IDの条件満たしてる時と満たしてないときのデザイン-->
       <p class="no-id">□</p>
-      <p
-        class="bad-id"
-        v-if="data.id.length >= 1"
-        :class="{
-          cross: !Alphanumeric.test(data.id),
-          check: Alphanumeric.test(data.id),
-        }"
-      ></p>
+      <p class="bad-id" v-if="data.id.length >= 1" :class="{
+        cross: !Alphanumeric.test(data.id),
+        check: Alphanumeric.test(data.id),
+      }"></p>
 
       <input type="password" v-model="data.password" placeholder="パスワード" />
       <!--パスワードの条件満たしてる時と満たしてないときのデザイン-->
       <p class="no-password">□</p>
-      <p
-        class="bad-password"
-        v-if="data.password.length >= 1"
-        :class="{
-          cross: !Alphanumeric.test(data.password),
-          check: Alphanumeric.test(data.password),
-        }"
-      ></p>
-      <input
-        type="password"
-        v-model="data.confirmPassword"
-        placeholder="パスワード確認"
-      />
-      <input
-        type="text"
-        v-model="data.accountName"
-        placeholder="アカウント名"
-      />
+      <p class="bad-password" v-if="data.password.length >= 1" :class="{
+        cross: !Alphanumeric.test(data.password),
+        check: Alphanumeric.test(data.password),
+      }"></p>
+      <input type="password" v-model="data.confirmPassword" placeholder="パスワード確認" />
+      <input type="text" v-model="data.accountName" placeholder="アカウント名" />
       <!--エラーの際テキスト表示-->
       <p class="error-text">{{ error }}</p>
       <button class="account-name-link" type="submit">作成</button>
-      <button
-        class="account-name-link"
-        style="margin-top: 10px"
-        @click="loginBack"
-      >
+      <button class="account-name-link" style="margin-top: 10px" @click="loginBack">
         ログイン画面に戻る
       </button>
     </form>
@@ -276,10 +256,12 @@ const submitForm = async (): Promise<void> => {
   .no-password {
     right: 15px;
   }
+
   .bad-id {
     position: absolute;
     right: 10px;
   }
+
   .bad-password {
     position: absolute;
     right: 10px;
@@ -292,11 +274,19 @@ const submitForm = async (): Promise<void> => {
   }
 }
 
+@media screen and (max-width: 768px) {
+  .create-account-box h2 {
+    font-size: 20px;
+  }
+}
+
 @media screen and (max-width: 480px) {
+
   .create-account-box input[type="text"],
   .create-account-box input[type="password"] {
     width: 90%;
   }
+
   .no-id {
     right: 20px;
   }
@@ -304,10 +294,12 @@ const submitForm = async (): Promise<void> => {
   .no-password {
     right: 20px;
   }
+
   .bad-id {
     position: absolute;
     right: 10px;
   }
+
   .bad-password {
     position: absolute;
     right: 10px;

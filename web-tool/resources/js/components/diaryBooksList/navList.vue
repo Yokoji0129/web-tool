@@ -1,34 +1,48 @@
-<script setup>
+<script setup lang="ts">
+import axios from "axios";
 import { onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import LoadingScreen from "../LoadingScreen.vue";
-const props = defineProps({
-  books: Array,
-  displayFavoriteBooks: Function,
-  isFavoriteDisplayed: Boolean,
-});
 
-const isLoading = ref(false)
+interface Book {
+  diary_color: string;
+  diary_favorite: number;
+  diary_font: string;
+  diary_id: number;
+  diary_name: string;
+  diary_text_color: string;
+  diary_top_file: string;
+}
 
-const tooltipsVisible = ref([false, false, false]); //ツールチップの表示状態を配列で管理
+const props = defineProps<{
+  books: Book[],
+  displayFavoriteBooks: () => void,
+  isFavoriteDisplayed: boolean,
+}>();
+
+const isLoading = ref<boolean>(false)
+
+const tooltipsVisible = ref<boolean[]>([false, false, false]); //ツールチップの表示状態を配列で管理
 
 //メニュー内容の表示非表示
-const toggleTooltip = (index) => {
+const toggleTooltip = (index: number): void => {
   //indexが一致したら値を反転させて、一致しなかった物はすべてfalseにする
   tooltipsVisible.value = tooltipsVisible.value.map((visible, i) => (i === index ? !visible : false));
   console.log(tooltipsVisible.value)
 };
 
-const isSorted = ref(false); //50音順の表示切替のフラグ
+const isSorted = ref<boolean>(false); //50音順の表示切替のフラグ
 
 //日記を50音順にする
-const sortJa = () => {
+const sortJa = (): void => {
   if (!isSorted.value) {
+    //50音順
     isSorted.value = true;
     props.books.sort((a, b) => {
       return a[0].diary_name.localeCompare(b[0].diary_name, "ja");
     });
   } else {
+    //日記作成順
     isSorted.value = false;
     props.books.sort((a, b) => {
       return a[0].diary_id - b[0].diary_id;
@@ -36,10 +50,11 @@ const sortJa = () => {
   }
 };
 
-const accountName = ref("");
+
+const accountName = ref<string>("");
 
 //アカウント名取得
-const account = async () => {
+const account = async (): Promise<void> => {
   try {
     const response = await axios.get("/searchname");
     accountName.value = response.data;
@@ -51,7 +66,7 @@ const account = async () => {
 const router = useRouter();
 
 //ログアウトメソッド
-const logout = async () => {
+const logout = async (): Promise<void> => {
   isLoading.value = true;
 
   try {
