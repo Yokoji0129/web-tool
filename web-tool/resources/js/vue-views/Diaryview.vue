@@ -1,46 +1,62 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
 import { ref, onMounted, reactive } from "vue";
 import BurgerMenu from "../components/diary/BurgerMenu.vue";
 import PageOperation from "../components/diary/PageOperation.vue";
 import PageMove from "../components/diary/PageMove.vue";
 import LoadingScreen from "../components/LoadingScreen.vue";
-const isLoading = ref(false)
-const route = useRoute();
+import axios from "axios";
+const isLoading = ref<boolean>(false)
+
 //日記を開くときに渡される日記ID
-const diaryId = ref(route.params.diaryId || localStorage.getItem("diaryId"));
-//日記を開くときに渡される日記index
-const selectBookNumber = ref(
-  route.params.selectBookNumber || localStorage.getItem("selectBookNumber")
+const diaryId = ref<string | undefined>(
+  localStorage.getItem("diaryId") || undefined
 );
-const showPopup = ref(false); //ポップアップの表示制御フラグ
+
+//日記を開くときに渡される日記index
+const selectBookNumber = ref<string | undefined>(
+  //localStorageから値を取得し、もし値がない場合はundefinedをセット
+  localStorage.getItem("selectBookNumber") || undefined
+);
+
+const showPopup = ref<boolean>(false); //ポップアップの表示制御フラグ
 
 //スマホ用ページ操作表示フラグ
-const showMenu = ref(false);
+const showMenu = ref<boolean>(false);
 //ページ操作メニュー表示()スマホ専用
-const toggleMenu = () => {
+const toggleMenu = (): void => {
   if (window.innerWidth <= 1024) {
     showMenu.value = !showMenu.value;
   }
 };
 
 //ポップアップの表示非表示
-const togglePopup = () => {
+const togglePopup = (): void => {
   showPopup.value = !showPopup.value;
 };
 
 //タイトルを改行させないようにするメソッド
-const preventNewline = (event) => {
-  //改行を空文字にして消すやつ
-  event.target.value = event.target.value.replace(/\n/, "");
+const preventNewline = (event: Event): void => {
+  const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+  target.value = target.value.replace(/\n/g, "");
 };
 
+interface Diary {
+  diary_color: string;
+  diary_favorite: number;
+  diary_font: string;
+  diary_id: number;
+  diary_name: string;
+  diary_text_color: string;
+  diary_top_file: string;
+}
 //日記の全情報入れる
-const diary = ref([]);
-const diaryInfo = async () => {
+const diary = ref<Diary[]>([]);
+const diaryInfo = async (): Promise<void> => {
   try {
     const response = await axios.get("returndiary");
     diary.value = response.data;
+    console.log(response.data)
   } catch (error) {
     console.log(error);
   }
@@ -53,17 +69,47 @@ const diaryInfo = async () => {
  *保存しないでページ移動押した際に保存するように警告を出す
  * **/
 
-const pages = ref([]); //日記ページのデータを格納する配列
+ interface Page {
+  diary_id: number;
+  page_file1: string;
+  page_file2: string;
+  page_file3: string;
+  page_file4: string;
+  page_file5: string;
+  page_file6: string;
+  page_file_txt1: string | null;
+  page_file_txt2: string | null;
+  page_file_txt3: string | null;
+  page_file_txt4: string | null;
+  page_file_txt5: string | null;
+  page_file_txt6: string | null;
+  page_id: number;
+  page_marker_color: string | null;
+  page_title: string | null;
+  page_title_color: string | null;
+  page_txt1: string | null;
+  page_txt2: string | null;
+  page_txt_color: string | null;
+}
+
+const pages = ref<Page[]>([]); //日記ページのデータを格納する配列
 const currentPageIndex = ref(0); //現在表示しているページのindex
+
+interface PageData{
+  pageTitle: string,
+  pageText1: string,
+  pageText2: string,
+}
+
 //ページの要素追加データ
-const pageData = reactive({
+const pageData = reactive<PageData>({
   pageTitle: "",
   pageText1: "",
   pageText2: "",
 });
 
 //ページ追加用メソッド
-const pageAdd = async () => {
+const pageAdd = async (): Promise<void> => {
   isLoading.value = true;
 
   try {
@@ -108,10 +154,11 @@ const pageAdd = async () => {
 };
 
 //ページ表示メソッド
-const displayPage = async () => {
+const displayPage = async (): Promise<void> => {
   try {
     const response = await axios.get(`/returnpage/${diaryId.value}`);
     pages.value = response.data;
+    console.log(response.data)
 
     if (pages.value.length === 0) {
       // ページが空の場合(日記初回に開くとき)、新しいページを追加
@@ -125,7 +172,7 @@ const displayPage = async () => {
 };
 
 //ページ移動したときに表示内容変える
-const currentPage = () => {
+const currentPage = (): void => {
   //現在のページに合わせて現在のページのデータを取得
   const currentPage = pages.value[currentPageIndex.value][0];
   //取得したページのデータを表示用の変数に設定
@@ -135,7 +182,7 @@ const currentPage = () => {
 };
 
 //ページ編集メソッド
-const pageEdit = async () => {
+const pageEdit = async (): Promise<void> => {
   isLoading.value = true;
 
   try {
@@ -180,18 +227,18 @@ const pageEdit = async () => {
 
 //ここから画像処理
 //ファイル選択とアップロード
-const selectedFile = ref(null);
+const selectedFile = ref<File | null>(null);
 
-//ファイル選択メソッド
-const onFileSelected = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    selectedFile.value = file;
+//ファイル選択処理
+const onFileSelected = (event: Event): void => {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    selectedFile.value = target.files[0];
   }
 };
 
 //画像アップロード
-const uploadFile = async () => {
+const uploadFile = async (): Promise<void> => {
   if (selectedFile.value) {
     const formData = new FormData();
     formData.append("file", selectedFile.value);
@@ -202,7 +249,6 @@ const uploadFile = async () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
       console.log("アップロード成功", response.data);
       selectedFile.value = null;
       pageEdit();
@@ -214,8 +260,8 @@ const uploadFile = async () => {
   }
 };
 
-
 onMounted(() => {
+  console.log(`開いた日記のindexID(${selectBookNumber.value})`)
   diaryInfo();
   displayPage();
 });
