@@ -182,10 +182,12 @@ const currentPage = (): void => {
 };
 
 //ページ編集メソッド
-const pageEdit = async (): Promise<void> => {
+const pageEdit = async (fileUrl: File | null = null): Promise<void> => {
   isLoading.value = true;
 
   try {
+    console.log("送信するファイルURL:", fileUrl);  // ここでURLが渡されているか確認
+
     await axios.post("/edit/page", {
       //ページID
       id: pages.value[currentPageIndex.value][0].page_id,
@@ -213,6 +215,8 @@ const pageEdit = async (): Promise<void> => {
       file_txt5: "",
       //画像6の文章
       file_txt6: "",
+      // 画像URLを設定
+      page_file1: fileUrl || "" //画像URLが渡されない場合は空文字
     });
 
     alert(`${currentPageIndex.value + 1}ページ目が保存されました`);
@@ -225,15 +229,17 @@ const pageEdit = async (): Promise<void> => {
   }
 };
 
-//ここから画像処理
-//ファイル選択とアップロード
+// ここから画像処理
+// ファイル選択とアップロード
 const selectedFile = ref<File | null>(null);
 
-//ファイル選択処理
+// ファイル選択処理
 const onFileSelected = (event: Event): void => {
   const target = event.target as HTMLInputElement;
   if (target.files) {
     selectedFile.value = target.files[0];
+    //選択されたファイルを確認
+    console.log("選択されたファイル:", selectedFile.value);
   }
 };
 
@@ -249,9 +255,17 @@ const uploadFile = async (): Promise<void> => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("アップロード成功", response.data);
-      selectedFile.value = null;
-      pageEdit();
+
+      console.log("アップロード成功:", response.data);
+
+      // サーバーが返すレスポンスが true の場合
+      if (response.data === true) {
+        pageEdit(selectedFile.value); // 仮URLを渡してpageEditを実行
+      } else {
+        console.error("ファイルアップロードに失敗しました");
+      }
+
+      selectedFile.value = null; // アップロード後に選択されたファイルをリセット
     } catch (error) {
       console.log("アップロードエラー", error);
     }
@@ -259,6 +273,8 @@ const uploadFile = async (): Promise<void> => {
     alert("ファイルを選択してください。");
   }
 };
+
+
 
 onMounted(() => {
   console.log(`開いた日記のindexID(${selectBookNumber.value})`)
