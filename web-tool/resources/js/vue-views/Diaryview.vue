@@ -186,13 +186,13 @@ const pageEdit = async (fileUrl: File | null = null): Promise<void> => {
   isLoading.value = true;
 
   try {
-    console.log("送信するファイルURL:", fileUrl);  // ここでURLが渡されているか確認
+    console.log("送信するファイルURL:", fileUrl);  //ここでURLが渡されているか確認
     const formData = new FormData();
     formData.append("id", pages.value[currentPageIndex.value][0].page_id);
     formData.append("title_color", "");
-    formData.append("title", pageData.pageTitle);
-    formData.append("txt", pageData.pageText1);
-    formData.append("txt2", pageData.pageText2);
+    formData.append("title", pageData.pageTitle || "");
+    formData.append("txt", pageData.pageText1 || "");
+    formData.append("txt2", pageData.pageText2 || "");
     formData.append("marker_color", "");
     formData.append("txt_color", "");
     formData.append("file_txt1", "");
@@ -202,7 +202,7 @@ const pageEdit = async (fileUrl: File | null = null): Promise<void> => {
     formData.append("file_txt5", "");
     formData.append("file_txt6", "");
     formData.append("file_txt4", "");
-    formData.append("page_file1", fileUrl);
+    formData.append("page_file1", fileUrl || "");
 
     const response = await axios.post("/edit/page", formData,
     {
@@ -221,8 +221,8 @@ const pageEdit = async (fileUrl: File | null = null): Promise<void> => {
   }
 };
 
-// ここから画像処理
-// ファイル選択とアップロード
+//ここから画像処理
+//ファイル選択とアップロード
 const selectedFile = ref<File | null>(null);
 
 // ファイル選択処理
@@ -250,14 +250,14 @@ const uploadFile = async (): Promise<void> => {
 
       console.log("アップロード成功:", response.data);
 
-      // サーバーが返すレスポンスが true の場合
+      //サーバーが返すレスポンスが true の場合
       if (response.data === true) {
-        pageEdit(selectedFile.value); // 仮URLを渡してpageEditを実行
+        pageEdit(selectedFile.value); //URLを渡してpageEditを実行
       } else {
         console.error("ファイルアップロードに失敗しました");
       }
 
-      selectedFile.value = null; // アップロード後に選択されたファイルをリセット
+      selectedFile.value = null; //アップロード後に選択されたファイルをリセット
     } catch (error) {
       console.log("アップロードエラー", error);
     }
