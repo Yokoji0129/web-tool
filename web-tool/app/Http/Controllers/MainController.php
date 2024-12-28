@@ -8,65 +8,69 @@ use App\Models\Account;
 use App\Models\Diary;
 use App\Models\Page;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class MainController extends Controller
 {
     public function startpage()
     {
+        //ページを返します
         return view('app');
     }
 
     public function all_account_data()
-    {
+    {   //全てのアカウントのすべてのデータを返す
         $account_object = new Account;
         $data = $account_object->all_data();
-        return $data;//全てのアカウントのすべてのデータを返す
+        return $data;
     }
 
     public function all_diary_data()
-    {
+    {   //全ての日記の全てのデータを返す
         $diary_object = new Diary;
         $data = $diary_object->all_data();
         return $data;
     }
 
     public function all_page_data()
-    {
+    {   //全てのページの全てのデータを返す
         $page_object = new Page;
         $data = $page_object->all_data();
         return $data;
     }
 
     public function search_id($id)
-    {
+    {   //アカウントが存在するかどうかを返す
         $account_object = new Account;
         $id = MainController::hash($id);
         $data = $account_object->search_id($id);
+        //フロントでの確認をしやすくするため文字列で返す
         if (count($data) === 0)
-        {
+        {   //存在しない状態がtrue
             $torf = 'true';
             return $torf;
         }
         else
-        {
+        {   //存在する状態がfalse
             $torf = 'false';
             return $torf;
         }
     }
 
     public function session(Request $request)
-    {
+    {   //セッションの確認用
         dump($request->cookies->get("laravel_session"));
     }
 
     public function full_to_half($data)
-    {
+    {   //全角があれば半角にして返す
         $after_data = mb_convert_kana($data, 'a');
         return $after_data;
     }
 
     public function string_check($data)
-    {
+    {   //入力された文字列が想定している内容と一致するかを確認
         if (preg_match("/^[a-zA-Z0-9]+$/", $data))
         {
             $torf = true;
@@ -80,9 +84,9 @@ class MainController extends Controller
     }
 
     public function int_check($num)
-    {
+    {   //数値型もしくは数値形式の文字型であるかを確認
         if (is_numeric($num))
-        {
+        {   //数値型に変換して返す
             return intval($num);
         }
         else
@@ -92,7 +96,7 @@ class MainController extends Controller
     }
 
     public function len_check($data)
-    {
+    {   //文字列の大きさが想定しているものであるか確認
         if((strlen($data) >= 8) && (strlen($data) <= 32))
             {
                 $torf = true;
@@ -106,7 +110,7 @@ class MainController extends Controller
     }
 
     public function hash($data)
-    {
+    {   //渡されたデータをハッシュ化
         for ($i = 0; $i < 20; $i += 1)
         {
             $data = hash('sha256', $data);
@@ -117,22 +121,21 @@ class MainController extends Controller
     public function make_account($id,$password)
     {
         $account_object = new Account;
+        //$id,passwordの全角英大文字,英子文字,数字を半角にする
         $id = MainController::full_to_half($id);
         $password = MainController::full_to_half($password);
-        //$id,passwordの全角英大文字,英子文字,数字を半角にする
-
+        //文字列が想定している長さと内容か確認
         $str_id = MainController::string_check($id);
         $str_password = MainController::string_check($password);
         $len_id = MainController::len_check($id);
         $len_password = MainController::len_check($password);
-
-        $id = MainController::hash($id);
+        //アカウントの有無、ソルトの作成
         $id_check = MainController::search_id($id);
         $random_key = Str::random(20);
-
+        //入力されたパスワードとソルトを連結、新たなパスワードとする
         $befor_pass = $random_key . $password;
-
-        $password = MainController::hash($befor_pass);//ハッシュ化したものをpasswordとして保存
+        //パスワードとidをハッシュ化、名前を初期化
+        $password = MainController::hash($befor_pass);
         $id = MainController::hash($id);
         $name = '匿名希望';
 
@@ -146,33 +149,35 @@ class MainController extends Controller
     public function add_account(Request $request)
     {
         $account_object = new Account;
-
+        //$id,passwordの全角英大文字,英子文字,数字を半角にする 
         $id = MainController::full_to_half($request->id);
         $password = MainController::full_to_half($request->password);
-        //$id,passwordの全角英大文字,英子文字,数字を半角にする
-
+        //文字列が想定している長さと内容か確認
         $str_id = MainController::string_check($id);
         $str_password = MainController::string_check($password);
         $len_id = MainController::len_check($id);
         $len_password = MainController::len_check($password);
-
+        //アカウントの有無、ソルトの作成
         $id_check = MainController::search_id($id);
         $random_key = Str::random(20);
+        //入力されたパスワードとソルトを連結、新たなパスワードとする
         $befor_pass = $random_key . $password;
-        $password = MainController::hash($befor_pass);//ハッシュ化したものをpasswordとして保存
+        //パスワードとidをハッシュ化
+        $password = MainController::hash($befor_pass);
         $id = MainController::hash($id);
-
+        //名前の取得、返す値の初期化
         $name = $request->accountName;
         $return_data = 'ok';
 
         if($str_id && $str_password && $len_id && $len_password && $id_check)
-        //上記の処理で問題がなければアカウント作成
-        {
+        {//上記の処理で問題がなければアカウント作成
             $account_object->add_account($id,$password,$random_key,$name);
+            //アカウントidのフォルダがあるか確認
+            //無ければ作成
             return $return_data;
         }
         else
-        {
+        {//上記の処理で問題があったことを返す
             $return_data = 'no';
             return $return_data;
         }
@@ -181,23 +186,22 @@ class MainController extends Controller
     public function auth($session)
     {
         $session_account_object = new SessionAccount;
+        //与えられたセッションidが全角であれば半角に
         $session = MainController::full_to_half($session);
+        //与えられたセッションidが想定している文字列か確認
         $str_session = MainController::string_check($session);
-
-        $login_situ = true;
-
+        //返す値の初期化
+        $login_situ = false;
+        //larabelでデフォルトの長さである40と一致するか確認
         if ($str_session && (strlen($session) === 40))
-        {
+        {   
             $data = $session_account_object->search_session($session);
+            //1つだけ存在すれば正常なログインと判断
             if (count($data) === 1)
             {
-                return $login_situ;
+                $login_situ = true;
             }
-            else
-            {
-                $login_situ = false;
-                return $login_situ;
-            }
+            return $login_situ;
         }
     }
 
@@ -205,32 +209,37 @@ class MainController extends Controller
     {
         $account_object = new Account;
         $session_account_object = new SessionAccount;
-
+        //$id,passwordの全角英大文字,英子文字,数字を半角にする 
         $id = MainController::full_to_half($id);
         $password = MainController::full_to_half($password);
-        //$id,passwordの全角英大文字,英子文字,数字を半角にする
 
-        $str_id = MainController::string_check($id);//問題なければtrueが問題があればfalseが返ってくる
-        $str_password = MainController::string_check($password);//問題なければtrueが問題があればfalseが返ってくる
-        $len_id = MainController::len_check($id);//問題なければtrueが問題があればfalseが返ってくる
-        $len_password = MainController::len_check($password);//問題なければtrueが問題があればfalseが返ってくる
+        //文字列が想定している内容、大きさであるかを確認
+        $str_id = MainController::string_check($id);
+        $str_password = MainController::string_check($password);
+        $len_id = MainController::len_check($id);
+        $len_password = MainController::len_check($password);
+
+        //idのハッシュ化
         $id = MainController::hash($id);
-        $id_check = $account_object->search_id($id);
-
+        //idからアカウント情報の検索
+        $account_data = $account_object->search_id($id);
+        //返却データの初期化
         $return_data = 'ok';
 
-        if ($str_id && $str_password && $len_id && $len_password && (count($id_check) > 0))
-        {
-            $account_data = $account_object->search_id($id);
+        if ($str_id && $str_password && $len_id && $len_password && (count($account_data)))
+        {   //上記の処理で問題なければログイン処理に移る
             $account_data = $account_data->toArray();
+            //アカウント情報から取得したソルトと入力されたパスワードを結合
             $befor_pass = $account_data["0"]["account_random_key"] . $password;
+            //パスワードのハッシュ化
             $password = MainController::hash($befor_pass);
             if ($password === $account_data["0"]["account_password"])
-            {
+            {   //パスワードの一致を確認
                 $session = $request->cookies->get("laravel_session");
                 $torf = MainController::auth($session);
+                //ログイン状態でないことを確認
                 if ($torf === false)
-                {
+                {   
                     $session_account_object->add_session($session, $id);
                     return $return_data;
                 }
@@ -241,13 +250,13 @@ class MainController extends Controller
                 }
             }
             else
-            {
+            {   //パスワードが一致しなかったことを返す
                 $return_data = 'no';
                 return view('app', compact('return_data'));
             }
         }
         else
-        {
+        {   //上記の処理で問題があったことを示す
             abort(500, 'サーバーエラーです');
         }
     }
@@ -418,7 +427,10 @@ class MainController extends Controller
         $torf = MainController::auth($session);
         $return_data = 'true';
         if ($torf)
-        {
+        {   //画像パスを空として日記情報を登録
+            //アカウントIDでフォルダー作成
+            //取得した日記数+1の番号のフォルダがあるか
+            //無ければ作成あれば処理の中断
             $account_id = MainController::s_after_a($session);
             $file = 'nodata';
             $diary_object->add_data($account_id,$name,$file,$color,$text_color,$font);
@@ -652,7 +664,7 @@ class MainController extends Controller
             }
 
             foreach ($diary_data as $diaries => $ids)
-            {
+            {   //一致するidがあれば処理を行う
                 if($ids['diary_id'] === $id)
                 {   
                     $title = $request->title;
@@ -675,17 +687,19 @@ class MainController extends Controller
                     $file6 = 'nodata';
 
                     $page_object->add_data($id, $title, $title_color, $txt, $txt2, $marker_color, $txt_color, $file1, $file_txt1, $file2, $file_txt2, $file3, $file_txt3, $file4, $file_txt4, $file5, $file_txt5, $file6, $file_txt6);
-                    return $return_data;
+                    //ループを抜け、$return_dataで問題ないことを示すためtrueを入れておく
+                    return $return_data = 'true';
                 }
                 else
-                {
+                {   //一致するidでなければnoidを入れておく
                     $return_data = 'noid';
                 }
             }
+            //状態を返す
             return $return_data;
         }
         else
-        {
+        {   //ログイン状態でないか、idがintでなかった場合falseを返す
             $return_data = 'false';
             return $return_data;
         }
@@ -854,8 +868,6 @@ class MainController extends Controller
                 return $return_data;
             }
 
-            $title = $request->title;
-            $txt = $request->txt;
             foreach($diary_data as $index => $diary)
             {
                 foreach($page_data as $value => $page)
@@ -875,6 +887,13 @@ class MainController extends Controller
                         $file_txt5 = $request->file_txt5;
                         $file_txt6 = $request->file_txt6;
                         $file1 = 'nodata';
+                        //ファイルの存在確認
+                        if ($request->hasfile('page_file1'))
+                        {
+                            $file = $request->file('page_file1');
+                            $file_name = "p" . "$id" . "1." . $file->getClientOriginalExtension();
+                            $file1 = $file->storeAs('public', $file_name);
+                        }
                         $file2 = 'nodata';
                         $file3 = 'nodata';
                         $file4 = 'nodata';

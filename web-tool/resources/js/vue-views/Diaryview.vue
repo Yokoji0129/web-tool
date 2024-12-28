@@ -187,38 +187,30 @@ const pageEdit = async (fileUrl: File | null = null): Promise<void> => {
 
   try {
     console.log("送信するファイルURL:", fileUrl);  // ここでURLが渡されているか確認
+    const formData = new FormData();
+    formData.append("id", pages.value[currentPageIndex.value][0].page_id);
+    formData.append("title_color", "");
+    formData.append("title", pageData.pageTitle);
+    formData.append("txt", pageData.pageText1);
+    formData.append("txt2", pageData.pageText2);
+    formData.append("marker_color", "");
+    formData.append("txt_color", "");
+    formData.append("file_txt1", "");
+    formData.append("file_txt2", "");
+    formData.append("file_txt3", "");
+    formData.append("file_txt4", "");
+    formData.append("file_txt5", "");
+    formData.append("file_txt6", "");
+    formData.append("file_txt4", "");
+    formData.append("page_file1", fileUrl);
 
-    await axios.post("/edit/page", {
-      //ページID
-      id: pages.value[currentPageIndex.value][0].page_id,
-      //タイトル文字色
-      title_color: "",
-      //ページタイトル
-      title: pageData.pageTitle,
-      //文章1
-      txt: pageData.pageText1,
-      //文章2
-      txt2: pageData.pageText2,
-      //マーカーの色
-      marker_color: "",
-      //文章の文字の色
-      txt_color: "",
-      //画像1の文章
-      file_txt1: "",
-      //画像2の文章
-      file_txt2: "",
-      //画像3の文章
-      file_txt3: "",
-      //画像4の文章
-      file_txt4: "",
-      //画像5の文章
-      file_txt5: "",
-      //画像6の文章
-      file_txt6: "",
-      // 画像URLを設定
-      page_file1: fileUrl || "" //画像URLが渡されない場合は空文字
+    const response = await axios.post("/edit/page", formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-
+    console.log(response.data);
     alert(`${currentPageIndex.value + 1}ページ目が保存されました`);
     toggleMenu();
     displayPage();

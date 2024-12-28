@@ -99,4 +99,9 @@ class Diary extends Model
     {
         Diary::where('diary_id', 'like', "$id")->delete();
     }
+
+    public function update_file($id, $file)
+    {
+        Diary::where('diary_id', 'like', "$id")->update(['diary_top_file' => $file]);
+    }
 }
