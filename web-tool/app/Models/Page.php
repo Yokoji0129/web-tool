@@ -144,6 +144,20 @@ class Page extends Model
         ]);
     }
 
+    public function search_image($image_name)
+    {
+        $data = Page::where('page_file1', 'like', "$image_name")
+            ->orWhere('page_file2', 'like', "$image_name")
+            ->orWhere('page_file3', 'like', "$image_name")
+            ->orWhere('page_file4', 'like', "$image_name")
+            ->orWhere('page_file5', 'like', "$image_name")
+            ->orWhere('page_file6', 'like', "$image_name")
+            ->get([
+                'diary_id'
+            ]);
+        return $data;
+    }
+
     public function delete_data($id)
     {
         Page::where('page_id', 'like', "$id")->delete();

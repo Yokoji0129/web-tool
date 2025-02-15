@@ -33,6 +33,7 @@ Route::post('/edit/page', 'App\Http\Controllers\MainController@edit_page');//ペ
 Route::get('/favorite/return', 'App\Http\Controllers\MainController@return_favorite');//お気に入り日記情報取得
 Route::post('/favorite/add', 'App\Http\Controllers\MainController@add_favorite');//お気に入り追加、日記idをidとして渡すとうまくいくはず
 Route::post('/favorite/delete', 'App\Http\Controllers\MainController@delete_favorite');//お気に入り削除、日記idをidとして渡すとうまくいくはず
+Route::get('/image_path/{image_name}', 'App\Http\Controllers\MainController@return_file_path');//画像のパスを返す
 
 //以下のルートはテスト用
 Route::get('/test/data', 'App\Http\Controllers\MainController@all_account_data');//全てのアカウントデータ取得

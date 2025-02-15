@@ -69,6 +69,28 @@ class MainController extends Controller
         return $after_data;
     }
 
+    public function add_image($file, $file_name)
+    {
+        //ファイルの削除
+        MainController::delete_image($file_name);
+        //ファイルの保存
+        $path = $file->storeAs('public', $file_name);
+        return $file_name;
+    }
+
+    public function delete_image($filename)
+    {
+        $return_data = 'notdelete';
+        //ファイルが存在すれば削除
+        if(Storage::disk('public')->exists($filename))
+        {
+            //ファイルの削除
+            Storage::disk('public')->delete($filename);
+            $return_data = 'delete';
+        }
+        return $return_data;
+    }
+
     public function string_check($data)
     {   //入力された文字列が想定している内容と一致するかを確認
         if (preg_match("/^[a-zA-Z0-9]+$/", $data))
@@ -228,12 +250,12 @@ class MainController extends Controller
 
         if ($str_id && $str_password && $len_id && $len_password && (count($account_data)))
         {   //上記の処理で問題なければログイン処理に移る
-            $account_data = $account_data->toArray();
+            // $account_data = $account_data->toArray();
             //アカウント情報から取得したソルトと入力されたパスワードを結合
-            $befor_pass = $account_data["0"]["account_random_key"] . $password;
+            $befor_pass = $account_data[0]->account_random_key . $password;
             //パスワードのハッシュ化
             $password = MainController::hash($befor_pass);
-            if ($password === $account_data["0"]["account_password"])
+            if ($password === $account_data[0]->account_password)
             {   //パスワードの一致を確認
                 $session = $request->cookies->get("laravel_session");
                 $torf = MainController::auth($session);
@@ -282,10 +304,10 @@ class MainController extends Controller
         if ($str_id && $str_password && $len_id && $len_password && count($id_check))
         {
             $account_data = $account_object->search_id($id);
-            $account_data = $account_data->toArray();
-            $befor_pass = $account_data["0"]["account_random_key"] . $password;
+            // $account_data = $account_data->toArray();
+            $befor_pass = $account_data[0]->account_random_key . $password;
             $password = MainController::hash($befor_pass);
-            if ($password === $account_data["0"]["account_password"])
+            if ($password === $account_data[0]->account_password)
             {
                 $session = $request->cookies->get("laravel_session");
                 $torf = MainController::auth($session);
@@ -339,11 +361,12 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $data = $account_object->search_id($account_id);
-            $account_data = $data->toArray();
-            foreach($account_data as $data => $key)
-            {
-                $return_data = $key['account_name'];
-            }
+            // $account_data = $data->toArray();
+            // foreach($account_data as $data => $key)
+            // {
+            //     $return_data = $key['account_name'];
+            // }
+            $return_data = $data[0]->account_name;
             return $return_data;
         }
     }
@@ -352,8 +375,9 @@ class MainController extends Controller
     {
         $session_account_object = new SessionAccount;
         $session_account_data = $session_account_object->search_session($session);
-        $session_account_data = $session_account_data->toArray();
-        $account_id = $session_account_data["0"]["account_id"];
+        // $session_account_data = $session_account_data->toArray();
+        // $account_id = $session_account_data["0"]["account_id"];
+        $account_id = $session_account_data[0]->account_id;
         return $account_id;
     }
 
@@ -862,7 +886,7 @@ class MainController extends Controller
             $diary_data = $diary_data->toArray();
             $page_data = $page_object->search_id($id);
             $page_data = $page_data->toArray();
-            if (count($page_data) === 0)
+            if ((count($diary_data) === 0) || (count($page_data) === 0))
             {
                 $return_data = 'nodata';
                 return $return_data;
@@ -887,18 +911,47 @@ class MainController extends Controller
                         $file_txt5 = $request->file_txt5;
                         $file_txt6 = $request->file_txt6;
                         $file1 = 'nodata';
+                        $file2 = 'nodata';
+                        $file3 = 'nodate';
+                        $file4 = 'nodata';
+                        $file5 = 'nodata';
+                        $file6 = 'nodata';
                         //ファイルの存在確認
                         if ($request->hasfile('page_file1'))
                         {
                             $file = $request->file('page_file1');
-                            $file_name = "p" . "$id" . "1." . $file->getClientOriginalExtension();
-                            $file1 = $file->storeAs('public', $file_name);
+                            $file1 = MainController::add_image($file, "p_" . "$id" . "_1." . $file->getClientOriginalExtension());
                         }
-                        $file2 = 'nodata';
-                        $file3 = 'nodata';
-                        $file4 = 'nodata';
-                        $file5 = 'nodata';
-                        $file6 = 'nodata';
+                        //ファイルの存在確認
+                        if ($request->hasfile('page_file2'))
+                        {
+                            $file = $request->file('page_file2');
+                            $file2 = MainController::add_image($file, "p_" . "$id" . "_2." . $file->getClientOriginalExtension());
+                        }
+                        //ファイルの存在確認
+                        if ($request->hasfile('page_file3'))
+                        {
+                            $file = $request->file('page_file3');
+                            $file3 = MainController::add_image($file, "p_" . "$id" . "_3." . $file->getClientOriginalExtension());
+                        }
+                        //ファイルの存在確認
+                        if ($request->hasfile('page_file4'))
+                        {
+                            $file = $request->file('page_file4');
+                            $file4 = MainController::add_image($file, "p_" . "$id" . "_4." . $file->getClientOriginalExtension());
+                        }
+                        //ファイルの存在確認
+                        if ($request->hasfile('page_file5'))
+                        {
+                            $file = $request->file('page_file5');
+                            $file5 = MainController::add_image($file, "p_" . "$id" . "_5." . $file->getClientOriginalExtension());
+                        }
+                        //ファイルの存在確認
+                        if ($request->hasfile('page_file6'))
+                        {
+                            $file = $request->file('page_file6');
+                            $file6 = MainController::add_image($file, "p_" . "$id" . "_6." . $file->getClientOriginalExtension());
+                        }
 
                         $page_object->edit_page($id, $title, $title_color, $txt, $txt2, $marker_color, $txt_color, $file1, $file_txt1, $file2, $file_txt2, $file3, $file_txt3, $file4, $file_txt4, $file5, $file_txt5, $file6, $file_txt6);
                         $return_data = 'true';
@@ -984,12 +1037,63 @@ class MainController extends Controller
         }
     }
 
+    // ログインしているアカウントの画像か確認し画像パスを返す
+    public function return_file_path(Request $request, $image_name)
+    {
+        $account_object = new Account;
+        $diary_object = new Diary;
+        $page_object = new Page;
+        $return_data = 'false';
+        $session = $request->cookies->get("laravel_session");
+        $torf = MainController::auth($session);
+        $image_name = MainController::full_to_half($image_name);
+        $len_image_name = MainController::len_check($image_name);
+        if($len_image_name && $torf)
+        { //画像がアカウントのものか確認
+            // 画像のパスがどのページのものか確認
+            $page_data = $page_object->search_image($image_name);
+            // アカウントの日記を取得
+            $diary_data = $diary_object->search_account(MainController::s_after_a($session));
+            foreach($diary_data as $diary)
+            {
+                if($diary->diary_id === $page_data[0]->diary_id)
+                {
+                    $return_data = MainController::return_image($image_name);
+                }
+            }
+        }
+        return $return_data;
+    }
+
     public function add_file(Request $request)
     {
-        $file_name = request()->file->getClientOriginalName();
-        request()->file->storeAs('public/',$file_name);
-        $return_data = 'true';
+        $return_data = 'false';
+        //ファイルが存在するかチェック
+        if($request->hasfile('file'))
+        {
+            //ファイル本体を取得
+            $file = $request->file('file');
+            //ファイル名を設定
+            $file_name = 'test.' . $file->getClientOriginalExtension();
+            //ファイルを保存
+            MainController::add_image($file, $file_name);
+            //ファイル名を基にファイルを削除
+            $delete_check = MainController::delete_image($file_name);
+        }
+        if($delete_check === 'delete')
+        {
+            //削除されていればtrueを返す
+            $return_data = 'true';
+        }
         return $return_data;
-        //dd(request()->all());
+    }
+
+    public function return_image($image_name)
+    {
+        $path = storage_path("app/public/{$image_name}");
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        return response($file, 200)->header("Content-Type", $type);
     }
 }
