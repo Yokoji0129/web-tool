@@ -361,11 +361,6 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $data = $account_object->search_id($account_id);
-            // $account_data = $data->toArray();
-            // foreach($account_data as $data => $key)
-            // {
-            //     $return_data = $key['account_name'];
-            // }
             $return_data = $data[0]->account_name;
             return $return_data;
         }
@@ -375,8 +370,6 @@ class MainController extends Controller
     {
         $session_account_object = new SessionAccount;
         $session_account_data = $session_account_object->search_session($session);
-        // $session_account_data = $session_account_data->toArray();
-        // $account_id = $session_account_data["0"]["account_id"];
         $account_id = $session_account_data[0]->account_id;
         return $account_id;
     }
@@ -392,15 +385,21 @@ class MainController extends Controller
             $account_id = MainController::s_after_a($session);
             $data = $diary_object->search_account($account_id);
             if ((count($data)))
-            {
-                $data = $data->toArray();
+            {// 初期のデータの返し方を間違えたので配列の中に連想配列を返すような形になっている
                 $return_data = [];
-                foreach($data as $value => $key)
+                foreach($data as $diary)
                 {
-                    $empty = [];
-                    $empty[] = $key;
-                    $return_data[] = $empty;
-                    $empty = [];
+                    $diary_data = [];
+                    $diary_data[] = [
+                        'diary_id' => $diary->diary_id,
+                        'diary_name' => $diary->diary_name,
+                        'diary_top_file' => $diary->diary_top_file,
+                        'diary_color' => $diary->diary_color,
+                        'diary_text_color' => $diary->diary_text_color,
+                        'diary_font' => $diary->diary_font,
+                        'diary_favorite' => $diary->diary_favorite
+                    ];
+                    $return_data[] = $diary_data;
                 }
                 return $return_data;
             }
@@ -486,10 +485,9 @@ class MainController extends Controller
                 return $return_data;
             }
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
-            foreach($diary_data as $values => $diary)
+            foreach($diary_data as $value)
             {
-                if ($id === $diary['diary_id'])
+                if ($id === $value->diary_id)
                 {
                     $diary_object->delete_data($id);
                     $return_data = 'true';
@@ -520,10 +518,9 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
-            foreach($diary_data as $values => $diary)
+            foreach($diary_data as $value)
             {
-                if ($id === $diary['diary_id'])
+                if ($id === $value->diary_id)
                 {
                     $diary_object->add_favorite($id);
                     $return_data = 'true';
@@ -553,14 +550,20 @@ class MainController extends Controller
             $diary_data = $diary_object->return_favorite($account_id);
             if(count($diary_data))
             {
-                $data = $diary_data->toArray();
                 $return_data = [];
-                foreach($data as $value => $key)
+                foreach($diary_data as $diary)
                 {
-                    $empty = [];
-                    $empty[] = $key;
-                    $return_data[] = $empty;
-                    $empty = [];
+                    $diary_data = [];
+                    $diary_data[] = [
+                        'diary_id' => $diary->diary_id,
+                        'diary_name' => $diary->diary_name,
+                        'diary_top_file' => $diary->diary_top_file,
+                        'diary_color' => $diary->diary_color,
+                        'diary_text_color' => $diary->diary_text_color,
+                        'diary_font' => $diary->diary_font,
+                        'diary_favorite' => $diary->diary_favorite
+                    ];
+                    $return_data[] = $diary_data;
                 }
                 return $return_data;
             }
@@ -588,10 +591,9 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
-            foreach($diary_data as $values => $diary)
+            foreach($diary_data as $value)
             {
-                if ($id === $diary['diary_id'])
+                if ($id === $value->diary_id)
                 {
                     $diary_object->delete_favorite($id);
                     $return_data = 'true';
@@ -630,9 +632,9 @@ class MainController extends Controller
                 return $return_data;
             }
 
-            foreach ($diary_data as $diaries => $ids)
+            foreach ($diary_data as $value)
             {
-                if($ids['diary_id'] === $id)
+                if($id === $value->diary_id)
                 {
                     $title_color = 'nodata';
                     $txt2 = 'nodata';
@@ -687,9 +689,9 @@ class MainController extends Controller
                 return $return_data;
             }
 
-            foreach ($diary_data as $diaries => $ids)
+            foreach ($diary_data as $value)
             {   //一致するidがあれば処理を行う
-                if($ids['diary_id'] === $id)
+                if($id === $value->diary_id)
                 {   
                     $title = $request->title;
                     $title_color = $request->title_color;
@@ -743,19 +745,38 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            foreach ($diary_data as $diaries => $ids)
+            foreach ($diary_data as $value)
             {
-                if($ids['diary_id'] === $id)
+                if($id === $value->diary_id)
                 {
                     $data = $page_object->search_diary($id);
-                    $data = $data->toArray();
                     $return_data = [];
-                    foreach($data as $value => $key)
+                    foreach($data as $page)
                     {
-                        $empty = [];
-                        $empty[] = $key;
-                        $return_data[] = $empty;
-                        $empty = [];
+                        $page_data = [];
+                        $page_data[] = [
+                            'diary_id' => $page->diary_id,
+                            'page_id' => $page->page_id,  
+                            'page_title' => $page->page_title,
+                            'page_titile_color' => $page->page_titile_color,
+                            'page_txt1' => $page->page_txt1,
+                            'page_txt2' => $page->page_txt2,
+                            'page_marker_color' => $page->page_marker_color,
+                            'page_txt_color' => $page->page_txt_color,
+                            'page_file1' => $page->page_file1,
+                            'page_file_txt1' => $page->page_file_txt1,
+                            'page_file2' => $page->page_file2,
+                            'page_file_txt2' => $page->page_file_txt2,
+                            'page_file3' => $page->page_file3,
+                            'page_file_txt3' => $page->page_file_txt3,
+                            'page_file4' => $page->page_file4,
+                            'page_file_txt4' => $page->page_file_txt4,
+                            'page_file5' => $page->page_file5,
+                            'page_file_txt5' => $page->page_file_txt5,
+                            'page_file6' => $page->page_file6,
+                            'page_file_txt6' => $page->page_file_txt6
+                        ];
+                        $return_data[] = $page_data;
                     }
                     return $return_data;
                 }
@@ -787,20 +808,18 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
             $page_data = $page_object->search_id($id);
-            $page_data = $page_data->toArray();
             if(count($page_data) === 0)
             {
                 $return_data = 'nodata';
                 return $return_data;
             }
 
-            foreach($diary_data as $index => $diary)
+            foreach($diary_data as $diary)
             {
-                foreach($page_data as $value => $page)
+                foreach($page_data as $value)
                 {
-                    if($diary['diary_id'] === $page['diary_id'])
+                    if($diary->diary_id === $value->diary_id)
                     {
                         $page_object->delete_data($id);
                         $return_data = 'true';
@@ -835,20 +854,18 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
             $page_data = $page_object->search_id($id);
-            $page_data = $page_data->toArray();
             if(count($page_data) === 0)
             {
                 $return_data = 'nodata';
                 return $return_data;
             }
 
-            foreach($diary_data as $index => $diary)
+            foreach($diary_data as $diary)
             {
-                foreach($page_data as $value => $page)
+                foreach($page_data as $value)
                 {
-                    if($diary['diary_id'] === $page['diary_id'])
+                    if($diary->diary_id === $value->diary_id)
                     {
                         $page_object->delete_data($id);
                         $return_data = 'true';
@@ -883,20 +900,18 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
             $page_data = $page_object->search_id($id);
-            $page_data = $page_data->toArray();
             if ((count($diary_data) === 0) || (count($page_data) === 0))
             {
                 $return_data = 'nodata';
                 return $return_data;
             }
 
-            foreach($diary_data as $index => $diary)
+            foreach($diary_data as $diary)
             {
-                foreach($page_data as $value => $page)
+                foreach($page_data as $page)
                 {
-                    if($diary['diary_id'] === $page['diary_id'])
+                    if($diary->diary_id === $page->diary_id)
                     {
                         $title = $request->title;
                         $title_color = $request->title_color;
@@ -986,20 +1001,18 @@ class MainController extends Controller
         {
             $account_id = MainController::s_after_a($session);
             $diary_data = $diary_object->search_account($account_id);
-            $diary_data = $diary_data->toArray();
             $page_data = $page_object->search_id($id);
-            $page_data = $page_data->toArray();
             if (count($page_data) === 0)
             {
                 $return_data = 'nodata';
                 return $return_data;
             }
 
-            foreach($diary_data as $index => $diary)
+            foreach($diary_data as $diary)
             {
-                foreach($page_data as $value => $page)
+                foreach($page_data as $page)
                 {
-                    if($diary['diary_id'] === $page['diary_id'])
+                    if($diary->diary_id === $page->diary_id)
                     {
                         $title_color = 'nodata';
                         $txt2 = 'nodata';
